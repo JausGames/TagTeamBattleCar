@@ -11,7 +11,7 @@ namespace Inputs
     {
         [SerializeField] PlayerInput playerInput;
         //[SerializeField] PlayerCombat combat;
-        //[SerializeField] PlayerController motor = null;
+        [SerializeField] CarController motor = null;
         [SerializeField] private Vector2 move;
         [SerializeField] private Vector2 look;
         [SerializeField] private float index;
@@ -53,10 +53,16 @@ namespace Inputs
         }
         public void OnSteer(CallbackContext context)
         {
-            //if (motor == null) return;
-            //move = context.ReadValue<Vector2>();
+            if (motor == null) return;
             //motor.SetMove(move);
-            Debug.Log("PlayerInputHandler, OnSteer : value = " + context.ReadValue<float>());
+            motor.SteeringDirection = context.ReadValue<float>();
+        }
+        public void OnTorque(CallbackContext context)
+        {
+            if (motor == null) return;
+            //motor.SetMove(move);
+            move.x = context.ReadValue<float>();
+            motor.TorqueApply = context.ReadValue<float>();
         }
     }
 }
