@@ -51,18 +51,28 @@ namespace Inputs
             var combats = FindObjectsOfType<PlayerCombat>();
             combat = combats.FirstOrDefault(m => m.GetPlayerIndex() == index);*/
         }
-        public void OnSteer(CallbackContext context)
+        public void OnRotate(CallbackContext context)
         {
             if (motor == null) return;
-            //motor.SetMove(move);
-            motor.SteeringDirection = context.ReadValue<float>();
+            motor.Rotation = context.ReadValue<Vector2>();
         }
         public void OnTorque(CallbackContext context)
         {
             if (motor == null) return;
-            //motor.SetMove(move);
-            move.x = context.ReadValue<float>();
             motor.TorqueApply = context.ReadValue<float>();
+        }
+        public void OnChangeRotation(CallbackContext context)
+        {
+            if (motor == null) return;
+            motor.RotationAxeIsY = context.canceled;
+        }
+        public void OnParkingBreaking(CallbackContext context)
+        {
+            if (motor == null) return;
+            if (context.performed)
+                motor.ParkingBreaking = true;
+            else if(context.canceled)
+                motor.ParkingBreaking = false;
         }
     }
 }

@@ -28,10 +28,10 @@ public partial class @Controls : IInputActionCollection2, IDisposable
             ""id"": ""a04d92d6-f200-4f4f-8ec0-32ef0d099861"",
             ""actions"": [
                 {
-                    ""name"": ""Steer"",
+                    ""name"": ""Rotate"",
                     ""type"": ""Value"",
                     ""id"": ""54beb160-9519-462e-8b4d-1a5108c8ba45"",
-                    ""expectedControlType"": ""Axis"",
+                    ""expectedControlType"": ""Stick"",
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
@@ -44,42 +44,27 @@ public partial class @Controls : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""ChangeRotationAxe"",
+                    ""type"": ""Button"",
+                    ""id"": ""5e5bb05a-a971-41d2-b47a-89e38514e0d9"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""ParkingBreak"",
+                    ""type"": ""Button"",
+                    ""id"": ""b7967166-8ca2-41e5-917e-d70cad8bdc02"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
-                {
-                    ""name"": ""1D Axis"",
-                    ""id"": ""77634013-a622-438f-86eb-35adbbea08fe"",
-                    ""path"": ""1DAxis"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": """",
-                    ""action"": ""Steer"",
-                    ""isComposite"": true,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": ""negative"",
-                    ""id"": ""95ac09ab-3be7-4a66-99bf-b23d26c3c561"",
-                    ""path"": ""<Keyboard>/a"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Keyboard"",
-                    ""action"": ""Steer"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
-                {
-                    ""name"": ""positive"",
-                    ""id"": ""fa61eed1-c8f8-4110-862c-b22950889683"",
-                    ""path"": ""<Keyboard>/d"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""Keyboard"",
-                    ""action"": ""Steer"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": true
-                },
                 {
                     ""name"": ""1D Axis"",
                     ""id"": ""b5fbb121-3a64-44d0-a600-e4ddf79081cb"",
@@ -112,6 +97,149 @@ public partial class @Controls : IInputActionCollection2, IDisposable
                     ""action"": ""Torque"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""1D Axis"",
+                    ""id"": ""9a1ada2e-ad63-40e4-9f98-4d0dd8540fd6"",
+                    ""path"": ""1DAxis"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Torque"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""negative"",
+                    ""id"": ""1b4dd337-112d-46f0-9231-4a437f367733"",
+                    ""path"": ""<Gamepad>/leftTrigger"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""Torque"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""positive"",
+                    ""id"": ""9848821e-33c3-4d8f-af6f-5dbb5b25bd85"",
+                    ""path"": ""<Gamepad>/rightTrigger"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""Torque"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""31a619d6-6424-44d5-a91e-cabf201c5bcb"",
+                    ""path"": ""<Gamepad>/leftStick"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""Rotate"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""2D Vector"",
+                    ""id"": ""bd876cc3-c6c5-4e05-89f0-38abb73cb5c1"",
+                    ""path"": ""2DVector"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Rotate"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""up"",
+                    ""id"": ""6d410052-0d4a-435c-beef-61d6eea7023c"",
+                    ""path"": ""<Keyboard>/w"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""Rotate"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""down"",
+                    ""id"": ""fcfaab17-8994-48bf-8c71-3973cc20e72b"",
+                    ""path"": ""<Keyboard>/s"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""Rotate"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""left"",
+                    ""id"": ""70136a09-d74b-4370-94f5-b438e2b87ab5"",
+                    ""path"": ""<Keyboard>/q"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""Rotate"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""right"",
+                    ""id"": ""3bda088d-8a2b-46ef-b7a2-bdaa70ba2dc8"",
+                    ""path"": ""<Keyboard>/d"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""Rotate"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""da721dd0-7268-4496-a11f-1bc4c245e8db"",
+                    ""path"": ""<Gamepad>/leftShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""ChangeRotationAxe"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""16c1c729-7064-43d4-a7a8-2688e72e728c"",
+                    ""path"": ""<Keyboard>/shift"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""ChangeRotationAxe"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""c9971234-64f3-4d65-acb0-cded42a14a83"",
+                    ""path"": ""<Gamepad>/buttonWest"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""ParkingBreak"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""ce846cc2-7338-410b-a702-ca9a4eb58f99"",
+                    ""path"": ""<Keyboard>/ctrl"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ParkingBreak"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -160,13 +288,26 @@ public partial class @Controls : IInputActionCollection2, IDisposable
                     ""isOR"": false
                 }
             ]
+        },
+        {
+            ""name"": ""Gamepad"",
+            ""bindingGroup"": ""Gamepad"",
+            ""devices"": [
+                {
+                    ""devicePath"": ""<Gamepad>"",
+                    ""isOptional"": false,
+                    ""isOR"": false
+                }
+            ]
         }
     ]
 }");
         // DrivingActions
         m_DrivingActions = asset.FindActionMap("DrivingActions", throwIfNotFound: true);
-        m_DrivingActions_Steer = m_DrivingActions.FindAction("Steer", throwIfNotFound: true);
+        m_DrivingActions_Rotate = m_DrivingActions.FindAction("Rotate", throwIfNotFound: true);
         m_DrivingActions_Torque = m_DrivingActions.FindAction("Torque", throwIfNotFound: true);
+        m_DrivingActions_ChangeRotationAxe = m_DrivingActions.FindAction("ChangeRotationAxe", throwIfNotFound: true);
+        m_DrivingActions_ParkingBreak = m_DrivingActions.FindAction("ParkingBreak", throwIfNotFound: true);
         // ShootingActions
         m_ShootingActions = asset.FindActionMap("ShootingActions", throwIfNotFound: true);
         m_ShootingActions_Newaction = m_ShootingActions.FindAction("New action", throwIfNotFound: true);
@@ -229,14 +370,18 @@ public partial class @Controls : IInputActionCollection2, IDisposable
     // DrivingActions
     private readonly InputActionMap m_DrivingActions;
     private IDrivingActionsActions m_DrivingActionsActionsCallbackInterface;
-    private readonly InputAction m_DrivingActions_Steer;
+    private readonly InputAction m_DrivingActions_Rotate;
     private readonly InputAction m_DrivingActions_Torque;
+    private readonly InputAction m_DrivingActions_ChangeRotationAxe;
+    private readonly InputAction m_DrivingActions_ParkingBreak;
     public struct DrivingActionsActions
     {
         private @Controls m_Wrapper;
         public DrivingActionsActions(@Controls wrapper) { m_Wrapper = wrapper; }
-        public InputAction @Steer => m_Wrapper.m_DrivingActions_Steer;
+        public InputAction @Rotate => m_Wrapper.m_DrivingActions_Rotate;
         public InputAction @Torque => m_Wrapper.m_DrivingActions_Torque;
+        public InputAction @ChangeRotationAxe => m_Wrapper.m_DrivingActions_ChangeRotationAxe;
+        public InputAction @ParkingBreak => m_Wrapper.m_DrivingActions_ParkingBreak;
         public InputActionMap Get() { return m_Wrapper.m_DrivingActions; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -246,22 +391,34 @@ public partial class @Controls : IInputActionCollection2, IDisposable
         {
             if (m_Wrapper.m_DrivingActionsActionsCallbackInterface != null)
             {
-                @Steer.started -= m_Wrapper.m_DrivingActionsActionsCallbackInterface.OnSteer;
-                @Steer.performed -= m_Wrapper.m_DrivingActionsActionsCallbackInterface.OnSteer;
-                @Steer.canceled -= m_Wrapper.m_DrivingActionsActionsCallbackInterface.OnSteer;
+                @Rotate.started -= m_Wrapper.m_DrivingActionsActionsCallbackInterface.OnRotate;
+                @Rotate.performed -= m_Wrapper.m_DrivingActionsActionsCallbackInterface.OnRotate;
+                @Rotate.canceled -= m_Wrapper.m_DrivingActionsActionsCallbackInterface.OnRotate;
                 @Torque.started -= m_Wrapper.m_DrivingActionsActionsCallbackInterface.OnTorque;
                 @Torque.performed -= m_Wrapper.m_DrivingActionsActionsCallbackInterface.OnTorque;
                 @Torque.canceled -= m_Wrapper.m_DrivingActionsActionsCallbackInterface.OnTorque;
+                @ChangeRotationAxe.started -= m_Wrapper.m_DrivingActionsActionsCallbackInterface.OnChangeRotationAxe;
+                @ChangeRotationAxe.performed -= m_Wrapper.m_DrivingActionsActionsCallbackInterface.OnChangeRotationAxe;
+                @ChangeRotationAxe.canceled -= m_Wrapper.m_DrivingActionsActionsCallbackInterface.OnChangeRotationAxe;
+                @ParkingBreak.started -= m_Wrapper.m_DrivingActionsActionsCallbackInterface.OnParkingBreak;
+                @ParkingBreak.performed -= m_Wrapper.m_DrivingActionsActionsCallbackInterface.OnParkingBreak;
+                @ParkingBreak.canceled -= m_Wrapper.m_DrivingActionsActionsCallbackInterface.OnParkingBreak;
             }
             m_Wrapper.m_DrivingActionsActionsCallbackInterface = instance;
             if (instance != null)
             {
-                @Steer.started += instance.OnSteer;
-                @Steer.performed += instance.OnSteer;
-                @Steer.canceled += instance.OnSteer;
+                @Rotate.started += instance.OnRotate;
+                @Rotate.performed += instance.OnRotate;
+                @Rotate.canceled += instance.OnRotate;
                 @Torque.started += instance.OnTorque;
                 @Torque.performed += instance.OnTorque;
                 @Torque.canceled += instance.OnTorque;
+                @ChangeRotationAxe.started += instance.OnChangeRotationAxe;
+                @ChangeRotationAxe.performed += instance.OnChangeRotationAxe;
+                @ChangeRotationAxe.canceled += instance.OnChangeRotationAxe;
+                @ParkingBreak.started += instance.OnParkingBreak;
+                @ParkingBreak.performed += instance.OnParkingBreak;
+                @ParkingBreak.canceled += instance.OnParkingBreak;
             }
         }
     }
@@ -308,10 +465,21 @@ public partial class @Controls : IInputActionCollection2, IDisposable
             return asset.controlSchemes[m_KeyboardSchemeIndex];
         }
     }
+    private int m_GamepadSchemeIndex = -1;
+    public InputControlScheme GamepadScheme
+    {
+        get
+        {
+            if (m_GamepadSchemeIndex == -1) m_GamepadSchemeIndex = asset.FindControlSchemeIndex("Gamepad");
+            return asset.controlSchemes[m_GamepadSchemeIndex];
+        }
+    }
     public interface IDrivingActionsActions
     {
-        void OnSteer(InputAction.CallbackContext context);
+        void OnRotate(InputAction.CallbackContext context);
         void OnTorque(InputAction.CallbackContext context);
+        void OnChangeRotationAxe(InputAction.CallbackContext context);
+        void OnParkingBreak(InputAction.CallbackContext context);
     }
     public interface IShootingActionsActions
     {
