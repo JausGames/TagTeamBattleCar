@@ -8,7 +8,7 @@ namespace Inputs
 {
     public class PlayerInputs : NetworkBehaviour
     {
-        [SerializeField] ShipController motor = null;
+        [SerializeField] ClientAutoritative.ShipController motor = null;
         public void Start()
         {
             Debug.Log("Network Informations : IsLocalPlayer " + IsLocalPlayer);

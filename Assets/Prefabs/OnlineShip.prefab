@@ -10348,7 +10348,7 @@ GameObject:
   - component: {fileID: 7082554515074365465}
   - component: {fileID: 7082554515074365466}
   - component: {fileID: 2942647051060950685}
-  - component: {fileID: 5825930168394349783}
+  - component: {fileID: 5014290134801926617}
   - component: {fileID: 7734754612417541495}
   - component: {fileID: 7082554515074365469}
   - component: {fileID: 7082554515074365458}
@@ -10358,8 +10358,8 @@ GameObject:
   - component: {fileID: 7082554515074365462}
   - component: {fileID: 7082554515074365467}
   - component: {fileID: 7082554515074365464}
-  - component: {fileID: 1538138757993205283}
-  - component: {fileID: -4753839358231549128}
+  - component: {fileID: 3258821112717848914}
+  - component: {fileID: -156218553507271744}
   m_Layer: 3
   m_Name: OnlineShip
   m_TagString: Untagged
@@ -10418,10 +10418,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c323e466057d58640a88ee78cccd898c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  motor: {fileID: 5825930168394349783}
+  motor: {fileID: 5014290134801926617}
   lookAt: {fileID: 7082554514215364516}
   body: {fileID: 7082554515074365458}
---- !u!114 &5825930168394349783
+--- !u!114 &5014290134801926617
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -10430,24 +10430,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 7082554515074365463}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9dd3eff40d7ad844e95ee05a5e551962, type: 3}
+  m_Script: {fileID: 11500000, guid: 2db778b2ef3afdd4ca079183f76f89cc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   previousRotation: {x: 0, y: 0}
-  rotation:
-    m_InternalValue: {x: 0, y: 0}
-  torqueApply:
-    m_InternalValue: 0
-  parkingBreaking:
-    m_InternalValue: 0
-  isRotationAxeY:
-    m_InternalValue: 1
-  force:
-    m_InternalValue: {x: 0, y: 0, z: 0}
-  torque:
-    m_InternalValue: {x: 0, y: 0, z: 0}
-  oldForce: {x: 0, y: 0, z: 0}
-  oldTorque: {x: 0, y: 0, z: 0}
+  rotation: {x: 0, y: 0}
+  torqueApply: 0
+  parkingBreaking: 0
+  isRotationAxeY: 0
   carSettings: {fileID: 11400000, guid: cd2699559a6a8c9409b119e8352fd02e, type: 2}
   onFloor: 0
   gravityModifier: 1000
@@ -10477,7 +10467,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0d2d44d2e9695b4458a4626779d8abf6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  motor: {fileID: 5825930168394349783}
+  motor: {fileID: 5014290134801926617}
 --- !u!114 &7082554515074365469
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10706,7 +10696,7 @@ CapsuleCollider:
   m_Height: 3.67
   m_Direction: 2
   m_Center: {x: 0.34, y: -0.31, z: 0}
---- !u!114 &1538138757993205283
+--- !u!114 &3258821112717848914
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -10715,7 +10705,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 7082554515074365463}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e96cb6065543e43c4a752faaa1468eb1, type: 3}
+  m_Script: {fileID: 11500000, guid: 54c9647dc784a46bca664910f182491e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   SyncPositionX: 1
@@ -10733,7 +10723,7 @@ MonoBehaviour:
   InLocalSpace: 0
   Interpolate: 1
   CanCommitToTransform: 0
---- !u!114 &-4753839358231549128
+--- !u!114 &-156218553507271744
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

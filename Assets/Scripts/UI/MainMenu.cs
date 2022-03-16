@@ -13,14 +13,35 @@ public class MainMenu : MonoBehaviour
     [Header("UI Components")]
     [SerializeField] TMPro.TMP_InputField text_ipAdress;
     [SerializeField] TMPro.TMP_Text lbl_currentIp;
+    [SerializeField] TMPro.TMP_Text lbl_ping;
     [SerializeField] Button btn_starGame;
     [SerializeField] Button btn_joinGame;
 
-
+    Ping ping;
+    List<int> pingsArray = new List<int>();
     UNetTransport unetTransform;
+    int pingCount = 49;
 
-    string ipAdress = "127.0.0.1";
+    string ipAdress = "172.30.106.235";
 
+    private void Update()
+    {
+        if (ping.isDone)
+        {
+            pingCount++;
+            pingsArray.Add(ping.time);
+            if(pingsArray.Count > 100)  pingsArray.Remove(0); 
+            if(pingCount == 50)
+            {
+                var averageValue = 0f;
+                foreach (int ping in pingsArray)  averageValue += ping; 
+                averageValue = Mathf.Round(averageValue /= pingsArray.Count);
+                lbl_ping.text = averageValue.ToString() + "ms";
+                pingCount = 0;
+            }
+            ping = new Ping(ipAdress);
+        }
+    }
 
     // Start is called before the first frame update
     void Start()
@@ -35,6 +56,8 @@ public class MainMenu : MonoBehaviour
 
         btn_starGame.onClick.AddListener(Host);
         btn_joinGame.onClick.AddListener(Client);
+
+        ping = new Ping("172.30.106.235");
     }
     private void OnDestroy()
     {
@@ -107,7 +130,8 @@ public class MainMenu : MonoBehaviour
             //PlayerManager.GetInstance().FindPlayers(listId);
             SubmitAddPlayerServerRpc(clientId);
 
-            ConectionMenu.SetActive(false);
+                    //ConectionMenu.SetActive(false);
+
             // passwordEntryUI.SetActive(false);
             //leaveButton.SetActive(true);
         }

@@ -6,7 +6,7 @@ using Unity.Netcode;
 
 public class Player : NetworkBehaviour
 {
-    [SerializeField] ShipController motor;
+    [SerializeField] ClientAutoritative.ShipController motor;
     [SerializeField] Transform lookAt;
     [SerializeField] Rigidbody body;
 
