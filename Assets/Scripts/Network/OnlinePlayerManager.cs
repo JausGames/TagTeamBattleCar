@@ -86,7 +86,7 @@ public class OnlinePlayerManager : MonoBehaviour
         // Temporary workaround to treat host as client
         if (NetworkManager.Singleton.IsHost)
         {
-            HandleClientConnected(NetworkManager.Singleton.ServerClientId);
+            HandleClientConnected(NetworkManager.ServerClientId);
         }
     }
     private void HandleClientConnected(ulong clientId)
@@ -141,20 +141,32 @@ public class OnlinePlayerManager : MonoBehaviour
             //leaveButton.SetActive(false);
         }
     }
-
-    private void ApprovalCheck(byte[] connectionData, ulong clientId, Unity.Netcode.NetworkManager.ConnectionApprovedDelegate callback)
+    private void ApprovalCheck(NetworkManager.ConnectionApprovalRequest request, NetworkManager.ConnectionApprovalResponse response)
     {
-        //string password = Encoding.ASCII.GetString(connectionData);
+        // The client identifier to be authenticated
+        var clientId = request.ClientNetworkId;
 
-        //bool approveConnection = password == passwordInputField.text;
-        bool approveConnection = true;
+        // Additional connection data defined by user code
+        var connectionData = request.Payload;
 
-        var driver = NetworkManager.Singleton.ConnectedClients.Count % 2 == 0;
-        var carNb = NetworkManager.Singleton.ConnectedClients.Count / 2 ;
+        // Your approval logic determines the following values
+        response.Approved = true;
+        response.CreatePlayerObject = true;
 
-        //callback(true, null, approveConnection, GetSpawnPosition()[pos], GetSpawnRotation()[pos]);
-        callback(true, null, approveConnection, new Vector3(10f, 10f, -10f), Quaternion.identity);
+        // The prefab hash value of the NetworkPrefab, if null the default NetworkManager player prefab is used
+        response.PlayerPrefabHash = null;
+
+        // Position to spawn the player object (if null it uses default of Vector3.zero)
+        response.Position = Vector3.zero;
+
+        // Rotation to spawn the player object (if null it uses the default of Quaternion.identity)
+        response.Rotation = Quaternion.identity;
+
+        // If additional approval steps are needed, set this to true until the additional steps are complete
+        // once it transitions from true to false the connection approval response will be processed.
+        response.Pending = false;
     }
+
     static void StatusLabels()
     {
         var mode = NetworkManager.Singleton.IsHost ?

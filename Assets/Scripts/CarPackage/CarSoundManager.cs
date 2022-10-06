@@ -5,7 +5,6 @@ using UnityEngine;
 public class CarSoundManager : MonoBehaviour
 {
     [SerializeField] AudioSource motorAudioSource;
-    [SerializeField] AudioClip motorStartClip;
     [SerializeField] AnimationCurve speedToPitchCurve;
     [SerializeField] float pitchClamp = 20f;
     float lastSpeed;
@@ -18,15 +17,13 @@ public class CarSoundManager : MonoBehaviour
     {
         maxVolume = motorAudioSource.volume;
     }
-    public void SetCarEnginePitch(float speed)
+    public void SetCarEnginePitch(float speed, float torque)
     {
 
-        currentPitch = Mathf.Lerp(currentPitch, speedToPitchCurve.Evaluate(speed / maxSpeed), pitchClamp * Time.deltaTime);
+        currentPitch = Mathf.MoveTowards(currentPitch, speedToPitchCurve.Evaluate(speed / maxSpeed), pitchClamp * Time.deltaTime);
 
-        if (speed == 0f) motorAudioSource.volume = Mathf.Lerp(motorAudioSource.volume, 0f, shutMotorClamp * Time.deltaTime);
-        else if (speed > 0f) motorAudioSource.volume = Mathf.Lerp(motorAudioSource.volume, maxVolume, shutMotorClamp * Time.deltaTime);
-
-        if (lastSpeed == 0f && speed != 0f && currentPitch <= 0.9f) motorAudioSource.PlayOneShot(motorStartClip);
+        if (torque == 0f) motorAudioSource.volume = Mathf.MoveTowards(motorAudioSource.volume, 0f, shutMotorClamp * Time.deltaTime);
+        else if (speed > 0f) motorAudioSource.volume = Mathf.MoveTowards(motorAudioSource.volume, maxVolume, shutMotorClamp * Time.deltaTime);
 
 
         motorAudioSource.pitch = currentPitch;

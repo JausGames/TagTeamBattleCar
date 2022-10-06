@@ -10,10 +10,10 @@ public class ShipController : NetworkBehaviour
 {
     [Header("Inputs")]
     [SerializeField] Vector2 previousRotation;
-    [SerializeField] NetworkVariable<Vector2> rotation = new NetworkVariable<Vector2>(NetworkVariableReadPermission.Everyone);
-    [SerializeField] NetworkVariable<float> torqueApply = new NetworkVariable<float>(NetworkVariableReadPermission.Everyone);
-    [SerializeField] NetworkVariable<bool> parkingBreaking = new NetworkVariable<bool>(NetworkVariableReadPermission.Everyone);
-    [SerializeField] NetworkVariable<bool> isRotationAxeY = new NetworkVariable<bool>(NetworkVariableReadPermission.Everyone);
+    [SerializeField] NetworkVariable<Vector2> rotation = new NetworkVariable<Vector2>(Vector2.zero, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
+    [SerializeField] NetworkVariable<float> torqueApply = new NetworkVariable<float>(0f, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
+    [SerializeField] NetworkVariable<bool> parkingBreaking = new NetworkVariable<bool>(false, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
+    [SerializeField] NetworkVariable<bool> isRotationAxeY = new NetworkVariable<bool>(false, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
 
     [Space]
     [Header("Network value")]
@@ -47,7 +47,7 @@ public class ShipController : NetworkBehaviour
     private void Start()
     {
         soundManager.SetMaxSpeed(carSettings.maxSpeed);
-        body.centerOfMass = centerOfMass.localPosition; 
+        body.centerOfMass = centerOfMass.localPosition;
     }
 
     #region Network var : Rotation
@@ -346,7 +346,7 @@ public class ShipController : NetworkBehaviour
     }
     private void SetMotorPitch(float speed)
     {
-        soundManager.SetCarEnginePitch(speed);
+        soundManager.SetCarEnginePitch(speed, 0f);
     }
     #endregion
 

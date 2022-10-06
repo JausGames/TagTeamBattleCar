@@ -9,11 +9,12 @@ namespace ClientAutoritative
     public class ShipController : NetworkBehaviour
     {
         [Header("Inputs")]
-        [SerializeField] Vector2 previousRotation;
-        [SerializeField] Vector2 rotation;
-        [SerializeField] float torqueApply;
-        [SerializeField] bool parkingBreaking;
-        [SerializeField] bool isRotationAxeY;
+        [SerializeField] float previousRotation;
+        [SerializeField] NetworkVariable<float> rotation = new NetworkVariable<float>(0f, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
+        [SerializeField] NetworkVariable<float> torqueApply = new NetworkVariable<float>(0f, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
+        [SerializeField] NetworkVariable<bool> parkingBreaking = new NetworkVariable<bool>(false, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
+        [SerializeField] NetworkVariable<bool> isRotationAxeY = new NetworkVariable<bool>(false, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
+
 
         [Space]
         [Header("Car stats")]
@@ -26,7 +27,6 @@ namespace ClientAutoritative
         [SerializeField] protected Rigidbody body;
         [SerializeField] Transform centerOfMass;
         [SerializeField] ParticleSystem[] boostParticles;
-        [SerializeField] Light[] boostLights;
         [SerializeField] CarSoundManager soundManager;
 
         [Space]
@@ -38,32 +38,33 @@ namespace ClientAutoritative
         private void Start()
         {
             soundManager.SetMaxSpeed(carSettings.maxSpeed);
-            body.centerOfMass = centerOfMass.localPosition; 
+            body.centerOfMass = centerOfMass.localPosition;
+            if (IsOwner) body.isKinematic = false;
         }
 
         #region Network var : Rotation
-        public void SetRotation(Vector3 rotation)
+        public void SetRotation(float torque)
         {
-            this.rotation = rotation;
+            this.rotation.Value = torque;
         }
         #endregion
         #region Network var : Motor Torque
         public void SetMotorTorque(float torque)
         {
-            this.torqueApply = torque;
+            this.torqueApply.Value = torque;
         }
         #endregion
         #region Network var : Parking break
 
         public void SetParkingBreak(bool breaking)
         {
-            this.parkingBreaking = breaking;
+            this.parkingBreaking.Value = breaking;
         }
         #endregion
         #region Network var : Rotation axe Y
         public void SetRotationAxeY(bool isY)
         {
-            this.isRotationAxeY = isY;
+            this.isRotationAxeY.Value = isY;
         }
         #endregion
 
@@ -71,12 +72,12 @@ namespace ClientAutoritative
         // Update is called once per frame
         void Update()
         {
-            Vector3[] localMatrix;
-            Vector3 localVelocity, localAngularVelocity;
-            GetSpeedConversions(out localMatrix, out localVelocity, out localAngularVelocity);
 
             if (IsOwner)
             {
+                Vector3[] localMatrix;
+                Vector3 localVelocity, localAngularVelocity;
+                GetSpeedConversions(out localMatrix, out localVelocity, out localAngularVelocity);
                 UpdateClient(localMatrix, localVelocity, localAngularVelocity);
             }
 
@@ -89,38 +90,38 @@ namespace ClientAutoritative
             if (onFloor)
             {
 
-                torque += ApplySteeringRotation(rotation, localAngularVelocity, out resetSteer);
-                force += ApplyMotorAcceleration(torqueApply, localVelocity, localMatrix);
+                torque += ApplySteeringRotation(rotation.Value, localAngularVelocity, out resetSteer);
+                force += ApplyMotorAcceleration(torqueApply.Value, localVelocity, localMatrix);
             }
             else
             {
-                torque += CheckAerialRotations(isRotationAxeY, rotation);
+                //torque += CheckAerialRotations(isRotationAxeY.Value, rotation.Value);
                 force += ApplyGravity();
             }
 
             body.AddForce(force * Time.deltaTime, ForceMode.Acceleration);
+            //body.velocity += force * Time.deltaTime;
             body.AddTorque(torque * Time.deltaTime, ForceMode.Acceleration);
-            ForceForwardDirection(parkingBreaking, localVelocity);
+            ForceForwardDirection(parkingBreaking.Value, localVelocity);
             if (resetSteer) ResetSteeringWheel(localAngularVelocity);
 
             //Effects here
-            PlayShipSvfxServerRpc(torqueApply > 0, localVelocity.z);
-            Debug.Log("ShipController, VFXisplayed client ? " + (torqueApply > 0));
+            PlayShipSvfxServerRpc(localVelocity.z, torqueApply.Value);
+            Debug.Log("ShipController, VFXisplayed client ? " + (torqueApply.Value > 0));
 
         }
 
         [ServerRpc]
-        void PlayShipSvfxServerRpc(bool isPlayed, float speed)
+        void PlayShipSvfxServerRpc(float speed, float torque)
         {
-            PlayShipSvfxClientRpc(isPlayed, speed);
+            PlayShipSvfxClientRpc(speed, torque);
         }
 
         [ClientRpc]
-        void PlayShipSvfxClientRpc(bool isPlayed, float speed)
+        void PlayShipSvfxClientRpc(float speed, float torque)
         {
-            PlayBoostVfx(isPlayed);
-            if (isPlayed) SetMotorPitch(speed);
-            else SetMotorPitch(0f);
+            PlaySpeedVfx();
+            SetMotorPitch(speed > .5f ? speed : 0f, torque);
         }
 
         #endregion
@@ -138,16 +139,16 @@ namespace ClientAutoritative
             return new Vector3[] { Vector3.Dot(transform.forward, Vector3.forward) * Vector3.forward, Vector3.Dot(transform.forward, Vector3.right) * Vector3.right, Vector3.Dot(transform.forward, Vector3.up) * Vector3.up };
         }
 
-        protected Vector3 ApplySteeringRotation(Vector3 rotation, Vector3 localAngularVelocity, out bool resetSteer)
+        protected Vector3 ApplySteeringRotation(float rotation, Vector3 localAngularVelocity, out bool resetSteer)
         {
             //Rotate the ship
             resetSteer = false;
             var torque = Vector3.zero;
             var steerRatio = carSettings.steerCurve.Evaluate(body.velocity.magnitude / carSettings.maxSpeed);
-            if (Mathf.Abs(rotation.x) > 0.1f)
+            if (Mathf.Abs(rotation) > 0.1f)
             {
-                if (Mathf.Sign(previousRotation.x) != Mathf.Sign(rotation.x)) resetSteer = true;
-                torque = rotation.x * carSettings.rotationSpeed * steerRatio * transform.up;
+                if (Mathf.Sign(previousRotation) != Mathf.Sign(rotation)) resetSteer = true;
+                torque = rotation * carSettings.rotationSpeed * steerRatio * transform.up;
             }
             else resetSteer = true;
             previousRotation = rotation;
@@ -179,7 +180,7 @@ namespace ClientAutoritative
                 var driftSpeedRatio = Mathf.Pow(localVelocity.x, 2f) / Mathf.Pow(Mathf.Abs(localVelocity.x) + Mathf.Abs(localVelocity.z), 2f);
                 var breakRatio = carSettings.stopDriftingCurve.Evaluate(driftSpeedRatio);
                 localVelocity.x *= breakRatio;
-                body.velocity = Vector3.Lerp(body.velocity, transform.TransformDirection(localVelocity), carSettings.driftSpeedBoostRatio * Time.deltaTime);
+                body.velocity = Vector3.MoveTowards(body.velocity, transform.TransformDirection(localVelocity), carSettings.driftSpeedBoostRatio * Time.deltaTime);
             }
         }
         private void ResetSteeringWheel(Vector3 localAngularVelocity)
@@ -187,16 +188,16 @@ namespace ClientAutoritative
             body.angularVelocity = localAngularVelocity.x * Vector3.right + localAngularVelocity.z * Vector3.up;
         }
 
-        protected Vector3 CheckAerialRotations(bool rotationAxeIsY, Vector3 rotation)
+        protected Vector3 CheckAerialRotations(bool rotationAxeIsY, float rotation)
         {
 
             //Not on floor : can rotate multiple axes
             var aerialRot = Vector3.zero;
             var rotationAxe = transform.up;
             if (!rotationAxeIsY) rotationAxe = -transform.forward;
-            if (Mathf.Abs(rotation.magnitude) > 0.1f) aerialRot = rotation.x * carSettings.rotationSpeed * rotationAxe
-                                                                + rotation.y * carSettings.rotationSpeed * transform.right;
-            SetMotorPitch(0f);
+            /*if (Mathf.Abs(rotation.magnitude) > 0.1f) aerialRot = rotation.x * carSettings.rotationSpeed * rotationAxe
+                                                                + rotation.y * carSettings.rotationSpeed * transform.right;*/
+            SetMotorPitch(0f, 0f);
             return aerialRot;
         }
         protected Vector3 ApplyGravity()
@@ -209,38 +210,21 @@ namespace ClientAutoritative
 
         #region SFX & VFX
 
-        void PlayBoostVfx(bool isPlayed)
+        void PlaySpeedVfx()
         {
-            if (isPlayed)
+            var playParticles = false;
+            if (body.velocity.magnitude > .5f && onFloor)
+                playParticles = true;
+
+            foreach (ParticleSystem prtc in boostParticles)
             {
-                foreach (ParticleSystem prtc in boostParticles)
-                {
-                    if (!prtc.isPlaying)
-                        prtc.Play();
-                }
-                foreach (Light light in boostLights)
-                {
-                    if (!light.enabled)
-                        light.enabled = true;
-                }
-            }
-            else
-            {
-                foreach (ParticleSystem prtc in boostParticles)
-                {
-                    if (!prtc.isStopped)
-                        prtc.Stop();
-                }
-                foreach (Light light in boostLights)
-                {
-                    if (light.enabled)
-                        light.enabled = false;
-                }
+                var em = prtc.emission;
+                em.enabled = playParticles;
             }
         }
-        private void SetMotorPitch(float speed)
+        private void SetMotorPitch(float speed, float torque)
         {
-            soundManager.SetCarEnginePitch(speed);
+            soundManager.SetCarEnginePitch(speed, torque);
         }
         #endregion
 

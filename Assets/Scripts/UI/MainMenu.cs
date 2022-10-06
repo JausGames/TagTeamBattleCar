@@ -12,7 +12,7 @@ public class MainMenu : MonoBehaviour
     [SerializeField] GameObject ConectionMenu;
     [Header("UI Components")]
     [SerializeField] TMPro.TMP_InputField text_ipAdress;
-    [SerializeField] TMPro.TMP_Text lbl_currentIp;
+    [SerializeField] TMPro.TMP_InputField text_currentIp;
     [SerializeField] TMPro.TMP_Text lbl_ping;
     [SerializeField] Button btn_starGame;
     [SerializeField] Button btn_joinGame;
@@ -22,7 +22,8 @@ public class MainMenu : MonoBehaviour
     UNetTransport unetTransform;
     int pingCount = 49;
 
-    string ipAdress = "172.30.106.235";
+    //string ipAdress = "172.30.114.48";
+    string ipAdress = "127.0.0.1";
 
     private void Update()
     {
@@ -53,11 +54,12 @@ public class MainMenu : MonoBehaviour
         NetworkManager.Singleton.OnClientDisconnectCallback += HandleClientDisconnect;
 
         text_ipAdress.onValueChanged.AddListener(delegate { unetTransform.ConnectAddress = ipAdress = text_ipAdress.text; });
+        text_currentIp.onValueChanged.AddListener(delegate { unetTransform.ConnectAddress = ipAdress = text_currentIp.text; });
 
         btn_starGame.onClick.AddListener(Host);
         btn_joinGame.onClick.AddListener(Client);
 
-        ping = new Ping("172.30.106.235");
+        ping = new Ping("127.0.0.1");
     }
     private void OnDestroy()
     {
@@ -107,7 +109,7 @@ public class MainMenu : MonoBehaviour
         // Temporary workaround to treat host as client
         if (NetworkManager.Singleton.IsHost)
         {
-            HandleClientConnected(NetworkManager.Singleton.ServerClientId);
+            HandleClientConnected(NetworkManager.ServerClientId);
         }
     }
     private void HandleClientConnected(ulong clientId)
@@ -140,9 +142,10 @@ public class MainMenu : MonoBehaviour
     [ServerRpc]
     void SubmitAddPlayerServerRpc(ulong clientId, ServerRpcParams rpcParams = default)
     {
-        if (!NetworkManager.Singleton.ConnectedClients.TryGetValue(clientId, out NetworkClient networkClient)) return;
-        if (!networkClient.PlayerObject.TryGetComponent<Player>(out Player newPlayer)) return;
-        AddPlayerClientRpc(newPlayer, clientId);
+        //only accessible by client
+        /*if (!NetworkManager.Singleton.ConnectedClients.TryGetValue(clientId, out NetworkClient networkClient)) return;
+        if (!networkClient.PlayerObject.TryGetComponent<Player>(out Player newPlayer)) return;*/
+        //AddPlayerClientRpc(newPlayer, clientId);
     }
     [ClientRpc]
     void AddPlayerClientRpc(Player player, ulong clientId)
@@ -166,17 +169,29 @@ public class MainMenu : MonoBehaviour
         }
     }
 
-    private void ApprovalCheck(byte[] connectionData, ulong clientId, Unity.Netcode.NetworkManager.ConnectionApprovedDelegate callback)
+    private void ApprovalCheck(NetworkManager.ConnectionApprovalRequest request, NetworkManager.ConnectionApprovalResponse response)
     {
-        //string password = Encoding.ASCII.GetString(connectionData);
+        // The client identifier to be authenticated
+        var clientId = request.ClientNetworkId;
 
-        //bool approveConnection = password == passwordInputField.text;
-        bool approveConnection = true;
+        // Additional connection data defined by user code
+        var connectionData = request.Payload;
 
-        var driver = NetworkManager.Singleton.ConnectedClients.Count % 2 == 0;
-        var carNb = NetworkManager.Singleton.ConnectedClients.Count / 2;
+        // Your approval logic determines the following values
+        response.Approved = true;
+        response.CreatePlayerObject = true;
 
-        //callback(true, null, approveConnection, GetSpawnPosition()[pos], GetSpawnRotation()[pos]);
-        callback(true, null, approveConnection, new Vector3(10f, 10f, -10f), Quaternion.identity);
+        // The prefab hash value of the NetworkPrefab, if null the default NetworkManager player prefab is used
+        response.PlayerPrefabHash = null;
+
+        // Position to spawn the player object (if null it uses default of Vector3.zero)
+        response.Position = Vector3.zero;
+
+        // Rotation to spawn the player object (if null it uses the default of Quaternion.identity)
+        response.Rotation = Quaternion.identity;
+
+        // If additional approval steps are needed, set this to true until the additional steps are complete
+        // once it transitions from true to false the connection approval response will be processed.
+        response.Pending = false;
     }
 }
