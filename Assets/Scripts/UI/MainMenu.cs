@@ -5,6 +5,8 @@ using Unity.Netcode;
 using UnityEngine.UI;
 using System.Text;
 using Unity.Netcode.Transports.UNET;
+using Unity.Services.Lobbies;
+using Unity.Services.Lobbies.Models;
 
 public class MainMenu : MonoBehaviour
 {
@@ -60,6 +62,15 @@ public class MainMenu : MonoBehaviour
         btn_joinGame.onClick.AddListener(Client);
 
         ping = new Ping("127.0.0.1");
+    }
+    async void StartLobby()
+    {
+        string lobbyName = "TaGrandeTante";
+        int maxPlayers = 3;
+        CreateLobbyOptions options = new CreateLobbyOptions();
+        options.IsPrivate = false;
+
+        Lobby lobby = await LobbyService.Instance.CreateLobbyAsync(lobbyName, maxPlayers, options);
     }
     private void OnDestroy()
     {
@@ -152,6 +163,7 @@ public class MainMenu : MonoBehaviour
     {
         if (clientId == NetworkManager.Singleton.LocalClientId) return;
         AddPlayerToList(player);
+        
     }
 
     private void AddPlayerToList(Player player)

@@ -9,7 +9,7 @@ EditorBuildSettings:
     path: Assets/Scenes/OnlineDrivingScene.unity
     guid: 2a2cb6344c6652e4e97cee9e6bf8aac9
   - enabled: 0
-    path: Assets/Scenes/OnlineTest.unity
+    path: Assets/Scenes/Tests/OnlineTest.unity
     guid: 9fc0d4010bbf28b4594072e72b8655ab
   m_configObjects:
     com.unity.input.settings: {fileID: 11400000, guid: 5b8c258636a15864e8a6209ccd766058,
