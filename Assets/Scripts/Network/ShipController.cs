@@ -25,7 +25,10 @@ namespace ClientAutoritative
         [Space]
         [Header("Components")]
         [SerializeField] protected Rigidbody body;
+        [SerializeField] CarAnimator carAnimator;
         [SerializeField] Transform centerOfMass;
+        [SerializeField] Rigidbody cartBody;
+        [SerializeField] Transform cartCenterOfMass;
         [SerializeField] ParticleSystem[] boostParticles;
         [SerializeField] CarSoundManager soundManager;
 
@@ -40,6 +43,7 @@ namespace ClientAutoritative
             soundManager.SetMaxSpeed(carSettings.maxSpeed);
             body.centerOfMass = centerOfMass.localPosition;
             if (IsOwner) body.isKinematic = false;
+            cartBody.centerOfMass = cartCenterOfMass.localPosition;
         }
 
         #region Network var : Rotation
@@ -106,7 +110,7 @@ namespace ClientAutoritative
             if (resetSteer) ResetSteeringWheel(localAngularVelocity);
 
             //Effects here
-            PlayShipSvfxServerRpc(localVelocity.z, torqueApply.Value);
+            PlayShipSvfxServerRpc(Mathf.Abs(localVelocity.z), torqueApply.Value);
             Debug.Log("ShipController, VFXisplayed client ? " + (torqueApply.Value > 0));
 
         }
@@ -122,6 +126,9 @@ namespace ClientAutoritative
         {
             PlaySpeedVfx();
             SetMotorPitch(speed > .5f ? speed : 0f, torque);
+            Debug.Log("allez = " + speed);
+            //if (speed > 0.5f)
+            carAnimator.SetSpeed(speed > .5f ? speed : 0f);
         }
 
         #endregion
@@ -216,15 +223,16 @@ namespace ClientAutoritative
             if (body.velocity.magnitude > .5f && onFloor)
                 playParticles = true;
 
-            foreach (ParticleSystem prtc in boostParticles)
+            /*foreach (ParticleSystem prtc in boostParticles)
             {
                 var em = prtc.emission;
                 em.enabled = playParticles;
-            }
+            }*/
         }
         private void SetMotorPitch(float speed, float torque)
         {
             soundManager.SetCarEnginePitch(speed, torque);
+
         }
         #endregion
 

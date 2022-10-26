@@ -32,6 +32,7 @@ public class ShipController : NetworkBehaviour
 
     [Space]
     [Header("Components")]
+    [SerializeField] public CarAnimator carAnimator;
     [SerializeField] protected Rigidbody body;
     [SerializeField] Transform centerOfMass;
     [SerializeField] ParticleSystem[] boostParticles;
@@ -48,6 +49,7 @@ public class ShipController : NetworkBehaviour
     {
         soundManager.SetMaxSpeed(carSettings.maxSpeed);
         body.centerOfMass = centerOfMass.localPosition;
+            carAnimator = GetComponent<CarAnimator>();
     }
 
     #region Network var : Rotation
@@ -202,6 +204,8 @@ public class ShipController : NetworkBehaviour
         PlayBoostVfx(isPlayed);
         if (isPlayed) SetMotorPitch(speed);
         else SetMotorPitch(0f);
+
+        carAnimator.SetSpeed(speed);
     }
     /*[ServerRpc]
     void RequestUpdateServerRpc(Vector3 force, Vector3 torque, bool resetSteer, Vector3 localAngularVelocity)
