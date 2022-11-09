@@ -345,6 +345,7 @@ public class LobbyHelloWorld : MonoBehaviour
         {
             Debug.Log($"Trying to log in a Unity.Services.Lobbies.Models.Player ...");
 
+
             // Use Unity Authentication to log in
             await AuthenticationService.Instance.SignInAnonymouslyAsync();
 
