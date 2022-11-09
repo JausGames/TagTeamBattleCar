@@ -248,24 +248,55 @@ public partial class @Controls : IInputActionCollection2, IDisposable
             ""id"": ""eb34750f-6567-4173-b97a-cfbe26cfdcce"",
             ""actions"": [
                 {
-                    ""name"": ""New action"",
+                    ""name"": ""Shoot"",
                     ""type"": ""Button"",
                     ""id"": ""826f04dc-f5fd-4ede-8c16-8f06e4a45cfd"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Look"",
+                    ""type"": ""Value"",
+                    ""id"": ""4aee7aab-093b-4745-90b3-097b677b5096"",
+                    ""expectedControlType"": ""Stick"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
                 }
             ],
             ""bindings"": [
                 {
                     ""name"": """",
                     ""id"": ""18c3b314-aa8f-4e7a-bf33-00ce63949ecb"",
-                    ""path"": """",
+                    ""path"": ""<Mouse>/leftButton"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Keyboard"",
-                    ""action"": ""New action"",
+                    ""action"": ""Shoot"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""cea6f4dc-3673-4012-8b44-e9405044af5b"",
+                    ""path"": ""<Gamepad>/rightShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""Shoot"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""72ca4160-936e-407b-8d58-919416633754"",
+                    ""path"": ""<Gamepad>/rightStick"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""Look"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -310,7 +341,8 @@ public partial class @Controls : IInputActionCollection2, IDisposable
         m_DrivingActions_ParkingBreak = m_DrivingActions.FindAction("ParkingBreak", throwIfNotFound: true);
         // ShootingActions
         m_ShootingActions = asset.FindActionMap("ShootingActions", throwIfNotFound: true);
-        m_ShootingActions_Newaction = m_ShootingActions.FindAction("New action", throwIfNotFound: true);
+        m_ShootingActions_Shoot = m_ShootingActions.FindAction("Shoot", throwIfNotFound: true);
+        m_ShootingActions_Look = m_ShootingActions.FindAction("Look", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -427,12 +459,14 @@ public partial class @Controls : IInputActionCollection2, IDisposable
     // ShootingActions
     private readonly InputActionMap m_ShootingActions;
     private IShootingActionsActions m_ShootingActionsActionsCallbackInterface;
-    private readonly InputAction m_ShootingActions_Newaction;
+    private readonly InputAction m_ShootingActions_Shoot;
+    private readonly InputAction m_ShootingActions_Look;
     public struct ShootingActionsActions
     {
         private @Controls m_Wrapper;
         public ShootingActionsActions(@Controls wrapper) { m_Wrapper = wrapper; }
-        public InputAction @Newaction => m_Wrapper.m_ShootingActions_Newaction;
+        public InputAction @Shoot => m_Wrapper.m_ShootingActions_Shoot;
+        public InputAction @Look => m_Wrapper.m_ShootingActions_Look;
         public InputActionMap Get() { return m_Wrapper.m_ShootingActions; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -442,16 +476,22 @@ public partial class @Controls : IInputActionCollection2, IDisposable
         {
             if (m_Wrapper.m_ShootingActionsActionsCallbackInterface != null)
             {
-                @Newaction.started -= m_Wrapper.m_ShootingActionsActionsCallbackInterface.OnNewaction;
-                @Newaction.performed -= m_Wrapper.m_ShootingActionsActionsCallbackInterface.OnNewaction;
-                @Newaction.canceled -= m_Wrapper.m_ShootingActionsActionsCallbackInterface.OnNewaction;
+                @Shoot.started -= m_Wrapper.m_ShootingActionsActionsCallbackInterface.OnShoot;
+                @Shoot.performed -= m_Wrapper.m_ShootingActionsActionsCallbackInterface.OnShoot;
+                @Shoot.canceled -= m_Wrapper.m_ShootingActionsActionsCallbackInterface.OnShoot;
+                @Look.started -= m_Wrapper.m_ShootingActionsActionsCallbackInterface.OnLook;
+                @Look.performed -= m_Wrapper.m_ShootingActionsActionsCallbackInterface.OnLook;
+                @Look.canceled -= m_Wrapper.m_ShootingActionsActionsCallbackInterface.OnLook;
             }
             m_Wrapper.m_ShootingActionsActionsCallbackInterface = instance;
             if (instance != null)
             {
-                @Newaction.started += instance.OnNewaction;
-                @Newaction.performed += instance.OnNewaction;
-                @Newaction.canceled += instance.OnNewaction;
+                @Shoot.started += instance.OnShoot;
+                @Shoot.performed += instance.OnShoot;
+                @Shoot.canceled += instance.OnShoot;
+                @Look.started += instance.OnLook;
+                @Look.performed += instance.OnLook;
+                @Look.canceled += instance.OnLook;
             }
         }
     }
@@ -483,6 +523,7 @@ public partial class @Controls : IInputActionCollection2, IDisposable
     }
     public interface IShootingActionsActions
     {
-        void OnNewaction(InputAction.CallbackContext context);
+        void OnShoot(InputAction.CallbackContext context);
+        void OnLook(InputAction.CallbackContext context);
     }
 }

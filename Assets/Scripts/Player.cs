@@ -16,6 +16,7 @@ public class Player : NetworkBehaviour
 
         if (!IsLocalPlayer) return;
         var virtualCamera = FindObjectOfType<CinemachineVirtualCamera>();
+        virtualCamera.enabled = true;
         virtualCamera.LookAt = lookAt;
         virtualCamera.Follow = transform;
     }
