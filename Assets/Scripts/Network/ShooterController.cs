@@ -53,7 +53,7 @@ public class ShooterController : NetworkBehaviour
         {
             var ennemy = hit.collider.GetComponent<ShooterController>() ? hit.collider.GetComponent<ShooterController>() : hit.collider.GetComponentInParent<ShooterController>();
 
-            Debug.Log(NetworkObjectId + " shot " + ennemy.NetworkObjectId);
+            Debug.Log("ShooterController, Shoot : #" + NetworkObjectId + " shot #" + ennemy.NetworkObjectId);
             SummitGetHitServerRpc(ennemy.NetworkObjectId, 50f);
         }
     }
@@ -62,16 +62,34 @@ public class ShooterController : NetworkBehaviour
     [ServerRpc]
     void SummitGetHitServerRpc(ulong playerid, float damage)
     {
-        GetNetworkObject(playerid).GetComponent<ShooterController>().GetHit(damage);
+
+        Debug.Log("ShooterController, SummitGetHitServerRpc : touched player = #" + playerid);
+        var id = GetNetworkObject(playerid);
+        GetNetworkObject(playerid).GetComponentInChildren<ShooterController>().GetHit(damage);
     }
     private void GetHit(float damage)
     {
+        Debug.Log("ShooterController, GetHit : damage = " + damage);
         SetHealth(Mathf.Max(0f, health.Value - damage));
-        if (health.Value == 0) Die();
+        if (health.Value == 0) SubmitDieServerRpc(NetworkObjectId);
     }
 
+    [ServerRpc]
+    private void SubmitDieServerRpc(ulong playerid)
+    {
+        Debug.Log("ShooterController, SubmitDieServerRpc : playerid = " + playerid);
+        KillPlayerClientRpc(playerid);
+    }
+
+    [ClientRpc]
+    private void KillPlayerClientRpc(ulong playerid)
+    {
+        Debug.Log("ShooterController, KillPlayerClientRpc : playerid = " + playerid);
+        Destroy(GetNetworkObject(playerid).gameObject);
+    }
     private void Die()
     {
+        Debug.Log("ShooterController, Die : Die = " + NetworkObjectId);
         Destroy(gameObject);
     }
 

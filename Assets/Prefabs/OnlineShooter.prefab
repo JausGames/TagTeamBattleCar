@@ -31,7 +31,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 3036402081554402340}
-  m_RootOrder: -1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!20 &8960784183596960698
 Camera:
@@ -165,7 +165,7 @@ Transform:
   m_Children:
   - {fileID: 3299472928662505881}
   m_Father: {fileID: 3346695240900732515}
-  m_RootOrder: -1
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &5666359829624113700
 MonoBehaviour:
@@ -267,7 +267,7 @@ MonoBehaviour:
     m_InternalValue: {x: 0, y: 0, z: 0}
   hitablemask:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 8
   cameraContainer: {fileID: 3036402081554402340}
   body: {fileID: 7315532188773447455}
   cameraSpeed: 75
@@ -386,7 +386,7 @@ Transform:
   m_Children:
   - {fileID: 8458244241904720835}
   m_Father: {fileID: 5493142882487950262}
-  m_RootOrder: 3
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &7966875081648184581
 GameObject:
@@ -419,7 +419,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 5493142883579475906}
-  m_RootOrder: -1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &7562265909416742377
 MeshFilter:
