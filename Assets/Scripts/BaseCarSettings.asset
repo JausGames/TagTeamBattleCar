@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: BaseCarSettings
   m_EditorClassIdentifier: 
   maxSpeed: 120
-  torqueForce: 2500
+  torqueForce: 1200
   accelerationCurve:
     serializedVersion: 2
     m_Curve:
@@ -38,7 +38,7 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  rotationSpeed: 400
+  rotationSpeed: 120
   steerCurve:
     serializedVersion: 2
     m_Curve:
@@ -63,7 +63,7 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  breakForce: 50
+  breakForce: 25
   autobreakCurve:
     serializedVersion: 2
     m_Curve:

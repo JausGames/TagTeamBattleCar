@@ -301,6 +301,76 @@ public partial class @Controls : IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": false
                 }
             ]
+        },
+        {
+            ""name"": ""LobbyActions"",
+            ""id"": ""ccb9542a-a788-4b3e-85c9-3e53a8d8964e"",
+            ""actions"": [
+                {
+                    ""name"": ""Ready"",
+                    ""type"": ""Button"",
+                    ""id"": ""02c379f7-d616-4b1e-a212-76b680b6c527"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Start"",
+                    ""type"": ""Button"",
+                    ""id"": ""225f1125-19e5-4fea-8077-110135e38b38"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""443f5a8e-b768-44de-96c2-31958ed9830d"",
+                    ""path"": ""<Keyboard>/space"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""Ready"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""97b11785-c137-4ad6-9972-2fe2994e2e4e"",
+                    ""path"": ""<Gamepad>/buttonSouth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""Ready"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""47ea6e1b-5a87-44f1-8f14-79fc8e94a805"",
+                    ""path"": ""<Keyboard>/enter"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""Start"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""68212110-c733-423e-ba06-fa9c36ba1028"",
+                    ""path"": ""<Gamepad>/start"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Start"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
         }
     ],
     ""controlSchemes"": [
@@ -343,6 +413,10 @@ public partial class @Controls : IInputActionCollection2, IDisposable
         m_ShootingActions = asset.FindActionMap("ShootingActions", throwIfNotFound: true);
         m_ShootingActions_Shoot = m_ShootingActions.FindAction("Shoot", throwIfNotFound: true);
         m_ShootingActions_Look = m_ShootingActions.FindAction("Look", throwIfNotFound: true);
+        // LobbyActions
+        m_LobbyActions = asset.FindActionMap("LobbyActions", throwIfNotFound: true);
+        m_LobbyActions_Ready = m_LobbyActions.FindAction("Ready", throwIfNotFound: true);
+        m_LobbyActions_Start = m_LobbyActions.FindAction("Start", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -496,6 +570,47 @@ public partial class @Controls : IInputActionCollection2, IDisposable
         }
     }
     public ShootingActionsActions @ShootingActions => new ShootingActionsActions(this);
+
+    // LobbyActions
+    private readonly InputActionMap m_LobbyActions;
+    private ILobbyActionsActions m_LobbyActionsActionsCallbackInterface;
+    private readonly InputAction m_LobbyActions_Ready;
+    private readonly InputAction m_LobbyActions_Start;
+    public struct LobbyActionsActions
+    {
+        private @Controls m_Wrapper;
+        public LobbyActionsActions(@Controls wrapper) { m_Wrapper = wrapper; }
+        public InputAction @Ready => m_Wrapper.m_LobbyActions_Ready;
+        public InputAction @Start => m_Wrapper.m_LobbyActions_Start;
+        public InputActionMap Get() { return m_Wrapper.m_LobbyActions; }
+        public void Enable() { Get().Enable(); }
+        public void Disable() { Get().Disable(); }
+        public bool enabled => Get().enabled;
+        public static implicit operator InputActionMap(LobbyActionsActions set) { return set.Get(); }
+        public void SetCallbacks(ILobbyActionsActions instance)
+        {
+            if (m_Wrapper.m_LobbyActionsActionsCallbackInterface != null)
+            {
+                @Ready.started -= m_Wrapper.m_LobbyActionsActionsCallbackInterface.OnReady;
+                @Ready.performed -= m_Wrapper.m_LobbyActionsActionsCallbackInterface.OnReady;
+                @Ready.canceled -= m_Wrapper.m_LobbyActionsActionsCallbackInterface.OnReady;
+                @Start.started -= m_Wrapper.m_LobbyActionsActionsCallbackInterface.OnStart;
+                @Start.performed -= m_Wrapper.m_LobbyActionsActionsCallbackInterface.OnStart;
+                @Start.canceled -= m_Wrapper.m_LobbyActionsActionsCallbackInterface.OnStart;
+            }
+            m_Wrapper.m_LobbyActionsActionsCallbackInterface = instance;
+            if (instance != null)
+            {
+                @Ready.started += instance.OnReady;
+                @Ready.performed += instance.OnReady;
+                @Ready.canceled += instance.OnReady;
+                @Start.started += instance.OnStart;
+                @Start.performed += instance.OnStart;
+                @Start.canceled += instance.OnStart;
+            }
+        }
+    }
+    public LobbyActionsActions @LobbyActions => new LobbyActionsActions(this);
     private int m_KeyboardSchemeIndex = -1;
     public InputControlScheme KeyboardScheme
     {
@@ -525,5 +640,10 @@ public partial class @Controls : IInputActionCollection2, IDisposable
     {
         void OnShoot(InputAction.CallbackContext context);
         void OnLook(InputAction.CallbackContext context);
+    }
+    public interface ILobbyActionsActions
+    {
+        void OnReady(InputAction.CallbackContext context);
+        void OnStart(InputAction.CallbackContext context);
     }
 }

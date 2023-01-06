@@ -10,7 +10,7 @@ public class ShooterController : NetworkBehaviour
     [Header("Inputs")]
     [SerializeField] NetworkVariable<float> health = new NetworkVariable<float>(50f, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
     [SerializeField] NetworkVariable<Vector3> look = new NetworkVariable<Vector3>(Vector3.zero, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
-
+    [SerializeField] Transform cart;
 
     [Space]
     [Header("Components")]
@@ -19,21 +19,27 @@ public class ShooterController : NetworkBehaviour
     [SerializeField] Rigidbody body;
     [SerializeField] float cameraSpeed;
 
+    public Transform Cart { get => cart; set => cart = value; }
+
     // Update is called once per frame
     private void Start ()
     {
         hitablemask = 1 << 3;
         if (IsOwner)
         {
-            body.isKinematic = false;
+            //body.isKinematic = false;
             cameraContainer.GetComponent<CameraFollow>().camera.enabled = true;
         }
     }
-    private void Update()
+    private void LateUpdate()
     {
         if (IsOwner)
         {
-            body.AddForce(Vector3.down, ForceMode.VelocityChange);
+            //body.AddForce(Vector3.down, ForceMode.VelocityChange);
+            if (Cart)
+            {
+                transform.position = Cart.position;
+            }
             cameraContainer.rotation = Quaternion.Euler(cameraContainer.rotation.eulerAngles + new Vector3(look.Value.y * Time.deltaTime * cameraSpeed, look.Value.x * Time.deltaTime * cameraSpeed, 0f));
         }
     }
@@ -47,8 +53,8 @@ public class ShooterController : NetworkBehaviour
     internal void Shoot(bool context)
     {
         if (!context) return;
-        Debug.DrawRay(transform.position + 1f * Vector3.up, cameraContainer.forward * 50f, Color.red, .5f);
-        var hits = Physics.RaycastAll(transform.position + 1f * Vector3.up, cameraContainer.forward, 50f, 1 << 3);
+        Debug.DrawRay(transform.position + 0.35f * Vector3.up, cameraContainer.forward * 50f, Color.red, .5f);
+        var hits = Physics.RaycastAll(transform.position + 0.35f * Vector3.up, cameraContainer.forward, 50f, 1 << 3);
         foreach (var hit in hits)
         {
             var ennemy = hit.collider.GetComponent<ShooterController>() ? hit.collider.GetComponent<ShooterController>() : hit.collider.GetComponentInParent<ShooterController>();
@@ -67,6 +73,15 @@ public class ShooterController : NetworkBehaviour
         var id = GetNetworkObject(playerid);
         GetNetworkObject(playerid).GetComponentInChildren<ShooterController>().GetHit(damage);
     }
+
+    [ClientRpc]
+    internal void FindCartClientRpc(ulong ownerObjId, int seatId)
+    {
+        Debug.Log("ShooterController, SummitGetHitServerRpc : cart owner = #" + ownerObjId);
+        var ship = GetNetworkObject(ownerObjId).GetComponentInChildren<ClientAutoritative.ShipController>();
+        Cart = ship.Seats[seatId];
+    }
+
     private void GetHit(float damage)
     {
         Debug.Log("ShooterController, GetHit : damage = " + damage);

@@ -30,6 +30,7 @@ namespace ClientAutoritative
         [SerializeField] Rigidbody cartBody;
         [SerializeField] Transform cartCenterOfMass;
         [SerializeField] ParticleSystem[] boostParticles;
+        [SerializeField] Transform[] seats;
         [SerializeField] CarSoundManager soundManager;
 
         [Space]
@@ -37,6 +38,8 @@ namespace ClientAutoritative
         [SerializeField] Vector3 vectorForward;
         [SerializeField] Vector3 vectorRight;
         [SerializeField] Vector3 vectorUp;
+
+        public Transform[] Seats { get => seats; set => seats = value; }
 
         private void Start()
         {
@@ -74,7 +77,7 @@ namespace ClientAutoritative
 
         #region Update : Client/Owner
         // Update is called once per frame
-        void Update()
+        void LateUpdate()
         {
 
             if (IsOwner)
@@ -126,7 +129,6 @@ namespace ClientAutoritative
         {
             PlaySpeedVfx();
             SetMotorPitch(speed > .5f ? speed : 0f, torque);
-            Debug.Log("allez = " + speed);
             //if (speed > 0.5f)
             carAnimator.SetSpeed(speed > .5f ? speed : 0f);
         }

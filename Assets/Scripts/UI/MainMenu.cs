@@ -19,6 +19,13 @@ public class MainMenu : MonoBehaviour
     [SerializeField] Button btn_starGame;
     [SerializeField] Button btn_joinGame;
 
+    [SerializeField] Transform lobbyRect;
+    [SerializeField] GameObject playerPrefab;
+    [SerializeField] TMPro.TMP_InputField inputName;
+
+
+    [SerializeField] List<OnlineLobbyController> lobbyControllerList = new List<OnlineLobbyController>();
+
     Ping ping;
     List<int> pingsArray = new List<int>();
     UNetTransport unetTransform;
@@ -85,7 +92,7 @@ public class MainMenu : MonoBehaviour
     {
         // Hook up password approval check
         NetworkManager.Singleton.ConnectionApprovalCallback += ApprovalCheck;
-        NetworkManager.Singleton.NetworkConfig.ConnectionData = Encoding.ASCII.GetBytes("put credential here");
+        NetworkManager.Singleton.NetworkConfig.ConnectionData = Encoding.ASCII.GetBytes(inputName.text);
         NetworkManager.Singleton.StartHost();
         //MLAPI
         //NetworkManager.Singleton.StartHost(PlayerManager.GetInstance().GetSpawnPosition()[0], PlayerManager.GetInstance().GetSpawnRotation()[0]);
@@ -94,7 +101,7 @@ public class MainMenu : MonoBehaviour
     public void Client()
     {
         // Set password ready to send to the server to validate
-        NetworkManager.Singleton.NetworkConfig.ConnectionData = Encoding.ASCII.GetBytes("put credential here");
+        NetworkManager.Singleton.NetworkConfig.ConnectionData = Encoding.ASCII.GetBytes(inputName.text);
         NetworkManager.Singleton.StartClient();
     }
     public void Leave()
@@ -141,7 +148,7 @@ public class MainMenu : MonoBehaviour
 
 
             //PlayerManager.GetInstance().FindPlayers(listId);
-            SubmitAddPlayerServerRpc(clientId);
+            //SubmitAddPlayerServerRpc(clientId);
 
                     //ConectionMenu.SetActive(false);
 
@@ -154,9 +161,9 @@ public class MainMenu : MonoBehaviour
     void SubmitAddPlayerServerRpc(ulong clientId, ServerRpcParams rpcParams = default)
     {
         //only accessible by client
-        /*if (!NetworkManager.Singleton.ConnectedClients.TryGetValue(clientId, out NetworkClient networkClient)) return;
-        if (!networkClient.PlayerObject.TryGetComponent<Player>(out Player newPlayer)) return;*/
-        //AddPlayerClientRpc(newPlayer, clientId);
+        //if (!NetworkManager.Singleton.ConnectedClients.TryGetValue(clientId, out NetworkClient networkClient)) return;
+        // (!networkClient.PlayerObject.TryGetComponent<Player>(out Player newPlayer)) return;
+        //AddPlayerClientRpc(clientId);
     }
     [ClientRpc]
     void AddPlayerClientRpc(Player player, ulong clientId)
@@ -188,10 +195,11 @@ public class MainMenu : MonoBehaviour
 
         // Additional connection data defined by user code
         var connectionData = request.Payload;
+        var playerName = Encoding.Default.GetString(connectionData);
 
         // Your approval logic determines the following values
         response.Approved = true;
-        response.CreatePlayerObject = true;
+        response.CreatePlayerObject = false;
 
         // The prefab hash value of the NetworkPrefab, if null the default NetworkManager player prefab is used
         response.PlayerPrefabHash = null;
@@ -205,5 +213,16 @@ public class MainMenu : MonoBehaviour
         // If additional approval steps are needed, set this to true until the additional steps are complete
         // once it transitions from true to false the connection approval response will be processed.
         response.Pending = false;
+        Debug.Log("connection approval : name = " + playerName +", id = " + clientId);
+
+        GameObject go = Instantiate(playerPrefab, Vector3.zero, Quaternion.identity);
+        go.GetComponent<NetworkObject>().SpawnWithOwnership(clientId, false);
+        var olc = go.GetComponent<OnlineLobbyController>();
+        if(clientId != 0)
+        {
+            olc.Role = false;
+        }
+        olc.PlayerName = playerName;
     }
+
 }
