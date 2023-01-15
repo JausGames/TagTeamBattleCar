@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: Grappling Hook
   m_EditorClassIdentifier: 
   prefab: {fileID: 4446984586210149794, guid: 4cfedb5462311bb4d89d26726d2542ff, type: 3}
-  name: Grapple
+  name: Hook
   cost: 200
   id: 5
