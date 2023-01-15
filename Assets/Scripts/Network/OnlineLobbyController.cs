@@ -88,13 +88,15 @@ public class OnlineLobbyController : NetworkBehaviour
 
         GameObject go1 = Instantiate(shootPrefab, Vector3.zero, Quaternion.identity, go.transform);
         go1.GetComponent<NetworkObject>().SpawnAsPlayerObject(OwnerClientId + 1, false);
-        go1.GetComponentInChildren<ShooterController>().Cart = ship.Seats[0];
-        go1.GetComponentInChildren<ShooterController>().FindCartClientRpc(go.GetComponent<NetworkObject>().NetworkObjectId, 0);
+        ship.Seats[0].controller = go1.GetComponentInChildren<ShooterAnimatorController>();
+        go1.GetComponentInChildren<ShooterController>().Seat = ship.Seats[0];
+        go1.GetComponentInChildren<ShooterController>().FindSeatClientRpc(go.GetComponent<NetworkObject>().NetworkObjectId, 0);
 
-        GameObject go2 = Instantiate(shootPrefab, Vector3.zero, Quaternion.identity, go.transform);
+        /*GameObject go2 = Instantiate(shootPrefab, Vector3.zero, Quaternion.identity, go.transform);
         go2.GetComponent<NetworkObject>().SpawnAsPlayerObject(OwnerClientId + 2, false);
-        go2.GetComponentInChildren<ShooterController>().Cart = ship.Seats[1];
-        go2.GetComponentInChildren<ShooterController>().FindCartClientRpc(go.GetComponent<NetworkObject>().NetworkObjectId, 1);
+        ship.Seats[1].controller = go2.GetComponentInChildren<ShooterAnimatorController>();
+        go2.GetComponentInChildren<ShooterController>().Seat = ship.Seats[1];
+        go2.GetComponentInChildren<ShooterController>().FindSeatClientRpc(go.GetComponent<NetworkObject>().NetworkObjectId, 1);*/
     }
 
 

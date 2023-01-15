@@ -12,8 +12,6 @@ public class Player : NetworkBehaviour
 
     public void Start()
     {
-        Debug.Log("Network Informations : IsLocalPlayer " + IsLocalPlayer);
-
         if (!IsLocalPlayer) return;
         var virtualCamera = FindObjectOfType<CinemachineVirtualCamera>();
         virtualCamera.enabled = true;
@@ -22,7 +20,6 @@ public class Player : NetworkBehaviour
     }
     public void Update()
     {
-        Debug.Log("IsLocalPlayer " + IsLocalPlayer);
         if (!IsLocalPlayer) return;
         lookAt.transform.position = transform.position + body.velocity.normalized;
     }

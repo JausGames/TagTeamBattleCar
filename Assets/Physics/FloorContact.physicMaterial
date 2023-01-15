@@ -9,6 +9,6 @@ PhysicMaterial:
   m_Name: FloorContact
   dynamicFriction: 0
   staticFriction: 0
-  bounciness: 0.2
+  bounciness: 0
   frictionCombine: 1
-  bounceCombine: 0
+  bounceCombine: 1

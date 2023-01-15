@@ -12,6 +12,9 @@ namespace Inputs
         [SerializeField] ClientAutoritative.ShipController motor = null;
         [SerializeField] ShooterController shooter = null;
 
+        [SerializeField] float stickLookSensibility = 10f;
+        [SerializeField] float mouseLookSensibility = 1f;
+
         public void Start()
         {
             Debug.Log("Network Informations : IsOwner " + IsOwner);
@@ -29,11 +32,32 @@ namespace Inputs
             OnlineInputManager.Controls.ShootingActions.Shoot.performed += _ => OnShoot(true);
             OnlineInputManager.Controls.ShootingActions.Shoot.canceled += _ => OnShoot(false);
 
-            OnlineInputManager.Controls.ShootingActions.Look.performed += ctx => OnLook(ctx.ReadValue<Vector2>());
+            OnlineInputManager.Controls.ShootingActions.Look.performed += ctx => OnLook(ctx.ReadValue<Vector2>() * mouseLookSensibility);
             OnlineInputManager.Controls.ShootingActions.Look.canceled += _ => OnLook(Vector2.zero);
+
+            OnlineInputManager.Controls.ShootingActions.LookStick.performed += ctx => OnLook(ctx.ReadValue<Vector2>() * stickLookSensibility);
+            OnlineInputManager.Controls.ShootingActions.LookStick.canceled += _ => OnLook(Vector2.zero);
 
             OnlineInputManager.Controls.DrivingActions.ParkingBreak.performed += _ => OnParkingBreaking(true);
             OnlineInputManager.Controls.DrivingActions.ParkingBreak.canceled += _ => OnParkingBreaking(false);
+
+            OnlineInputManager.Controls.ShootingActions.WeaponShop.performed += _ => OnWeaponShop(true);
+            OnlineInputManager.Controls.ShootingActions.WeaponShop.canceled += _ => OnWeaponShop(false);
+
+            OnlineInputManager.Controls.ShootingActions.ToolShop.performed += _ => OnToolShop(true);
+            OnlineInputManager.Controls.ShootingActions.ToolShop.canceled += _ => OnToolShop(false);
+        }
+
+        private void OnToolShop(bool v)
+        {
+            if (shooter == null || !IsOwner) return;
+            shooter.ActivateToolWheel(v);
+        }
+
+        private void OnWeaponShop(bool v)
+        {
+            if (shooter == null || !IsOwner) return;
+            shooter.ActivateWeaponWheel(v);
         }
 
         private void OnLook(Vector2 vector2)
@@ -52,7 +76,9 @@ namespace Inputs
         {
             Debug.Log("Network Informations : IsLocalPlayer " + IsLocalPlayer);
             if (shooter == null || !IsOwner) return;
-            shooter.Shoot(context);
+
+            if (shooter.IsOnMenu) shooter.BuyItem();
+            else shooter.Shoot(context);
         }
         public void OnTorque(float context)
         {
