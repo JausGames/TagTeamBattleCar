@@ -30,13 +30,17 @@ namespace ClientAutoritative
         [SerializeField] Rigidbody cartBody;
         [SerializeField] Transform cartCenterOfMass;
         [SerializeField] ParticleSystem[] boostParticles;
+        [SerializeField] Seat[] seats;
         [SerializeField] CarSoundManager soundManager;
+        [SerializeField] List<Wheel> wheels;
 
         [Space]
         [Header("Debug")]
         [SerializeField] Vector3 vectorForward;
         [SerializeField] Vector3 vectorRight;
         [SerializeField] Vector3 vectorUp;
+
+        public Seat[] Seats { get => seats; set => seats = value; }
 
         private void Start()
         {
@@ -74,7 +78,7 @@ namespace ClientAutoritative
 
         #region Update : Client/Owner
         // Update is called once per frame
-        void Update()
+        void LateUpdate()
         {
 
             if (IsOwner)
@@ -83,9 +87,33 @@ namespace ClientAutoritative
                 Vector3 localVelocity, localAngularVelocity;
                 GetSpeedConversions(out localMatrix, out localVelocity, out localAngularVelocity);
                 UpdateClient(localMatrix, localVelocity, localAngularVelocity);
-            }
 
+
+                var speed = Vector3.Dot(cartBody.velocity, cartBody.transform.right);
+                SubmitWheelRotationServerRpc(speed);
+                foreach (Wheel wheel in wheels)
+                {
+                    wheel.RotateWheel(speed);
+                }
+            }
         }
+
+        [ServerRpc] 
+        void SubmitWheelRotationServerRpc(float speed)
+        {
+            RotateWheelsClientRpc(speed);
+        }
+
+        [ClientRpc]
+        void RotateWheelsClientRpc(float speed)
+        {
+            if (IsOwner) return;
+            foreach(Wheel wheel in wheels)
+            {
+                wheel.RotateWheel(speed);
+            }
+        }
+
         private void UpdateClient(Vector3[] localMatrix, Vector3 localVelocity, Vector3 localAngularVelocity)
         {
             Vector3 torque = Vector3.zero, force = Vector3.zero;
@@ -124,9 +152,8 @@ namespace ClientAutoritative
         [ClientRpc]
         void PlayShipSvfxClientRpc(float speed, float torque)
         {
-            PlaySpeedVfx();
+            PlaySpeedVfx(speed);
             SetMotorPitch(speed > .5f ? speed : 0f, torque);
-            Debug.Log("allez = " + speed);
             //if (speed > 0.5f)
             carAnimator.SetSpeed(speed > .5f ? speed : 0f);
         }
@@ -217,17 +244,17 @@ namespace ClientAutoritative
 
         #region SFX & VFX
 
-        void PlaySpeedVfx()
+        void PlaySpeedVfx(float speed)
         {
             var playParticles = false;
-            if (body.velocity.magnitude > .5f && onFloor)
+            if (speed > .5f && onFloor)
                 playParticles = true;
 
-            /*foreach (ParticleSystem prtc in boostParticles)
+            foreach (ParticleSystem prtc in boostParticles)
             {
                 var em = prtc.emission;
                 em.enabled = playParticles;
-            }*/
+            }
         }
         private void SetMotorPitch(float speed, float torque)
         {

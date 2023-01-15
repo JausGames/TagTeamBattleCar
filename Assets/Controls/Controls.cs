@@ -248,9 +248,45 @@ public partial class @Controls : IInputActionCollection2, IDisposable
             ""id"": ""eb34750f-6567-4173-b97a-cfbe26cfdcce"",
             ""actions"": [
                 {
-                    ""name"": ""New action"",
+                    ""name"": ""Shoot"",
                     ""type"": ""Button"",
                     ""id"": ""826f04dc-f5fd-4ede-8c16-8f06e4a45cfd"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Look"",
+                    ""type"": ""Value"",
+                    ""id"": ""4aee7aab-093b-4745-90b3-097b677b5096"",
+                    ""expectedControlType"": ""Vector2"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""LookStick"",
+                    ""type"": ""Value"",
+                    ""id"": ""376f345d-83c9-4c5d-b533-03016f55a194"",
+                    ""expectedControlType"": ""Stick"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""WeaponShop"",
+                    ""type"": ""Button"",
+                    ""id"": ""c2d7a2e3-e19f-4c69-8fe4-532e90e3b224"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""ToolShop"",
+                    ""type"": ""Button"",
+                    ""id"": ""66ba9d88-a646-4218-87c2-b163f706046b"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """",
@@ -261,11 +297,158 @@ public partial class @Controls : IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""18c3b314-aa8f-4e7a-bf33-00ce63949ecb"",
-                    ""path"": """",
+                    ""path"": ""<Mouse>/leftButton"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Keyboard"",
-                    ""action"": ""New action"",
+                    ""action"": ""Shoot"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""cea6f4dc-3673-4012-8b44-e9405044af5b"",
+                    ""path"": ""<Gamepad>/rightShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""Shoot"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""37858ca5-ff63-4a9e-a6b4-f61e8d196484"",
+                    ""path"": ""<Mouse>/delta"",
+                    ""interactions"": """",
+                    ""processors"": ""InvertVector2(invertX=false)"",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""Look"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""72ca4160-936e-407b-8d58-919416633754"",
+                    ""path"": ""<Gamepad>/rightStick"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""LookStick"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""62f290f1-734f-4cfb-989a-d0a67810f644"",
+                    ""path"": ""<Keyboard>/shift"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""WeaponShop"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""5bd59764-e36f-4204-84a0-08a9c7deddd3"",
+                    ""path"": ""<Gamepad>/leftTrigger"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""WeaponShop"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""76b3086c-7e21-45ca-8133-5261d876a16f"",
+                    ""path"": ""<Keyboard>/ctrl"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""ToolShop"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""c4b2b705-e1a3-480a-ba81-e88e62ee34cf"",
+                    ""path"": ""<Gamepad>/rightTrigger"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""ToolShop"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
+        },
+        {
+            ""name"": ""LobbyActions"",
+            ""id"": ""ccb9542a-a788-4b3e-85c9-3e53a8d8964e"",
+            ""actions"": [
+                {
+                    ""name"": ""Ready"",
+                    ""type"": ""Button"",
+                    ""id"": ""02c379f7-d616-4b1e-a212-76b680b6c527"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Start"",
+                    ""type"": ""Button"",
+                    ""id"": ""225f1125-19e5-4fea-8077-110135e38b38"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""443f5a8e-b768-44de-96c2-31958ed9830d"",
+                    ""path"": ""<Keyboard>/space"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""Ready"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""97b11785-c137-4ad6-9972-2fe2994e2e4e"",
+                    ""path"": ""<Gamepad>/buttonSouth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""Ready"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""47ea6e1b-5a87-44f1-8f14-79fc8e94a805"",
+                    ""path"": ""<Keyboard>/enter"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""Start"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""68212110-c733-423e-ba06-fa9c36ba1028"",
+                    ""path"": ""<Gamepad>/start"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Start"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -310,7 +493,15 @@ public partial class @Controls : IInputActionCollection2, IDisposable
         m_DrivingActions_ParkingBreak = m_DrivingActions.FindAction("ParkingBreak", throwIfNotFound: true);
         // ShootingActions
         m_ShootingActions = asset.FindActionMap("ShootingActions", throwIfNotFound: true);
-        m_ShootingActions_Newaction = m_ShootingActions.FindAction("New action", throwIfNotFound: true);
+        m_ShootingActions_Shoot = m_ShootingActions.FindAction("Shoot", throwIfNotFound: true);
+        m_ShootingActions_Look = m_ShootingActions.FindAction("Look", throwIfNotFound: true);
+        m_ShootingActions_LookStick = m_ShootingActions.FindAction("LookStick", throwIfNotFound: true);
+        m_ShootingActions_WeaponShop = m_ShootingActions.FindAction("WeaponShop", throwIfNotFound: true);
+        m_ShootingActions_ToolShop = m_ShootingActions.FindAction("ToolShop", throwIfNotFound: true);
+        // LobbyActions
+        m_LobbyActions = asset.FindActionMap("LobbyActions", throwIfNotFound: true);
+        m_LobbyActions_Ready = m_LobbyActions.FindAction("Ready", throwIfNotFound: true);
+        m_LobbyActions_Start = m_LobbyActions.FindAction("Start", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -427,12 +618,20 @@ public partial class @Controls : IInputActionCollection2, IDisposable
     // ShootingActions
     private readonly InputActionMap m_ShootingActions;
     private IShootingActionsActions m_ShootingActionsActionsCallbackInterface;
-    private readonly InputAction m_ShootingActions_Newaction;
+    private readonly InputAction m_ShootingActions_Shoot;
+    private readonly InputAction m_ShootingActions_Look;
+    private readonly InputAction m_ShootingActions_LookStick;
+    private readonly InputAction m_ShootingActions_WeaponShop;
+    private readonly InputAction m_ShootingActions_ToolShop;
     public struct ShootingActionsActions
     {
         private @Controls m_Wrapper;
         public ShootingActionsActions(@Controls wrapper) { m_Wrapper = wrapper; }
-        public InputAction @Newaction => m_Wrapper.m_ShootingActions_Newaction;
+        public InputAction @Shoot => m_Wrapper.m_ShootingActions_Shoot;
+        public InputAction @Look => m_Wrapper.m_ShootingActions_Look;
+        public InputAction @LookStick => m_Wrapper.m_ShootingActions_LookStick;
+        public InputAction @WeaponShop => m_Wrapper.m_ShootingActions_WeaponShop;
+        public InputAction @ToolShop => m_Wrapper.m_ShootingActions_ToolShop;
         public InputActionMap Get() { return m_Wrapper.m_ShootingActions; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -442,20 +641,85 @@ public partial class @Controls : IInputActionCollection2, IDisposable
         {
             if (m_Wrapper.m_ShootingActionsActionsCallbackInterface != null)
             {
-                @Newaction.started -= m_Wrapper.m_ShootingActionsActionsCallbackInterface.OnNewaction;
-                @Newaction.performed -= m_Wrapper.m_ShootingActionsActionsCallbackInterface.OnNewaction;
-                @Newaction.canceled -= m_Wrapper.m_ShootingActionsActionsCallbackInterface.OnNewaction;
+                @Shoot.started -= m_Wrapper.m_ShootingActionsActionsCallbackInterface.OnShoot;
+                @Shoot.performed -= m_Wrapper.m_ShootingActionsActionsCallbackInterface.OnShoot;
+                @Shoot.canceled -= m_Wrapper.m_ShootingActionsActionsCallbackInterface.OnShoot;
+                @Look.started -= m_Wrapper.m_ShootingActionsActionsCallbackInterface.OnLook;
+                @Look.performed -= m_Wrapper.m_ShootingActionsActionsCallbackInterface.OnLook;
+                @Look.canceled -= m_Wrapper.m_ShootingActionsActionsCallbackInterface.OnLook;
+                @LookStick.started -= m_Wrapper.m_ShootingActionsActionsCallbackInterface.OnLookStick;
+                @LookStick.performed -= m_Wrapper.m_ShootingActionsActionsCallbackInterface.OnLookStick;
+                @LookStick.canceled -= m_Wrapper.m_ShootingActionsActionsCallbackInterface.OnLookStick;
+                @WeaponShop.started -= m_Wrapper.m_ShootingActionsActionsCallbackInterface.OnWeaponShop;
+                @WeaponShop.performed -= m_Wrapper.m_ShootingActionsActionsCallbackInterface.OnWeaponShop;
+                @WeaponShop.canceled -= m_Wrapper.m_ShootingActionsActionsCallbackInterface.OnWeaponShop;
+                @ToolShop.started -= m_Wrapper.m_ShootingActionsActionsCallbackInterface.OnToolShop;
+                @ToolShop.performed -= m_Wrapper.m_ShootingActionsActionsCallbackInterface.OnToolShop;
+                @ToolShop.canceled -= m_Wrapper.m_ShootingActionsActionsCallbackInterface.OnToolShop;
             }
             m_Wrapper.m_ShootingActionsActionsCallbackInterface = instance;
             if (instance != null)
             {
-                @Newaction.started += instance.OnNewaction;
-                @Newaction.performed += instance.OnNewaction;
-                @Newaction.canceled += instance.OnNewaction;
+                @Shoot.started += instance.OnShoot;
+                @Shoot.performed += instance.OnShoot;
+                @Shoot.canceled += instance.OnShoot;
+                @Look.started += instance.OnLook;
+                @Look.performed += instance.OnLook;
+                @Look.canceled += instance.OnLook;
+                @LookStick.started += instance.OnLookStick;
+                @LookStick.performed += instance.OnLookStick;
+                @LookStick.canceled += instance.OnLookStick;
+                @WeaponShop.started += instance.OnWeaponShop;
+                @WeaponShop.performed += instance.OnWeaponShop;
+                @WeaponShop.canceled += instance.OnWeaponShop;
+                @ToolShop.started += instance.OnToolShop;
+                @ToolShop.performed += instance.OnToolShop;
+                @ToolShop.canceled += instance.OnToolShop;
             }
         }
     }
     public ShootingActionsActions @ShootingActions => new ShootingActionsActions(this);
+
+    // LobbyActions
+    private readonly InputActionMap m_LobbyActions;
+    private ILobbyActionsActions m_LobbyActionsActionsCallbackInterface;
+    private readonly InputAction m_LobbyActions_Ready;
+    private readonly InputAction m_LobbyActions_Start;
+    public struct LobbyActionsActions
+    {
+        private @Controls m_Wrapper;
+        public LobbyActionsActions(@Controls wrapper) { m_Wrapper = wrapper; }
+        public InputAction @Ready => m_Wrapper.m_LobbyActions_Ready;
+        public InputAction @Start => m_Wrapper.m_LobbyActions_Start;
+        public InputActionMap Get() { return m_Wrapper.m_LobbyActions; }
+        public void Enable() { Get().Enable(); }
+        public void Disable() { Get().Disable(); }
+        public bool enabled => Get().enabled;
+        public static implicit operator InputActionMap(LobbyActionsActions set) { return set.Get(); }
+        public void SetCallbacks(ILobbyActionsActions instance)
+        {
+            if (m_Wrapper.m_LobbyActionsActionsCallbackInterface != null)
+            {
+                @Ready.started -= m_Wrapper.m_LobbyActionsActionsCallbackInterface.OnReady;
+                @Ready.performed -= m_Wrapper.m_LobbyActionsActionsCallbackInterface.OnReady;
+                @Ready.canceled -= m_Wrapper.m_LobbyActionsActionsCallbackInterface.OnReady;
+                @Start.started -= m_Wrapper.m_LobbyActionsActionsCallbackInterface.OnStart;
+                @Start.performed -= m_Wrapper.m_LobbyActionsActionsCallbackInterface.OnStart;
+                @Start.canceled -= m_Wrapper.m_LobbyActionsActionsCallbackInterface.OnStart;
+            }
+            m_Wrapper.m_LobbyActionsActionsCallbackInterface = instance;
+            if (instance != null)
+            {
+                @Ready.started += instance.OnReady;
+                @Ready.performed += instance.OnReady;
+                @Ready.canceled += instance.OnReady;
+                @Start.started += instance.OnStart;
+                @Start.performed += instance.OnStart;
+                @Start.canceled += instance.OnStart;
+            }
+        }
+    }
+    public LobbyActionsActions @LobbyActions => new LobbyActionsActions(this);
     private int m_KeyboardSchemeIndex = -1;
     public InputControlScheme KeyboardScheme
     {
@@ -483,6 +747,15 @@ public partial class @Controls : IInputActionCollection2, IDisposable
     }
     public interface IShootingActionsActions
     {
-        void OnNewaction(InputAction.CallbackContext context);
+        void OnShoot(InputAction.CallbackContext context);
+        void OnLook(InputAction.CallbackContext context);
+        void OnLookStick(InputAction.CallbackContext context);
+        void OnWeaponShop(InputAction.CallbackContext context);
+        void OnToolShop(InputAction.CallbackContext context);
+    }
+    public interface ILobbyActionsActions
+    {
+        void OnReady(InputAction.CallbackContext context);
+        void OnStart(InputAction.CallbackContext context);
     }
 }

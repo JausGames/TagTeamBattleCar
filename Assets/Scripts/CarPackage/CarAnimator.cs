@@ -8,9 +8,6 @@ public class CarAnimator : MonoBehaviour
 
     public void SetSpeed(float speed)
     {
-        if (speed > 0.5f)
-            Debug.Log("allez");
-
         foreach (var animator in animators)
             animator.SetFloat("Speed", speed);
     }

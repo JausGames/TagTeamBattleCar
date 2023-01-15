@@ -12,7 +12,17 @@ ModelImporter:
   - first:
       74: 5544858871826729933
     second: Horse Rig|Run
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Fur
+    second: {fileID: 2100000, guid: 444e1189b43dd33468ed0325529a7093, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: FurBase
+    second: {fileID: 2100000, guid: 8c3bff94d0fb47a4a873aedf59d4c59d, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0
