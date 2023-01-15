@@ -15,3 +15,4 @@ MonoBehaviour:
   prefab: {fileID: 4446984586210149794, guid: 157fc55c0fc891b45a26e746111f202f, type: 3}
   name: Spikes
   cost: 150
+  id: 5

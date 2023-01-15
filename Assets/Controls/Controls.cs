@@ -291,6 +291,15 @@ public partial class @Controls : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""SwitchItem"",
+                    ""type"": ""Button"",
+                    ""id"": ""79a8bc1f-1bc2-4f0c-bc68-bcbfdae5850b"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -379,6 +388,39 @@ public partial class @Controls : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""groups"": ""Gamepad"",
                     ""action"": ""ToolShop"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""434ce3b1-0c5a-475a-9b48-d72b30b788c6"",
+                    ""path"": ""<Keyboard>/e"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""SwitchItem"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""53596701-1157-46c5-bf25-6b2e8d01e1f6"",
+                    ""path"": ""<Gamepad>/dpad/left"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""SwitchItem"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""16336ce5-fd12-4b90-a502-c95dc810b8d9"",
+                    ""path"": ""<Gamepad>/dpad/right"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Gamepad"",
+                    ""action"": ""SwitchItem"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -498,6 +540,7 @@ public partial class @Controls : IInputActionCollection2, IDisposable
         m_ShootingActions_LookStick = m_ShootingActions.FindAction("LookStick", throwIfNotFound: true);
         m_ShootingActions_WeaponShop = m_ShootingActions.FindAction("WeaponShop", throwIfNotFound: true);
         m_ShootingActions_ToolShop = m_ShootingActions.FindAction("ToolShop", throwIfNotFound: true);
+        m_ShootingActions_SwitchItem = m_ShootingActions.FindAction("SwitchItem", throwIfNotFound: true);
         // LobbyActions
         m_LobbyActions = asset.FindActionMap("LobbyActions", throwIfNotFound: true);
         m_LobbyActions_Ready = m_LobbyActions.FindAction("Ready", throwIfNotFound: true);
@@ -623,6 +666,7 @@ public partial class @Controls : IInputActionCollection2, IDisposable
     private readonly InputAction m_ShootingActions_LookStick;
     private readonly InputAction m_ShootingActions_WeaponShop;
     private readonly InputAction m_ShootingActions_ToolShop;
+    private readonly InputAction m_ShootingActions_SwitchItem;
     public struct ShootingActionsActions
     {
         private @Controls m_Wrapper;
@@ -632,6 +676,7 @@ public partial class @Controls : IInputActionCollection2, IDisposable
         public InputAction @LookStick => m_Wrapper.m_ShootingActions_LookStick;
         public InputAction @WeaponShop => m_Wrapper.m_ShootingActions_WeaponShop;
         public InputAction @ToolShop => m_Wrapper.m_ShootingActions_ToolShop;
+        public InputAction @SwitchItem => m_Wrapper.m_ShootingActions_SwitchItem;
         public InputActionMap Get() { return m_Wrapper.m_ShootingActions; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -656,6 +701,9 @@ public partial class @Controls : IInputActionCollection2, IDisposable
                 @ToolShop.started -= m_Wrapper.m_ShootingActionsActionsCallbackInterface.OnToolShop;
                 @ToolShop.performed -= m_Wrapper.m_ShootingActionsActionsCallbackInterface.OnToolShop;
                 @ToolShop.canceled -= m_Wrapper.m_ShootingActionsActionsCallbackInterface.OnToolShop;
+                @SwitchItem.started -= m_Wrapper.m_ShootingActionsActionsCallbackInterface.OnSwitchItem;
+                @SwitchItem.performed -= m_Wrapper.m_ShootingActionsActionsCallbackInterface.OnSwitchItem;
+                @SwitchItem.canceled -= m_Wrapper.m_ShootingActionsActionsCallbackInterface.OnSwitchItem;
             }
             m_Wrapper.m_ShootingActionsActionsCallbackInterface = instance;
             if (instance != null)
@@ -675,6 +723,9 @@ public partial class @Controls : IInputActionCollection2, IDisposable
                 @ToolShop.started += instance.OnToolShop;
                 @ToolShop.performed += instance.OnToolShop;
                 @ToolShop.canceled += instance.OnToolShop;
+                @SwitchItem.started += instance.OnSwitchItem;
+                @SwitchItem.performed += instance.OnSwitchItem;
+                @SwitchItem.canceled += instance.OnSwitchItem;
             }
         }
     }
@@ -752,6 +803,7 @@ public partial class @Controls : IInputActionCollection2, IDisposable
         void OnLookStick(InputAction.CallbackContext context);
         void OnWeaponShop(InputAction.CallbackContext context);
         void OnToolShop(InputAction.CallbackContext context);
+        void OnSwitchItem(InputAction.CallbackContext context);
     }
     public interface ILobbyActionsActions
     {

@@ -8,4 +8,6 @@ abstract public class Item : MonoBehaviour
     int id;
     public GameObject Prefab { get => prefab; set => prefab = value; }
     public int Id { get => id; set => id = value; }
+
+    public abstract void Use(ShooterController owner);
 }

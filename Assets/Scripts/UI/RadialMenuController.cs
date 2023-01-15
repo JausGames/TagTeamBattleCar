@@ -29,7 +29,7 @@ public class RadialMenuController : MonoBehaviour
         //var angleIncrement = 180f / items.Count;
         var angleIncrement = (2f * Mathf.PI) / items.Count;
         var angleIncrementDegree = 360f / items.Count;
-        var diameter = 250f;
+        var diameter = Screen.height / 3.5f;
 
         Mask2.rotation = Quaternion.Euler(0f,0f, -90f + angleIncrementDegree);
 
