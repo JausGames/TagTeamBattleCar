@@ -35,7 +35,7 @@ namespace Inputs
             OnlineInputManager.Controls.ShootingActions.Look.performed += ctx => OnLook(ctx.ReadValue<Vector2>() * mouseLookSensibility);
             OnlineInputManager.Controls.ShootingActions.Look.canceled += _ => OnLook(Vector2.zero);
 
-            OnlineInputManager.Controls.ShootingActions.LookStick.performed += ctx => OnLook(ctx.ReadValue<Vector2>() * stickLookSensibility);
+            OnlineInputManager.Controls.ShootingActions.LookStick.performed += ctx => OnLook((ctx.ReadValue<Vector2>().x * Vector2.right - ctx.ReadValue<Vector2>().y * Vector2.up) * stickLookSensibility);
             OnlineInputManager.Controls.ShootingActions.LookStick.canceled += _ => OnLook(Vector2.zero);
 
             OnlineInputManager.Controls.DrivingActions.ParkingBreak.performed += _ => OnParkingBreaking(true);
@@ -46,6 +46,14 @@ namespace Inputs
 
             OnlineInputManager.Controls.ShootingActions.ToolShop.performed += _ => OnToolShop(true);
             OnlineInputManager.Controls.ShootingActions.ToolShop.canceled += _ => OnToolShop(false);
+
+            OnlineInputManager.Controls.ShootingActions.SwitchItem.performed += _ => OnSwitchItem();
+        }
+
+        private void OnSwitchItem()
+        {
+            if (shooter == null || !IsOwner) return;
+            shooter.SwitchItem();
         }
 
         private void OnToolShop(bool v)

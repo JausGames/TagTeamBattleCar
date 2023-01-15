@@ -15,3 +15,4 @@ MonoBehaviour:
   prefab: {fileID: 4446984586210149794, guid: 4cfedb5462311bb4d89d26726d2542ff, type: 3}
   name: Riffle
   cost: 100
+  id: 2

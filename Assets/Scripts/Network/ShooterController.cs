@@ -22,15 +22,18 @@ public class ShooterController : NetworkBehaviour
 
     [Space]
     [Header("Components")]
-    public LayerMask hitablemask;
+    private LayerMask hitablemask;
     [SerializeField] Transform cameraContainer;
     [SerializeField] ShooterAnimatorController animatorController;
     [SerializeField] float cameraSpeed;
     [SerializeField] RadialMenuController weaponWheel;
     [SerializeField] RadialMenuController toolWheel;
+    [SerializeField] HealthBar healthbar;
+    [SerializeField] private CameraFollow cameraFollow;
 
-
-
+    public Transform CameraContainer { get => cameraContainer; set => cameraContainer = value; }
+    public LayerMask Hitablemask { get => hitablemask; set => hitablemask = value; }
+    public CameraFollow CameraFollow { get => cameraFollow; set => cameraFollow = value; }
     public Seat Seat { get => seat; set
         {
             seat = value;
@@ -45,7 +48,7 @@ public class ShooterController : NetworkBehaviour
         set 
         { 
             currentTool = value;
-            currentTool.Prefab = toolWheel.PickedItem.Prefab;
+            //currentTool.Prefab = toolWheel.PickedItem.Prefab;
             if (heldItem == null) HeldItem = currentTool;
         }
     }
@@ -55,7 +58,7 @@ public class ShooterController : NetworkBehaviour
         set
         {
             currentWeapon = value;
-            currentWeapon.Prefab = weaponWheel.PickedItem.Prefab;
+            //currentWeapon.Prefab = weaponWheel.PickedItem.Prefab;
             if (heldItem == null) HeldItem = currentWeapon;
         }
     }
@@ -70,6 +73,70 @@ public class ShooterController : NetworkBehaviour
             SubmitChangeItemServerRpc(heldItem.Id, heldItem is Weapon);
         }
     }
+    // Update is called once per frame
+    private void Start()
+    {
+        hitablemask = (1 << 3) | (1 << 6) | (1 << 0);
+        if (IsOwner)
+        {
+            healthbar.SetMaxHealth(100f);
+            healthbar.SetHealth(health.Value);
+            health.OnValueChanged += UpdateHealthBar;
+            Cursor.lockState = CursorLockMode.Locked;
+            //body.isKinematic = false;
+            cameraContainer.GetComponent<CameraFollow>().camera.enabled = true;
+            aimeUi.SetActive(true);
+        }
+
+
+        for (int i = 0; i < weaponWheel.items.Count; i++)
+        {
+            weaponWheel.items[i].Prefab.GetComponent<Item>().Prefab = weaponWheel.items[i].Prefab;
+            weaponWheel.items[i].Prefab.GetComponent<Item>().Id = weaponWheel.items[i].Id;
+        }
+        for (int i = 0; i < toolWheel.items.Count; i++)
+        {
+            toolWheel.items[i].Prefab.GetComponent<Item>().Prefab = toolWheel.items[i].Prefab;
+            toolWheel.items[i].Prefab.GetComponent<Item>().Id = toolWheel.items[i].Id;
+        }
+        
+    }
+
+    private void UpdateHealthBar(float previous, float current)
+    {
+        healthbar.SetHealth(current);
+    }
+
+    private void Update()
+    {
+        //body.AddForce(Vector3.down, ForceMode.VelocityChange);
+        if (Seat && heldItem is Weapon)
+        {
+            foreach (var prtcl in ((Weapon)heldItem).shootParticles)
+            {
+                prtcl.transform.position = Seat.BulletStart.position;
+                prtcl.transform.LookAt(seat.target);
+            }
+        }
+
+    }
+    private void LateUpdate()
+    {
+        if (IsOwner)
+        {
+            if (Seat)
+            {
+                transform.position = Seat.transform.position;
+            }
+
+            if (IsOnMenu) return;
+            cameraFollow.RotateCamera(look.Value, cameraSpeed, Seat.transform, out float angle, out Vector3 target);
+
+            PlayAnimationServerRpc(angle, target);
+        }
+    }
+
+
 
     private void SetItemUp(Item value)
     {
@@ -114,60 +181,6 @@ public class ShooterController : NetworkBehaviour
         throw new Exception("No item found for switch");
     }
 
-    // Update is called once per frame
-    private void Start ()
-    {
-        hitablemask = (1 << 3) | (1 << 6) | (1 << 0);
-        if (IsOwner)
-        {
-            Cursor.lockState = CursorLockMode.Locked;
-            //body.isKinematic = false;
-            cameraContainer.GetComponent<CameraFollow>().camera.enabled = true;
-            aimeUi.SetActive(true);
-        }
-    }
-    private void Update()
-    {
-        //body.AddForce(Vector3.down, ForceMode.VelocityChange);
-        if (Seat && heldItem is Weapon)
-        {
-            foreach (var prtcl in ((Weapon)heldItem).shootParticles)
-            {
-                prtcl.transform.position = Seat.BulletStart.position;
-                prtcl.transform.LookAt(seat.target);
-            }
-        }
-        
-    }
-    private void LateUpdate()
-    {
-        if (IsOwner)
-        {
-            if (Seat)
-            {
-                transform.position = Seat.transform.position;
-            }
-
-            if (IsOnMenu) return;
-
-            var eulerRot = cameraContainer.rotation.eulerAngles + new Vector3(look.Value.normalized.y * Time.deltaTime * cameraSpeed * look.Value.magnitude, look.Value.normalized.x * Time.deltaTime * cameraSpeed * look.Value.magnitude, 0f);
-            eulerRot.x = eulerRot.x < 0 ? eulerRot.x + 360f : eulerRot.x;
-            var newX = eulerRot.x > 0 && eulerRot.x <= 150f ? Mathf.Clamp(eulerRot.x, 0f, 50f) : Mathf.Clamp(eulerRot.x, 310f, 360f);
-            eulerRot = newX * Vector3.right + eulerRot.y * Vector3.up + eulerRot.z * Vector3.forward;
-
-            cameraContainer.rotation = Quaternion.Euler(eulerRot);
-            
-            var forward = (cameraContainer.forward.x * Vector2.right + cameraContainer.forward.z * Vector2.up).normalized;
-            var seatForward = (Seat.transform.forward.x * Vector2.right + Seat.transform.forward.z * Vector2.up).normalized;
-
-            var angle = Vector2.SignedAngle(seatForward, forward);
-            var target = cameraContainer.position + cameraContainer.forward * 10f;
-
-
-            PlayAnimationServerRpc(angle, target);
-        }
-    }
-
     internal void ActivateWeaponWheel(bool v)
     {
         if (v)
@@ -189,10 +202,18 @@ public class ShooterController : NetworkBehaviour
         else if (weaponWheel.gameObject.activeSelf)
             CurrentWeapon = weaponWheel.PickedItem.Prefab.GetComponent<Weapon>();
     }
-    internal void SwitchItem()
+    internal void SwitchItem(bool destroyCurrent = false)
     {
-        if ((heldItem == currentWeapon || heldItem == null) && currentTool != null) HeldItem = currentTool;
-        else if ((heldItem == currentTool || heldItem == null) && currentWeapon != null) HeldItem = currentWeapon;
+        if (destroyCurrent)
+        {
+            if (heldItem is Weapon) currentWeapon = null;
+            else currentTool = null;
+
+            Destroy(heldItem.gameObject);
+        }
+
+        if ((heldItem is Tool || heldItem == null) && currentWeapon != null) HeldItem = currentWeapon;
+        else if ((heldItem is Weapon || heldItem == null) && currentTool != null) HeldItem = currentTool;
     }
 
     internal void ActivateToolWheel(bool v)
@@ -229,40 +250,26 @@ public class ShooterController : NetworkBehaviour
     {
         this.health.Value = health;
     }
-    #endregion
-    internal void Shoot(bool context)
+    public void AddHealth(float regenValue)
     {
-        if (!IsOwner) return;
-        if (!context || IsOnMenu || heldItem == null) return;
-        Debug.DrawRay(transform.position + 0.35f * Vector3.up, cameraContainer.forward * 50f, Color.red, .5f);
-        var hits = Physics.RaycastAll(transform.position + 0.35f * Vector3.up, cameraContainer.forward, 50f, 1 << 3);
-
-
-        //if(hits.Length > 0) shootParticles.transform.Lok
-        SubmitShootServerRpc();
-
-        foreach (var hit in hits)
-        {
-            switch (hit.collider.gameObject.layer)
-            {
-                // Hit player body
-                case 3:
-                    //var ennemy = hit.collider.GetComponent<ShooterController>() ? hit.collider.GetComponent<ShooterController>() : hit.collider.GetComponentInParent<ShooterController>();
-                    //Debug.Log("ShooterController, Shoot : #" + NetworkObjectId + " shot #" + ennemy.NetworkObjectId);
-                    //SummitGetHitServerRpc(ennemy.NetworkObjectId, 50f);
-                    break;
-                // Hit cart body
-                case 6:
-                    // code block
-                    break;
-                default:
-                    break;
-            }
-        }
+        SubmitAddHealthServerRpc(regenValue);
     }
 
     [ServerRpc]
-    void SubmitShootServerRpc()
+    private void SubmitAddHealthServerRpc(float regenValue)
+    {
+        this.health.Value = Mathf.Min(health.Value + regenValue, 100f);
+    }
+    #endregion
+    internal void Shoot(bool context)
+    {
+        if (!IsOwner || !context || IsOnMenu || heldItem == null) return;
+
+        heldItem.Use(this);
+    }
+
+    [ServerRpc]
+    public void SubmitShootServerRpc()
     {
         PlayShootParticleClientRpc();
     }
@@ -278,7 +285,7 @@ public class ShooterController : NetworkBehaviour
 
 
     [ServerRpc]
-    void SummitGetHitServerRpc(ulong playerid, float damage)
+    public void SummitGetHitServerRpc(ulong playerid, float damage)
     {
 
         Debug.Log("ShooterController, SummitGetHitServerRpc : touched player = #" + playerid);

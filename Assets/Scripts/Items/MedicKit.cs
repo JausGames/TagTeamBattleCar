@@ -4,15 +4,11 @@ using UnityEngine;
 
 public class MedicKit : Tool
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    [SerializeField] float bonus = 50f;
 
-    // Update is called once per frame
-    void Update()
+    public override void Use(ShooterController owner)
     {
-        
+        owner.AddHealth(bonus);
+        base.Use(owner);
     }
 }
