@@ -23,6 +23,8 @@ public class Seat : MonoBehaviour
             item = Instantiate(value, rightHand);
             if (item.GetComponent<Weapon>()) bulletStart = item.GetComponent<Weapon>().canonEnd;
             else bulletStart = null;
+            item.GetComponent<Item>().Id = value.GetComponent<Item>().Id;
+            item.GetComponent<Item>().Prefab = value.GetComponent<Item>().Prefab;
         }
     }
 

@@ -57,6 +57,7 @@ namespace ClientAutoritative
             if (IsServer)
             {
                 health.Value = maxHealth;
+                health.Value = maxHealth / 2f;
             }
 
             if (IsOwner)
@@ -64,7 +65,7 @@ namespace ClientAutoritative
                 ui.SetActive(true);
                 body.isKinematic = false;
                 healthbar.SetMaxHealth(maxHealth);
-                healthbar.SetHealth(maxHealth);
+                healthbar.SetHealth(health.Value);
                 health.OnValueChanged += UpdateHealthBar;
             }
         }
@@ -83,10 +84,10 @@ namespace ClientAutoritative
             SubmitAddHealthServerRpc(regenValue);
         }
 
-        [ServerRpc]
+        [ServerRpc(RequireOwnership = false)]
         private void SubmitAddHealthServerRpc(float regenValue)
         {
-            this.health.Value = Mathf.Min(health.Value + regenValue, 100f);
+            this.health.Value = Mathf.Min(health.Value + regenValue, maxHealth);
         }
         #endregion
         #region Network var : Rotation

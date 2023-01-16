@@ -303,6 +303,7 @@ public class ShooterController : NetworkBehaviour
         Debug.Log("ShooterController, SummitGetHitServerRpc : cart owner = #" + ownerObjId);
         var ship = GetNetworkObject(ownerObjId).GetComponentInChildren<ClientAutoritative.ShipController>();
         Seat = ship.Seats[seatId];
+        Ship = ship;
     }
 
     private void GetHit(float damage)
