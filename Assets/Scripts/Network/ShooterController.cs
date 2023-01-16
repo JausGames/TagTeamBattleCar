@@ -30,6 +30,7 @@ public class ShooterController : NetworkBehaviour
     [SerializeField] RadialMenuController toolWheel;
     [SerializeField] HealthBar healthbar;
     [SerializeField] private CameraFollow cameraFollow;
+    [SerializeField] private ClientAutoritative.ShipController ship;
 
     public Transform CameraContainer { get => cameraContainer; set => cameraContainer = value; }
     public LayerMask Hitablemask { get => hitablemask; set => hitablemask = value; }
@@ -73,6 +74,9 @@ public class ShooterController : NetworkBehaviour
             SubmitChangeItemServerRpc(heldItem.Id, heldItem is Weapon);
         }
     }
+
+    public ClientAutoritative.ShipController Ship { get => ship; set => ship = value; }
+
     // Update is called once per frame
     private void Start()
     {

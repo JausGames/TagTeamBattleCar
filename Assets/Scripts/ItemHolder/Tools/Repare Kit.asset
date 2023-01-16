@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7083e6fe9a6d5214a9ff5a26afcb65e8, type: 3}
   m_Name: Repare Kit
   m_EditorClassIdentifier: 
-  prefab: {fileID: 4446984586210149794, guid: 157fc55c0fc891b45a26e746111f202f, type: 3}
+  prefab: {fileID: 4446984586210149794, guid: 620814abb5db49043b0ac276a81fd0b2, type: 3}
   name: Repare
   cost: 40
   id: 1

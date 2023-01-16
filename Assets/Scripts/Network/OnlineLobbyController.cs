@@ -90,6 +90,7 @@ public class OnlineLobbyController : NetworkBehaviour
         go1.GetComponent<NetworkObject>().SpawnAsPlayerObject(OwnerClientId + 1, false);
         ship.Seats[0].controller = go1.GetComponentInChildren<ShooterAnimatorController>();
         go1.GetComponentInChildren<ShooterController>().Seat = ship.Seats[0];
+        go1.GetComponentInChildren<ShooterController>().Ship = ship;
         go1.GetComponentInChildren<ShooterController>().FindSeatClientRpc(go.GetComponent<NetworkObject>().NetworkObjectId, 0);
 
         /*GameObject go2 = Instantiate(shootPrefab, Vector3.zero, Quaternion.identity, go.transform);
