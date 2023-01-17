@@ -144,6 +144,22 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: 225f1125-19e5-4fea-8077-110135e38b38
     m_ActionName: LobbyActions/Start[/Keyboard/enter]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 376f345d-83c9-4c5d-b533-03016f55a194
+    m_ActionName: ShootingActions/LookStick
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: c2d7a2e3-e19f-4c69-8fe4-532e90e3b224
+    m_ActionName: ShootingActions/WeaponShop[/Keyboard/shift]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 66ba9d88-a646-4218-87c2-b163f706046b
+    m_ActionName: ShootingActions/ToolShop[/Keyboard/ctrl]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 79a8bc1f-1bc2-4f0c-bc68-bcbfdae5850b
+    m_ActionName: ShootingActions/SwitchItem[/Keyboard/e]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: LobbyActions
@@ -166,6 +182,9 @@ MonoBehaviour:
   uiSetter: {fileID: 1179320707740293405, guid: 2871aaf306e18dc4eb647f082d724828,
     type: 3}
   playerName: 
+  lbl_teamname: {fileID: 0}
+  teamPrefab: {fileID: 735899700741052560, guid: 322ca9a6a83d46c4a94c79ad5ebefbd9,
+    type: 3}
   shipPrefab: {fileID: 3346695240900732517, guid: 6a1f107f43d27cb459b17ead5816cd9f,
     type: 3}
   shootPrefab: {fileID: 3346695240900732517, guid: 59db258f9a07a6a4fa069ce800ad13fd,
