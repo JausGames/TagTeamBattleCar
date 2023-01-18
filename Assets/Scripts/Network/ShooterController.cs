@@ -211,11 +211,13 @@ public class ShooterController : NetworkBehaviour
         {
             var tool = toolWheel.PickedItem.Prefab.GetComponent<Tool>();
             CurrentTool = tool;
+            toolWheel.gameObject.SetActive(false);
         }
         else if (weaponWheel.gameObject.activeSelf && player.Team.ChangeCreditAmount(-weaponWheel.PickedItem.Cost))
         {
             var weap = weaponWheel.PickedItem.Prefab.GetComponent<Weapon>();
             CurrentWeapon = weap;
+            weaponWheel.gameObject.SetActive(false);
         }
     }
     internal void SwitchItem(bool destroyCurrent = false)
