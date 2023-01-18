@@ -182,10 +182,12 @@ MonoBehaviour:
   uiSetter: {fileID: 1179320707740293405, guid: 2871aaf306e18dc4eb647f082d724828,
     type: 3}
   playerName: 
-  lbl_teamname: {fileID: 0}
+  teamName: 
   teamPrefab: {fileID: 735899700741052560, guid: 322ca9a6a83d46c4a94c79ad5ebefbd9,
     type: 3}
   shipPrefab: {fileID: 3346695240900732517, guid: 6a1f107f43d27cb459b17ead5816cd9f,
     type: 3}
   shootPrefab: {fileID: 3346695240900732517, guid: 59db258f9a07a6a4fa069ce800ad13fd,
+    type: 3}
+  aiShipPrefab: {fileID: 3346695240900732517, guid: 890afb532898f3d48b414c2738f31b0c,
     type: 3}

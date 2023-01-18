@@ -94,15 +94,15 @@ public class ShooterController : NetworkBehaviour
     private void Start()
     {
         hitablemask = (1 << 3) | (1 << 6) | (1 << 0);
-        if (IsOwner)
+        if (IsOwner && IsLocalPlayer)
         {
             Cursor.lockState = CursorLockMode.Locked;
             //body.isKinematic = false;
-            cameraContainer.GetComponent<CameraFollow>().camera.enabled = true;
+            cameraContainer.GetComponent<CameraFollow>().GetComponentInChildren<Camera>().enabled = true;
             aimeUi.SetActive(true);
         }
 
-
+        if (!weaponWheel) return;
         for (int i = 0; i < weaponWheel.items.Count; i++)
         {
             weaponWheel.items[i].Prefab.GetComponent<Item>().Prefab = weaponWheel.items[i].Prefab;
@@ -132,7 +132,7 @@ public class ShooterController : NetworkBehaviour
     }
     private void LateUpdate()
     {
-        if (IsOwner)
+        if (IsOwner && IsLocalPlayer)
         {
             if (Seat)
             {

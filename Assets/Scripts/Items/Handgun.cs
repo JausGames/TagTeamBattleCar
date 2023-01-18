@@ -9,7 +9,7 @@ public class Handgun : Weapon
     {
         base.Use(owner);
         var hits = ShootRaycast(owner.CameraContainer.forward, owner.Hitablemask);
-        FindRayVictims(hits);
+        FindRayVictims(owner, hits);
     }
 
 }

@@ -10,7 +10,7 @@ public class RadialMenuController : MonoBehaviour
 {
     [SerializeField] GameObject theMenu;
 
-    public List<ItemHolder> items;
+    public List<ItemHolder> items = new List<ItemHolder>();
     List<ItemData> itemData = new List<ItemData>();
 
     [SerializeField] private ItemData pickedItem;

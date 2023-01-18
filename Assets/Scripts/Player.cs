@@ -32,7 +32,7 @@ public class Player : NetworkBehaviour
         {
             health.Value = maxHealth;
         }
-        if (IsOwner)
+        if (IsOwner && healthbar)
         {
             healthbar.SetMaxHealth(maxHealth);
             healthbar.SetHealth(health.Value);
@@ -49,7 +49,8 @@ public class Player : NetworkBehaviour
 
     internal void UpdateCreditsUi(float previousValue, float newValue)
     {
-        creditsUi.Amount = Mathf.FloorToInt(newValue);
+        if (creditsUi)
+            creditsUi.Amount = Mathf.FloorToInt(newValue);
     }
 
     public void Update()

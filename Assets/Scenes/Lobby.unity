@@ -409,6 +409,18 @@ RectTransform:
     type: 3}
   m_PrefabInstance: {fileID: 5108372697262083875}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &756866024 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5108372697840586348, guid: 33a793bee5c677748b4e0bb44310c58c,
+    type: 3}
+  m_PrefabInstance: {fileID: 5108372697262083875}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2da0c512f12947e489f739169773d7ca, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &770147074
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -468,6 +480,12 @@ MonoBehaviour:
       OverridingTargetPrefab: {fileID: 0}
     - Override: 0
       Prefab: {fileID: 3346695240900732517, guid: 59db258f9a07a6a4fa069ce800ad13fd,
+        type: 3}
+      SourcePrefabToOverride: {fileID: 0}
+      SourceHashToOverride: 0
+      OverridingTargetPrefab: {fileID: 0}
+    - Override: 0
+      Prefab: {fileID: 3346695240900732517, guid: 890afb532898f3d48b414c2738f31b0c,
         type: 3}
       SourcePrefabToOverride: {fileID: 0}
       SourceHashToOverride: 0
@@ -950,6 +968,21 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 5
       objectReference: {fileID: 0}
+    - target: {fileID: 5108372697840586348, guid: 33a793bee5c677748b4e0bb44310c58c,
+        type: 3}
+      propertyPath: m_Text
+      value: Bogoss EQUIPE
+      objectReference: {fileID: 0}
+    - target: {fileID: 5108372697934328853, guid: 33a793bee5c677748b4e0bb44310c58c,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5108372697934328853, guid: 33a793bee5c677748b4e0bb44310c58c,
+        type: 3}
+      propertyPath: m_fontSize
+      value: 42.05
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 33a793bee5c677748b4e0bb44310c58c, type: 3}
 --- !u!224 &7245320942778422165
@@ -992,6 +1025,7 @@ MonoBehaviour:
   lbl_ping: {fileID: 388054030}
   btn_starGame: {fileID: 388054033}
   btn_joinGame: {fileID: 388054031}
+  input_teamname: {fileID: 756866024}
   lobbyRect: {fileID: 1268844059}
   playerPrefab: {fileID: 689839107552138297, guid: 7276e96b5d902724b91b97d133eacff4,
     type: 3}

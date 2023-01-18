@@ -51,7 +51,7 @@ namespace ClientAutoritative
             cartBody.centerOfMass = cartCenterOfMass.localPosition;
 
 
-            if (IsOwner)
+            if (IsOwner && IsLocalPlayer)
             {
                 ui.SetActive(true);
                 body.isKinematic = false;

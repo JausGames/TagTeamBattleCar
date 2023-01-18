@@ -14,6 +14,7 @@ public class OnlineLobbyController : NetworkBehaviour
     [SerializeField] GameObject shipPrefab;
     [SerializeField] GameObject shootPrefab;
     private bool gameStarted = false;
+    [SerializeField] private GameObject aiShipPrefab;
 
     public string PlayerName { 
         get => playerName; 
@@ -96,12 +97,12 @@ public class OnlineLobbyController : NetworkBehaviour
         driverGo.GetComponent<NetworkObject>().SpawnAsPlayerObject(OwnerClientId, false);
         driverGo.transform.parent = teamGo.transform;
         var ship = driverGo.GetComponentInChildren<ClientAutoritative.ShipController>();
-        team.AddPlayer(ship.GetComponent<Player>());
+        team.AddPlayer(ship.GetComponentInParent<Player>());
         //SubmitAddPlayerToTeam();
         playerList.Add(driverGo.GetComponent<NetworkObject>().NetworkObjectId);
         var idList = NetworkManager.ConnectedClientsIds;
 
-        for(int i = 0; i < idList.Count; i++)
+        for (int i = 0; i < idList.Count; i++)
         {
             if(OwnerClientId != idList[i])
             {
@@ -119,6 +120,24 @@ public class OnlineLobbyController : NetworkBehaviour
         }
 
         SubmitCreateTeamServerRpc(teamGo.GetComponent<NetworkObject>().NetworkObjectId, playerList.ToArray());
+
+
+
+        /*GameObject teamAiGo = Instantiate(teamPrefab, Vector3.zero, Quaternion.identity);
+        teamGo.GetComponent<NetworkObject>().SpawnWithOwnership(OwnerClientId, false);
+        var teamAi = teamGo.GetComponent<Team>();
+        team.name = "team ai";*/
+
+        //team.TeamName.Value = lbl_teamname.text;
+        var playerAiList = new List<ulong>();
+
+        GameObject driverAiGo = Instantiate(aiShipPrefab, Vector3.right * 2f, Quaternion.identity);
+        driverAiGo.GetComponent<NetworkObject>().SpawnWithOwnership(OwnerClientId, true);
+        //driverGo.transform.parent = teamAi.transform;
+        var shipAi = driverAiGo.GetComponentInChildren<ClientAutoritative.ShipController>();
+        //team.AddPlayer(shipAi.GetComponent<Player>());
+        //SubmitAddPlayerToTeam();
+        //playerList.Add(driverAiGo.GetComponent<NetworkObject>().NetworkObjectId);
     }
 
     [ServerRpc]

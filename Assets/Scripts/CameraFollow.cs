@@ -6,7 +6,7 @@ public class CameraFollow : MonoBehaviour
 {
     [SerializeField] Transform target;
     public  float speed = 20f;
-    public  Camera camera;
+    private Camera camera;
     [SerializeField] Vector3 offset;
 
 
@@ -37,6 +37,8 @@ public class CameraFollow : MonoBehaviour
             return curr;
         }
     }
+
+    public Camera Camera { get => camera; set => camera = value; }
 
     public void RotateCamera(Vector3 look, float cameraSpeed, Transform seatTransform, out float angle, out Vector3 target)
     {

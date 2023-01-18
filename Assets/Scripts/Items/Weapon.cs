@@ -63,7 +63,7 @@ abstract public class Weapon : Item
     {
         return Physics.RaycastAll(canonEnd.position, direction, Mathf.Infinity, mask);
     }
-    protected void FindRayVictims(RaycastHit[] hits)
+    protected void FindRayVictims(ShooterController owner, RaycastHit[] hits)
     {
         foreach (var hit in hits)
         {
@@ -72,9 +72,9 @@ abstract public class Weapon : Item
                 // Hit player body
                 case 3:
                 case 6:
-                    /*var ennemy = hit.collider.GetComponent<Player>() ? hit.collider.GetComponent<Player>() : hit.collider.GetComponentInParent<Player>();
+                    var ennemy = hit.collider.GetComponent<Player>() ? hit.collider.GetComponent<Player>() : hit.collider.GetComponentInParent<Player>();
                     Debug.Log("ShooterController, Shoot : #" + owner.NetworkObjectId + " shot #" + ennemy.NetworkObjectId);
-                    owner.SummitGetHitServerRpc(ennemy.NetworkObjectId, damage);*/
+                    owner.SummitGetHitServerRpc(ennemy.NetworkObjectId, damage);
                     break;
                 default:
                     break;
