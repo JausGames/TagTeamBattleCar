@@ -57,7 +57,6 @@ namespace ClientAutoritative
             if (IsServer)
             {
                 health.Value = maxHealth;
-                health.Value = maxHealth / 2f;
             }
 
             if (IsOwner)

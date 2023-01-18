@@ -4900,7 +4900,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   damage: 10
   coolDown: 0.4
+  maximumAmmo: 30
+  magazineCapacity: 6
   recoil: {x: -8, y: 3, z: -0}
+  ammo: 0
+  remainingAmmo: 0
   canonEnd: {fileID: 5947979214890729210}
   shootParticles:
   - {fileID: 7141249747043298120}

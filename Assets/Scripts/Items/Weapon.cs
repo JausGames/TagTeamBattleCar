@@ -7,13 +7,53 @@ abstract public class Weapon : Item
     [Header("Stats")]
     [SerializeField] protected float damage = 10f;
     [SerializeField] protected float coolDown = .4f;
+    [SerializeField] protected int maximumAmmo;
+    [SerializeField] protected int magazineCapacity;
     [SerializeField] private Vector3 recoil = Vector3.right * -2f;
+
+    [Header("Logic")]
+    protected float nextShot;
+    [SerializeField] protected int ammo;
+    [SerializeField] protected int remainingAmmo;
 
     [Header("Componenents")]
     [SerializeField] public Transform canonEnd;
     [SerializeField] public List<ParticleSystem> shootParticles;
 
-    protected float nextShot;
+
+
+    public override void Use(ShooterController owner)
+    {
+        if (Time.time < nextShot) return;
+        if (ammo == 0 && remainingAmmo > 0) { Reload(); return; }
+        else if (ammo == 0 && remainingAmmo == 0) return;
+        ammo--;
+        nextShot = Time.time + coolDown;
+
+        owner.CameraFollow.RotationOffset = rndRecoil;
+        //VFX
+        owner.SubmitShootServerRpc();
+    }
+
+        private void Awake()
+    {
+        ammo = magazineCapacity;
+        remainingAmmo = maximumAmmo - magazineCapacity;
+    }
+
+    protected void Reload()
+    {
+        if (ammo < 0) return;
+        var ammoUsed = Mathf.Min(magazineCapacity, remainingAmmo);
+        remainingAmmo -= magazineCapacity;
+        ammo = ammoUsed;
+    }
+
+    protected RaycastHit[] ShootRaycast(Vector3 direction, LayerMask mask)
+    {
+        return Physics.RaycastAll(canonEnd.position, direction, 50f, mask);
+    }
+
 
     protected Vector3 rndRecoil 
     {

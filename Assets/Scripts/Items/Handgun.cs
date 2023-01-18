@@ -7,13 +7,10 @@ public class Handgun : Weapon
 
     public override void Use(ShooterController owner)
     {
-        if (Time.time < nextShot) return;
-        nextShot = Time.time + coolDown;
+        base.Use(owner);
 
-        owner.CameraFollow.RotationOffset = rndRecoil;
+        var hits = ShootRaycast(owner.CameraContainer.forward, owner.Hitablemask);
 
-        owner.SubmitShootServerRpc();
-        var hits = Physics.RaycastAll(canonEnd.position, owner.CameraContainer.forward, 50f, owner.Hitablemask);
         foreach (var hit in hits)
         {
             switch (hit.collider.gameObject.layer)
