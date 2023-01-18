@@ -67,6 +67,7 @@ public class OnlineLobbyController : NetworkBehaviour
 
     private IEnumerator StartGame()
     {
+        var teamName = FindObjectOfType<MainMenu>().TeamName;
 
         Debug.Log("OnlineLobbyController, StartGame");
         var status = NetworkManager.SceneManager.LoadScene("GameScene", UnityEngine.SceneManagement.LoadSceneMode.Single);
@@ -86,8 +87,10 @@ public class OnlineLobbyController : NetworkBehaviour
         GameObject teamGo = Instantiate(teamPrefab, Vector3.zero, Quaternion.identity);
         teamGo.GetComponent<NetworkObject>().SpawnWithOwnership(OwnerClientId, false);
         var team = teamGo.GetComponent<Team>();
+        team.name = teamName;
 
         //team.TeamName.Value = lbl_teamname.text;
+        var playerList = new List<ulong>();
 
         GameObject driverGo = Instantiate(shipPrefab, Vector3.zero, Quaternion.identity);
         driverGo.GetComponent<NetworkObject>().SpawnAsPlayerObject(OwnerClientId, false);
@@ -95,27 +98,27 @@ public class OnlineLobbyController : NetworkBehaviour
         var ship = driverGo.GetComponentInChildren<ClientAutoritative.ShipController>();
         team.AddPlayer(ship.GetComponent<Player>());
         //SubmitAddPlayerToTeam();
+        playerList.Add(driverGo.GetComponent<NetworkObject>().NetworkObjectId);
+        var idList = NetworkManager.ConnectedClientsIds;
 
-        
-        GameObject shooterGo1 = Instantiate(shootPrefab, Vector3.zero, Quaternion.identity);
-        shooterGo1.GetComponent<NetworkObject>().SpawnAsPlayerObject(OwnerClientId + 1, false);
-        shooterGo1.transform.parent = teamGo.transform;
-        ship.Seats[0].controller = shooterGo1.GetComponentInChildren<ShooterAnimatorController>();
-        var shooter1 = shooterGo1.GetComponentInChildren<ShooterController>();
-        shooter1.Seat = ship.Seats[0];
-        shooter1.Ship = ship;
-        shooter1.FindSeatClientRpc(driverGo.GetComponent<NetworkObject>().NetworkObjectId, 0);
-        team.AddPlayer(shooter1.GetComponent<Player>());
-        SubmitCreateTeamServerRpc(teamGo.GetComponent<NetworkObject>().NetworkObjectId, new ulong[] { driverGo.GetComponent<NetworkObject>().NetworkObjectId, shooterGo1.GetComponent<NetworkObject>().NetworkObjectId });
+        for(int i = 0; i < idList.Count; i++)
+        {
+            if(OwnerClientId != idList[i])
+            {
+                GameObject shooterGo = Instantiate(shootPrefab, Vector3.zero, Quaternion.identity);
+                shooterGo.GetComponent<NetworkObject>().SpawnAsPlayerObject(idList[i], false);
+                shooterGo.transform.parent = teamGo.transform;
+                ship.Seats[0].controller = shooterGo.GetComponentInChildren<ShooterAnimatorController>();
+                var shooter = shooterGo.GetComponentInChildren<ShooterController>();
+                shooter.Seat = ship.Seats[0];
+                shooter.Ship = ship;
+                shooter.FindSeatClientRpc(driverGo.GetComponent<NetworkObject>().NetworkObjectId, 0);
+                team.AddPlayer(shooter.GetComponent<Player>());
+                playerList.Add(shooterGo.GetComponent<NetworkObject>().NetworkObjectId);
+            }
+        }
 
-
-        /*
-         * GameObject go2 = Instantiate(shootPrefab, Vector3.zero, Quaternion.identity, go.transform);
-        go2.GetComponent<NetworkObject>().SpawnAsPlayerObject(OwnerClientId + 2, false);
-        ship.Seats[1].controller = go2.GetComponentInChildren<ShooterAnimatorController>();
-        go2.GetComponentInChildren<ShooterController>().Seat = ship.Seats[1];
-        go2.GetComponentInChildren<ShooterController>().FindSeatClientRpc(go.GetComponent<NetworkObject>().NetworkObjectId, 1);
-        */
+        SubmitCreateTeamServerRpc(teamGo.GetComponent<NetworkObject>().NetworkObjectId, playerList.ToArray());
     }
 
     [ServerRpc]

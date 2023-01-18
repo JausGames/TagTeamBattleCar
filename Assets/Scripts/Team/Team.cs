@@ -15,6 +15,7 @@ public class Team : NetworkBehaviour
 
     public NetworkVariable<char> TeamName { get => teamName; set => teamName = value; }
     public NetworkVariable<float> Credits { get => credits; set => credits = value; }
+    public List<Player> Players { get => players; set => players = value; }
 
     int test;
 
@@ -39,7 +40,6 @@ public class Team : NetworkBehaviour
 
     private bool ChangeAmount(float amount)
     {
-        Debug.Log("Team, ChangeAmount : amount = " + amount);
         if (amount < 0 && credits.Value < amount) return false;
         credits.Value += amount;
         return true;
@@ -52,10 +52,8 @@ public class Team : NetworkBehaviour
 
     public bool ChangeCreditAmount(float amount)
     {
-        Debug.Log("Team, ChangeCreditAmount : amount = " + amount);
         if (CanChangeAmount(amount))
         {
-            Debug.Log("Team, ChangeCreditAmount : can change");
             SubmitChangeMoneyServerRpc(amount);
             return true;
         }
@@ -65,7 +63,6 @@ public class Team : NetworkBehaviour
     [ServerRpc(RequireOwnership = false)]
     private void SubmitChangeMoneyServerRpc(float amount)
     {
-        Debug.Log("Team, SubmitChangeMoneyServerRpc");
         ChangeAmount(amount);
     }
 

@@ -7,6 +7,7 @@ using System.Text;
 using Unity.Netcode.Transports.UNET;
 using Unity.Services.Lobbies;
 using Unity.Services.Lobbies.Models;
+using TMPro;
 
 public class MainMenu : MonoBehaviour
 {
@@ -18,6 +19,8 @@ public class MainMenu : MonoBehaviour
     [SerializeField] TMPro.TMP_Text lbl_ping;
     [SerializeField] Button btn_starGame;
     [SerializeField] Button btn_joinGame;
+
+    [SerializeField] TMPro.TMP_InputField input_teamname;
 
     [SerializeField] Transform lobbyRect;
     [SerializeField] GameObject playerPrefab;
@@ -33,6 +36,8 @@ public class MainMenu : MonoBehaviour
 
     //string ipAdress = "172.30.114.48";
     string ipAdress = "127.0.0.1";
+
+    public string TeamName { get => input_teamname.text; }
 
     private void Update()
     {

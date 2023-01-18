@@ -11,12 +11,11 @@ abstract public class Weapon : Item
     [SerializeField] protected int magazineCapacity;
     [SerializeField] private Vector3 recoil = Vector3.right * -2f;
 
-    [Header("Logic")]
     protected float nextShot;
-    [SerializeField] protected int ammo;
-    [SerializeField] private int remainingAmmo;
+    protected int ammo;
+    private int remainingAmmo;
 
-    [Header("Componenents")]
+    [Header("Components")]
     [SerializeField] public Transform canonEnd;
     [SerializeField] public List<ParticleSystem> shootParticles;
     protected Vector3 rndRecoil 
