@@ -9,32 +9,53 @@ using UnityEngine;
 public class Team : NetworkBehaviour
 {
     [SerializeField] NetworkVariable<char> teamName = new NetworkVariable<char>(new char(), NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
-    [SerializeField] List<ShooterController> shooters = new List<ShooterController>();
-    [SerializeField] ClientAutoritative.ShipController driver;
-    [SerializeField] NetworkVariable<float> credits = new NetworkVariable<float>(0f, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
+    [SerializeField] List<Player> players = new List<Player>();
+    [SerializeField] NetworkVariable<float> credits = new NetworkVariable<float>(150f, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
 
-    public int Credits { get => Mathf.FloorToInt(credits.Value); }
-    public List<ShooterController> Shooters { get => shooters; set => shooters = value; }
-    public ShipController Driver { get => driver; set => driver = value; }
+
     public NetworkVariable<char> TeamName { get => teamName; set => teamName = value; }
+    public NetworkVariable<float> Credits { get => credits; set => credits = value; }
 
+    int test;
 
-    public bool ChangeAmount(float amount)
+    private void Update()
     {
+        /*if(IsOwner)
+            if (Mathf.FloorToInt(Time.time) != test)
+            {
+                test = Mathf.FloorToInt(Time.time);
+                var rnd = UnityEngine.Random.Range(-100f, 100f);
+                if (CanChangeAmount(rnd))
+                    ChangeAmount(rnd);
+            }*/
+    }
+    public void AddPlayer(Player player)
+    {
+        players.Add(player);
+        player.Team = this;
+        credits.OnValueChanged += player.UpdateCreditsUi;
+    }
+
+
+    private bool ChangeAmount(float amount)
+    {
+        Debug.Log("Team, ChangeAmount : amount = " + amount);
         if (amount < 0 && credits.Value < amount) return false;
         credits.Value += amount;
         return true;
     }
-    public bool CanChangeAmount(float amount)
+    private bool CanChangeAmount(float amount)
     {
-        if (amount < 0f && credits.Value < amount) return false;
+        if (credits.Value + amount < 0f) return false;
         return true;
     }
 
     public bool ChangeCreditAmount(float amount)
     {
+        Debug.Log("Team, ChangeCreditAmount : amount = " + amount);
         if (CanChangeAmount(amount))
         {
+            Debug.Log("Team, ChangeCreditAmount : can change");
             SubmitChangeMoneyServerRpc(amount);
             return true;
         }
@@ -44,7 +65,15 @@ public class Team : NetworkBehaviour
     [ServerRpc(RequireOwnership = false)]
     private void SubmitChangeMoneyServerRpc(float amount)
     {
+        Debug.Log("Team, SubmitChangeMoneyServerRpc");
         ChangeAmount(amount);
     }
 
+    internal void SetTeamMates(List<Player> players)
+    {
+        foreach(Player player in players)
+        {
+            AddPlayer(player);
+        }
+    }
 }

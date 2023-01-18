@@ -14,7 +14,7 @@ abstract public class Weapon : Item
     [Header("Logic")]
     protected float nextShot;
     [SerializeField] protected int ammo;
-    [SerializeField] protected int remainingAmmo;
+    [SerializeField] private int remainingAmmo;
 
     [Header("Componenents")]
     [SerializeField] public Transform canonEnd;
@@ -37,8 +37,7 @@ abstract public class Weapon : Item
 
         private void Awake()
     {
-        ammo = magazineCapacity;
-        remainingAmmo = maximumAmmo - magazineCapacity;
+        ResetAmmo();
     }
 
     protected void Reload()
@@ -62,5 +61,13 @@ abstract public class Weapon : Item
             var t = Random.Range(0f, 1f);
             return recoil * t + (recoil - 2f * recoil.y * Vector3.up) * (1f - t);
         }
+    }
+
+    public int RemainingAmmo { get => remainingAmmo; set => remainingAmmo = value; }
+
+    internal void ResetAmmo()
+    {
+        ammo = magazineCapacity;
+        remainingAmmo = maximumAmmo - magazineCapacity;
     }
 }

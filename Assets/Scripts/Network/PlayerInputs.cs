@@ -85,7 +85,7 @@ namespace Inputs
             Debug.Log("Network Informations : IsLocalPlayer " + IsLocalPlayer);
             if (shooter == null || !IsOwner) return;
 
-            if (shooter.IsOnMenu) shooter.BuyItem();
+            if (shooter.IsOnMenu && context) shooter.BuyItem();
             else shooter.Shoot(context);
         }
         public void OnTorque(float context)

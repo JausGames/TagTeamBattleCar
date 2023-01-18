@@ -104,6 +104,7 @@ public class ItemData
 
     public float Angle { get => angle; set => angle = value; }
     public GameObject Prefab { get => prefab; set => prefab = value; }
+    public int Cost { get => cost; set => cost = value; }
 
     public ItemData(string name, int cost, float angle, GameObject prefab)
     {

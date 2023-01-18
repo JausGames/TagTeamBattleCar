@@ -93,7 +93,8 @@ public class OnlineLobbyController : NetworkBehaviour
         driverGo.GetComponent<NetworkObject>().SpawnAsPlayerObject(OwnerClientId, false);
         driverGo.transform.parent = teamGo.transform;
         var ship = driverGo.GetComponentInChildren<ClientAutoritative.ShipController>();
-        team.Driver = ship;
+        team.AddPlayer(ship.GetComponent<Player>());
+        //SubmitAddPlayerToTeam();
 
         
         GameObject shooterGo1 = Instantiate(shootPrefab, Vector3.zero, Quaternion.identity);
@@ -104,8 +105,9 @@ public class OnlineLobbyController : NetworkBehaviour
         shooter1.Seat = ship.Seats[0];
         shooter1.Ship = ship;
         shooter1.FindSeatClientRpc(driverGo.GetComponent<NetworkObject>().NetworkObjectId, 0);
-        team.Shooters.Add(shooter1);
-        
+        team.AddPlayer(shooter1.GetComponent<Player>());
+        SubmitCreateTeamServerRpc(teamGo.GetComponent<NetworkObject>().NetworkObjectId, new ulong[] { driverGo.GetComponent<NetworkObject>().NetworkObjectId, shooterGo1.GetComponent<NetworkObject>().NetworkObjectId });
+
 
         /*
          * GameObject go2 = Instantiate(shootPrefab, Vector3.zero, Quaternion.identity, go.transform);
@@ -116,6 +118,33 @@ public class OnlineLobbyController : NetworkBehaviour
         */
     }
 
+    [ServerRpc]
+    private void SubmitCreateTeamServerRpc(ulong networkObjectId, ulong[] playersObjectId)
+    {
+        if(!IsHost)AddPlayersToTeam(networkObjectId, playersObjectId);
+        SetUpTeamClientRpc(networkObjectId, playersObjectId);
+        var team = GetNetworkObject(networkObjectId).GetComponent<Team>();
+        team.Credits.Value = GameSettings.startingCredits;
+    }
+
+    [ClientRpc]
+    private void SetUpTeamClientRpc(ulong networkObjectId, ulong[] playersObjectId)
+    {
+        AddPlayersToTeam(networkObjectId, playersObjectId);
+    }
+
+    private Team AddPlayersToTeam(ulong networkObjectId, ulong[] playersObjectId)
+    {
+        var team = GetNetworkObject(networkObjectId).GetComponent<Team>();
+        var players = new List<Player>();
+        for (int i = 0; i < playersObjectId.Length; i++)
+        {
+            var player = GetNetworkObject(playersObjectId[i]).GetComponentInChildren<Player>();
+            players.Add(player);
+        }
+        team.SetTeamMates(players);
+        return team;
+    }
 
     [ServerRpc(RequireOwnership = true)]
     private void SubmitReadyServerRpc()

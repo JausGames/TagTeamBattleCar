@@ -17,9 +17,9 @@ public class Handgun : Weapon
             {
                 // Hit player body
                 case 3: case 6:
-                    var ennemy = hit.collider.GetComponent<Player>() ? hit.collider.GetComponent<Player>() : hit.collider.GetComponentInParent<Player>();
+                    /*var ennemy = hit.collider.GetComponent<Player>() ? hit.collider.GetComponent<Player>() : hit.collider.GetComponentInParent<Player>();
                     Debug.Log("ShooterController, Shoot : #" + owner.NetworkObjectId + " shot #" + ennemy.NetworkObjectId);
-                    owner.SummitGetHitServerRpc(ennemy.NetworkObjectId, damage);
+                    owner.SummitGetHitServerRpc(ennemy.NetworkObjectId, damage);*/
                     break;
                 default:
                     break;

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Cinemachine;
 using Unity.Netcode;
+using System;
 
 public class Player : NetworkBehaviour
 {
@@ -18,9 +19,12 @@ public class Player : NetworkBehaviour
     [Space]
     [Header("Component")]
     [SerializeField] HealthBar healthbar;
+    [SerializeField] CreditsUi creditsUi;
+    [SerializeField] Team team;
 
     public float MaxHealth { get => maxHealth; set => maxHealth = value; }
     public NetworkVariable<float> Health { get => health; set => health = value; }
+    public Team Team { get => team; set => team = value; }
 
     public void Start()
     {
@@ -42,6 +46,12 @@ public class Player : NetworkBehaviour
             virtualCamera.Follow = transform;
         }
     }
+
+    internal void UpdateCreditsUi(float previousValue, float newValue)
+    {
+        creditsUi.Amount = Mathf.FloorToInt(newValue);
+    }
+
     public void Update()
     {
         if (!IsLocalPlayer || !lookAt || !body) return;

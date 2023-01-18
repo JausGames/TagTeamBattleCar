@@ -46,10 +46,14 @@ public class ShooterController : NetworkBehaviour
     public Tool CurrentTool { 
         get => currentTool;
         set 
-        { 
-            currentTool = value;
-            //currentTool.Prefab = toolWheel.PickedItem.Prefab;
-            if (heldItem == null) HeldItem = currentTool;
+        {
+            if (currentTool == null || value.Id != currentTool.Id)
+            {
+                currentTool = value; 
+                HeldItem = currentTool;
+            }
+
+            if (heldItem is Weapon) SwitchItem();
         }
     }
     public Weapon CurrentWeapon
@@ -57,9 +61,19 @@ public class ShooterController : NetworkBehaviour
         get => currentWeapon;
         set
         {
-            currentWeapon = value;
-            //currentWeapon.Prefab = weaponWheel.PickedItem.Prefab;
-            if (heldItem == null) HeldItem = currentWeapon;
+
+            if (currentWeapon == null  || value.Id != currentWeapon.Id)
+            {
+                currentWeapon = value;
+                HeldItem = currentWeapon;
+            }
+            else if(value.Id == currentWeapon.Id)
+            {
+                if (heldItem is Tool) SwitchItem();
+                ((Weapon)HeldItem).ResetAmmo();
+            }
+
+
         }
     }
     public Item HeldItem 
@@ -193,10 +207,16 @@ public class ShooterController : NetworkBehaviour
 
     internal void BuyItem()
     {
-        if (toolWheel.gameObject.activeSelf)
-            CurrentTool = toolWheel.PickedItem.Prefab.GetComponent<Tool>();
-        else if (weaponWheel.gameObject.activeSelf)
-            CurrentWeapon = weaponWheel.PickedItem.Prefab.GetComponent<Weapon>();
+        if (toolWheel.gameObject.activeSelf && player.Team.ChangeCreditAmount(-toolWheel.PickedItem.Cost))
+        {
+            var tool = toolWheel.PickedItem.Prefab.GetComponent<Tool>();
+            CurrentTool = tool;
+        }
+        else if (weaponWheel.gameObject.activeSelf && player.Team.ChangeCreditAmount(-weaponWheel.PickedItem.Cost))
+        {
+            var weap = weaponWheel.PickedItem.Prefab.GetComponent<Weapon>();
+            CurrentWeapon = weap;
+        }
     }
     internal void SwitchItem(bool destroyCurrent = false)
     {

@@ -63,8 +63,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   teamName:
     m_InternalValue: 0
-  shooters: []
-  driver: {fileID: 0}
-  wallet:
-    amount:
-      m_InternalValue: 0
+  players: []
+  credits:
+    m_InternalValue: 0
