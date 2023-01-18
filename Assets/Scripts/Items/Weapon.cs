@@ -19,14 +19,21 @@ abstract public class Weapon : Item
     [Header("Componenents")]
     [SerializeField] public Transform canonEnd;
     [SerializeField] public List<ParticleSystem> shootParticles;
-
-
+    protected Vector3 rndRecoil 
+    {
+        get
+        {
+            var t = Random.Range(0f, 1f);
+            return recoil * t + (recoil - 2f * recoil.y * Vector3.up) * (1f - t);
+        }
+    }
 
     public override void Use(ShooterController owner)
     {
-        if (Time.time < nextShot) return;
-        if (ammo == 0 && remainingAmmo > 0) { Reload(); return; }
-        else if (ammo == 0 && remainingAmmo == 0) return;
+        
+        if (Time.time < nextShot || (ammo == 0 && remainingAmmo == 0)) return; // check cooldown & ammunition
+        if (ammo == 0 && remainingAmmo > 0) { Reload(); return; }  // Auto reload
+
         ammo--;
         nextShot = Time.time + coolDown;
 
@@ -34,11 +41,16 @@ abstract public class Weapon : Item
         //VFX
         owner.SubmitShootServerRpc();
     }
-
-        private void Awake()
+    private void Awake()
     {
         ResetAmmo();
     }
+    internal void ResetAmmo()
+    {
+        ammo = magazineCapacity;
+        remainingAmmo = maximumAmmo - magazineCapacity;
+    }
+
 
     protected void Reload()
     {
@@ -50,24 +62,27 @@ abstract public class Weapon : Item
 
     protected RaycastHit[] ShootRaycast(Vector3 direction, LayerMask mask)
     {
-        return Physics.RaycastAll(canonEnd.position, direction, 50f, mask);
+        return Physics.RaycastAll(canonEnd.position, direction, Mathf.Infinity, mask);
     }
-
-
-    protected Vector3 rndRecoil 
+    protected void FindRayVictims(RaycastHit[] hits)
     {
-        get
+        foreach (var hit in hits)
         {
-            var t = Random.Range(0f, 1f);
-            return recoil * t + (recoil - 2f * recoil.y * Vector3.up) * (1f - t);
+            switch (hit.collider.gameObject.layer)
+            {
+                // Hit player body
+                case 3:
+                case 6:
+                    /*var ennemy = hit.collider.GetComponent<Player>() ? hit.collider.GetComponent<Player>() : hit.collider.GetComponentInParent<Player>();
+                    Debug.Log("ShooterController, Shoot : #" + owner.NetworkObjectId + " shot #" + ennemy.NetworkObjectId);
+                    owner.SummitGetHitServerRpc(ennemy.NetworkObjectId, damage);*/
+                    break;
+                default:
+                    break;
+            }
         }
     }
 
-    public int RemainingAmmo { get => remainingAmmo; set => remainingAmmo = value; }
 
-    internal void ResetAmmo()
-    {
-        ammo = magazineCapacity;
-        remainingAmmo = maximumAmmo - magazineCapacity;
-    }
+
 }
