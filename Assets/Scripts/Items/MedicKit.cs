@@ -8,7 +8,7 @@ public class MedicKit : Tool
 
     public override void Use(ShooterController owner)
     {
-        owner.AddHealth(bonus);
+        owner.GetComponent<Player>().AddHealth(bonus);
         base.Use(owner);
     }
 }

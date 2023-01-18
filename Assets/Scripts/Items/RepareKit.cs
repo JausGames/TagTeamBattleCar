@@ -8,7 +8,7 @@ public class RepareKit : Tool
 
     public override void Use(ShooterController owner)
     {
-        owner.Ship.AddHealth(bonus);
+        owner.Ship.GetComponent<Player>().AddHealth(bonus);
         base.Use(owner);
     }
 }

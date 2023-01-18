@@ -305,8 +305,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5493142882487950262}
-  - component: {fileID: 4982819303406851800}
+  - component: {fileID: 1764531381796831641}
   - component: {fileID: 4927519407808872754}
+  - component: {fileID: 4982819303406851800}
   - component: {fileID: 8388727838150657233}
   m_Layer: 3
   m_Name: shooter
@@ -330,6 +331,51 @@ Transform:
   m_Father: {fileID: 3346695240900732515}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
+--- !u!114 &1764531381796831641
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5493142882487950264}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c323e466057d58640a88ee78cccd898c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  health:
+    m_InternalValue: 0
+  maxHealth: 100
+  lookAt: {fileID: 0}
+  body: {fileID: 0}
+  healthbar: {fileID: 2723422561473859049}
+--- !u!114 &4927519407808872754
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5493142882487950264}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f06f3db9963beef409e6dbad2f7b7db4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  look:
+    m_InternalValue: {x: 0, y: 0, z: 0}
+  seat: {fileID: 0}
+  aimeUi: {fileID: 8494546482941859864}
+  currentWeapon: {fileID: 0}
+  currentTool: {fileID: 0}
+  heldItem: {fileID: 0}
+  player: {fileID: 1764531381796831641}
+  cameraContainer: {fileID: 3036402081554402340}
+  animatorController: {fileID: 8388727838150657233}
+  cameraSpeed: 25
+  weaponWheel: {fileID: 4621995868093497876}
+  toolWheel: {fileID: 5811223396871235211}
+  cameraFollow: {fileID: 5666359829624113700}
+  ship: {fileID: 0}
 --- !u!114 &4982819303406851800
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -346,34 +392,6 @@ MonoBehaviour:
   shooter: {fileID: 4927519407808872754}
   stickLookSensibility: 10
   mouseLookSensibility: 1
---- !u!114 &4927519407808872754
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5493142882487950264}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f06f3db9963beef409e6dbad2f7b7db4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  health:
-    m_InternalValue: 100
-  look:
-    m_InternalValue: {x: 0, y: 0, z: 0}
-  seat: {fileID: 0}
-  aimeUi: {fileID: 8494546482941859864}
-  currentWeapon: {fileID: 0}
-  currentTool: {fileID: 0}
-  heldItem: {fileID: 0}
-  cameraContainer: {fileID: 3036402081554402340}
-  animatorController: {fileID: 8388727838150657233}
-  cameraSpeed: 25
-  weaponWheel: {fileID: 4621995868093497876}
-  toolWheel: {fileID: 5811223396871235211}
-  healthbar: {fileID: 2723422561473859049}
-  cameraFollow: {fileID: 5666359829624113700}
 --- !u!114 &8388727838150657233
 MonoBehaviour:
   m_ObjectHideFlags: 0

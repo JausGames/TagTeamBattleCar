@@ -6,11 +6,10 @@ using UnityEngine;
 using Unity.Netcode;
 using RootMotion.FinalIK;
 
+[RequireComponent(typeof(Player))]
 public class ShooterController : NetworkBehaviour
 {
-    [Header("Inputs")]
-    [SerializeField] NetworkVariable<float> health = new NetworkVariable<float>(50f, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
-    [SerializeField] NetworkVariable<Vector3> look = new NetworkVariable<Vector3>(Vector3.zero, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
+    [Header("Inputs")][SerializeField] NetworkVariable<Vector3> look = new NetworkVariable<Vector3>(Vector3.zero, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
     [SerializeField] Seat seat;
     [SerializeField] GameObject aimeUi;
 
@@ -23,12 +22,12 @@ public class ShooterController : NetworkBehaviour
     [Space]
     [Header("Components")]
     private LayerMask hitablemask;
+    [SerializeField] Player player;
     [SerializeField] Transform cameraContainer;
     [SerializeField] ShooterAnimatorController animatorController;
     [SerializeField] float cameraSpeed;
     [SerializeField] RadialMenuController weaponWheel;
     [SerializeField] RadialMenuController toolWheel;
-    [SerializeField] HealthBar healthbar;
     [SerializeField] private CameraFollow cameraFollow;
     [SerializeField] private ClientAutoritative.ShipController ship;
 
@@ -83,9 +82,6 @@ public class ShooterController : NetworkBehaviour
         hitablemask = (1 << 3) | (1 << 6) | (1 << 0);
         if (IsOwner)
         {
-            healthbar.SetMaxHealth(100f);
-            healthbar.SetHealth(health.Value);
-            health.OnValueChanged += UpdateHealthBar;
             Cursor.lockState = CursorLockMode.Locked;
             //body.isKinematic = false;
             cameraContainer.GetComponent<CameraFollow>().camera.enabled = true;
@@ -106,10 +102,6 @@ public class ShooterController : NetworkBehaviour
         
     }
 
-    private void UpdateHealthBar(float previous, float current)
-    {
-        healthbar.SetHealth(current);
-    }
 
     private void Update()
     {
@@ -248,23 +240,6 @@ public class ShooterController : NetworkBehaviour
         seat.target.position = target;
         //animatorController.Direction = (x * Vector2.right + y * Vector2.up).normalized;
     }
-
-    #region Network var : Health
-    public void SetHealth(float health)
-    {
-        this.health.Value = health;
-    }
-    public void AddHealth(float regenValue)
-    {
-        SubmitAddHealthServerRpc(regenValue);
-    }
-
-    [ServerRpc]
-    private void SubmitAddHealthServerRpc(float regenValue)
-    {
-        this.health.Value = Mathf.Min(health.Value + regenValue, 100f);
-    }
-    #endregion
     internal void Shoot(bool context)
     {
         if (!IsOwner || !context || IsOnMenu || heldItem == null) return;
@@ -294,7 +269,7 @@ public class ShooterController : NetworkBehaviour
 
         Debug.Log("ShooterController, SummitGetHitServerRpc : touched player = #" + playerid);
         var id = GetNetworkObject(playerid);
-        GetNetworkObject(playerid).GetComponentInChildren<ShooterController>().GetHit(damage);
+        GetNetworkObject(playerid).GetComponentInChildren<Player>().GetHit(damage);
     }
 
     [ClientRpc]
@@ -306,31 +281,6 @@ public class ShooterController : NetworkBehaviour
         Ship = ship;
     }
 
-    private void GetHit(float damage)
-    {
-        Debug.Log("ShooterController, GetHit : damage = " + damage);
-        SetHealth(Mathf.Max(0f, health.Value - damage));
-        if (health.Value == 0) SubmitDieServerRpc(NetworkObjectId);
-    }
-
-    [ServerRpc]
-    private void SubmitDieServerRpc(ulong playerid)
-    {
-        Debug.Log("ShooterController, SubmitDieServerRpc : playerid = " + playerid);
-        KillPlayerClientRpc(playerid);
-    }
-
-    [ClientRpc]
-    private void KillPlayerClientRpc(ulong playerid)
-    {
-        Debug.Log("ShooterController, KillPlayerClientRpc : playerid = " + playerid);
-        GetNetworkObject(playerid).gameObject.GetComponentInChildren<ShooterController>().Die();
-    }
-    private void Die()
-    {
-        Debug.Log("ShooterController, Die : Die = " + NetworkObjectId);
-        Destroy(gameObject);
-    }
 
     internal void Look(Vector2 vector2)
     {

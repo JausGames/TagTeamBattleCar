@@ -16,14 +16,10 @@ public class Handgun : Weapon
             switch (hit.collider.gameObject.layer)
             {
                 // Hit player body
-                case 3:
-                    var ennemy = hit.collider.GetComponent<ShooterController>() ? hit.collider.GetComponent<ShooterController>() : hit.collider.GetComponentInParent<ShooterController>();
+                case 3: case 6:
+                    var ennemy = hit.collider.GetComponent<Player>() ? hit.collider.GetComponent<Player>() : hit.collider.GetComponentInParent<Player>();
                     Debug.Log("ShooterController, Shoot : #" + owner.NetworkObjectId + " shot #" + ennemy.NetworkObjectId);
                     owner.SummitGetHitServerRpc(ennemy.NetworkObjectId, damage);
-                    break;
-                // Hit cart body
-                case 6:
-                    // code block
                     break;
                 default:
                     break;

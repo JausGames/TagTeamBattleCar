@@ -15,18 +15,15 @@ namespace ClientAutoritative
         [SerializeField] NetworkVariable<bool> parkingBreaking = new NetworkVariable<bool>(false, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
         [SerializeField] NetworkVariable<bool> isRotationAxeY = new NetworkVariable<bool>(false, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
 
-
-
         [Space]
         [Header("Car stats")]
         [SerializeField] protected CarSettings carSettings;
-        [SerializeField] NetworkVariable<float> health = new NetworkVariable<float>(1000f, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
         [SerializeField] protected bool onFloor;
         [SerializeField] float gravityModifier = 1000f;
-        [SerializeField] float maxHealth = 1000f;
 
         [Space]
         [Header("Components")]
+        [SerializeField] protected Player player;
         [SerializeField] protected Rigidbody body;
         [SerializeField] CarAnimator carAnimator;
         [SerializeField] Transform centerOfMass;
@@ -36,7 +33,6 @@ namespace ClientAutoritative
         [SerializeField] Seat[] seats;
         [SerializeField] CarSoundManager soundManager;
         [SerializeField] List<Wheel> wheels;
-        [SerializeField] HealthBar healthbar;
         [SerializeField] GameObject ui;
 
         [Space]
@@ -54,41 +50,13 @@ namespace ClientAutoritative
             body.centerOfMass = centerOfMass.localPosition;
             cartBody.centerOfMass = cartCenterOfMass.localPosition;
 
-            if (IsServer)
-            {
-                health.Value = maxHealth;
-            }
 
             if (IsOwner)
             {
                 ui.SetActive(true);
                 body.isKinematic = false;
-                healthbar.SetMaxHealth(maxHealth);
-                healthbar.SetHealth(health.Value);
-                health.OnValueChanged += UpdateHealthBar;
             }
         }
-        private void UpdateHealthBar(float previous, float current)
-        {
-            healthbar.SetHealth(current);
-        }
-
-        #region Network var : Health
-        public void SetHealth(float health)
-        {
-            this.health.Value = health;
-        }
-        public void AddHealth(float regenValue)
-        {
-            SubmitAddHealthServerRpc(regenValue);
-        }
-
-        [ServerRpc(RequireOwnership = false)]
-        private void SubmitAddHealthServerRpc(float regenValue)
-        {
-            this.health.Value = Mathf.Min(health.Value + regenValue, maxHealth);
-        }
-        #endregion
         #region Network var : Rotation
         public void SetRotation(float torque)
         {
@@ -236,7 +204,7 @@ namespace ClientAutoritative
             {
                 var accelerationRatio = carSettings.accelerationCurve.Evaluate(body.velocity.magnitude / carSettings.maxSpeed);
                 // Health modificator, min .66f of max acceleration
-                var healthMod = ((1f - minHealthImpactOnSpeed) / maxHealth) * health.Value + minHealthImpactOnSpeed;
+                var healthMod = ((1f - minHealthImpactOnSpeed) / player.MaxHealth) * player.Health.Value + minHealthImpactOnSpeed;
                 force = accelerationRatio * torqueApply * healthMod * carSettings.torqueForce * (localMatrix[0] + localMatrix[1] + localMatrix[2]);
             }
             else

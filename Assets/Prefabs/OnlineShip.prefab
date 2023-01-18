@@ -14891,9 +14891,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c323e466057d58640a88ee78cccd898c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  motor: {fileID: 7775341443780782710}
+  health:
+    m_InternalValue: 0
+  maxHealth: 1000
   lookAt: {fileID: 5493142883312927755}
   body: {fileID: 5493142882487950269}
+  healthbar: {fileID: 4127667578038341293}
 --- !u!114 &7775341443780782710
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -14916,10 +14919,9 @@ MonoBehaviour:
   isRotationAxeY:
     m_InternalValue: 0
   carSettings: {fileID: 11400000, guid: cd2699559a6a8c9409b119e8352fd02e, type: 2}
-  health:
-    m_InternalValue: 100
   onFloor: 0
   gravityModifier: 1000
+  player: {fileID: 479554683084920114}
   body: {fileID: 5493142882487950269}
   carAnimator: {fileID: 3200130069788905672}
   centerOfMass: {fileID: 5493142883440065815}
@@ -14939,11 +14941,11 @@ MonoBehaviour:
   wheels:
   - {fileID: 4259043308515771909}
   - {fileID: 7462371183757738981}
-  healthbar: {fileID: 4127667578038341293}
   ui: {fileID: 256618969150656383}
   vectorForward: {x: 0, y: 0, z: 0}
   vectorRight: {x: 0, y: 0, z: 0}
   vectorUp: {x: 0, y: 0, z: 0}
+  minHealthImpactOnSpeed: 0.5
 --- !u!114 &4982819303406851800
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -32585,7 +32587,7 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
 --- !u!95 &8512038062878549061
 Animator:
-  serializedVersion: 5
+  serializedVersion: 4
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -32602,7 +32604,7 @@ Animator:
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorStateOnDisable: 0
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!114 &2210308562522578640
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -35169,7 +35171,7 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
 --- !u!95 &5025269706039922560
 Animator:
-  serializedVersion: 5
+  serializedVersion: 4
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -35186,7 +35188,7 @@ Animator:
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorStateOnDisable: 0
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!114 &2591628032654567441
 MonoBehaviour:
   m_ObjectHideFlags: 0
