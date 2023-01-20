@@ -189,5 +189,7 @@ MonoBehaviour:
     type: 3}
   shootPrefab: {fileID: 3346695240900732517, guid: 59db258f9a07a6a4fa069ce800ad13fd,
     type: 3}
-  aiShipPrefab: {fileID: 3346695240900732517, guid: 890afb532898f3d48b414c2738f31b0c,
+  aiShipPrefab: {fileID: 4249782411962541405, guid: f24058203e4b558488b8240bda56ae7e,
+    type: 3}
+  aiShootPrefab: {fileID: 8241328780733922180, guid: 000c10cb7779fb147a8bfae00ac0d4d0,
     type: 3}

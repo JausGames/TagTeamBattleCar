@@ -211,7 +211,7 @@ public partial class @Controls : IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""16c1c729-7064-43d4-a7a8-2688e72e728c"",
-                    ""path"": ""<Keyboard>/shift"",
+                    ""path"": ""<Keyboard>/ctrl"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""Keyboard"",
@@ -233,7 +233,7 @@ public partial class @Controls : IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""ce846cc2-7338-410b-a702-ca9a4eb58f99"",
-                    ""path"": ""<Keyboard>/ctrl"",
+                    ""path"": ""<Keyboard>/shift"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
@@ -296,6 +296,15 @@ public partial class @Controls : IInputActionCollection2, IDisposable
                     ""name"": ""SwitchItem"",
                     ""type"": ""Button"",
                     ""id"": ""79a8bc1f-1bc2-4f0c-bc68-bcbfdae5850b"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Reload"",
+                    ""type"": ""Button"",
+                    ""id"": ""453f8cf4-32e4-4f3a-836b-8eadf385f9dd"",
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """",
@@ -423,6 +432,28 @@ public partial class @Controls : IInputActionCollection2, IDisposable
                     ""action"": ""SwitchItem"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""f27087ea-6ad6-4f11-8e9a-a552ed5cf663"",
+                    ""path"": ""<Keyboard>/r"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard"",
+                    ""action"": ""Reload"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""002fbbf3-0544-4153-89db-f49b1d71b2e4"",
+                    ""path"": ""<Gamepad>/buttonWest"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Reload"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -541,6 +572,7 @@ public partial class @Controls : IInputActionCollection2, IDisposable
         m_ShootingActions_WeaponShop = m_ShootingActions.FindAction("WeaponShop", throwIfNotFound: true);
         m_ShootingActions_ToolShop = m_ShootingActions.FindAction("ToolShop", throwIfNotFound: true);
         m_ShootingActions_SwitchItem = m_ShootingActions.FindAction("SwitchItem", throwIfNotFound: true);
+        m_ShootingActions_Reload = m_ShootingActions.FindAction("Reload", throwIfNotFound: true);
         // LobbyActions
         m_LobbyActions = asset.FindActionMap("LobbyActions", throwIfNotFound: true);
         m_LobbyActions_Ready = m_LobbyActions.FindAction("Ready", throwIfNotFound: true);
@@ -667,6 +699,7 @@ public partial class @Controls : IInputActionCollection2, IDisposable
     private readonly InputAction m_ShootingActions_WeaponShop;
     private readonly InputAction m_ShootingActions_ToolShop;
     private readonly InputAction m_ShootingActions_SwitchItem;
+    private readonly InputAction m_ShootingActions_Reload;
     public struct ShootingActionsActions
     {
         private @Controls m_Wrapper;
@@ -677,6 +710,7 @@ public partial class @Controls : IInputActionCollection2, IDisposable
         public InputAction @WeaponShop => m_Wrapper.m_ShootingActions_WeaponShop;
         public InputAction @ToolShop => m_Wrapper.m_ShootingActions_ToolShop;
         public InputAction @SwitchItem => m_Wrapper.m_ShootingActions_SwitchItem;
+        public InputAction @Reload => m_Wrapper.m_ShootingActions_Reload;
         public InputActionMap Get() { return m_Wrapper.m_ShootingActions; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -704,6 +738,9 @@ public partial class @Controls : IInputActionCollection2, IDisposable
                 @SwitchItem.started -= m_Wrapper.m_ShootingActionsActionsCallbackInterface.OnSwitchItem;
                 @SwitchItem.performed -= m_Wrapper.m_ShootingActionsActionsCallbackInterface.OnSwitchItem;
                 @SwitchItem.canceled -= m_Wrapper.m_ShootingActionsActionsCallbackInterface.OnSwitchItem;
+                @Reload.started -= m_Wrapper.m_ShootingActionsActionsCallbackInterface.OnReload;
+                @Reload.performed -= m_Wrapper.m_ShootingActionsActionsCallbackInterface.OnReload;
+                @Reload.canceled -= m_Wrapper.m_ShootingActionsActionsCallbackInterface.OnReload;
             }
             m_Wrapper.m_ShootingActionsActionsCallbackInterface = instance;
             if (instance != null)
@@ -726,6 +763,9 @@ public partial class @Controls : IInputActionCollection2, IDisposable
                 @SwitchItem.started += instance.OnSwitchItem;
                 @SwitchItem.performed += instance.OnSwitchItem;
                 @SwitchItem.canceled += instance.OnSwitchItem;
+                @Reload.started += instance.OnReload;
+                @Reload.performed += instance.OnReload;
+                @Reload.canceled += instance.OnReload;
             }
         }
     }
@@ -804,6 +844,7 @@ public partial class @Controls : IInputActionCollection2, IDisposable
         void OnWeaponShop(InputAction.CallbackContext context);
         void OnToolShop(InputAction.CallbackContext context);
         void OnSwitchItem(InputAction.CallbackContext context);
+        void OnReload(InputAction.CallbackContext context);
     }
     public interface ILobbyActionsActions
     {

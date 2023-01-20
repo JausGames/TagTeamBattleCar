@@ -31,14 +31,14 @@ abstract public class Weapon : Item
     {
         
         if (Time.time < nextShot || (ammo == 0 && remainingAmmo == 0)) return; // check cooldown & ammunition
-        if (ammo == 0 && remainingAmmo > 0) { Reload(); return; }  // Auto reload
+        if (ammo == 0 && remainingAmmo > 0) { owner.StartReloading(); return; }  // Auto reload
 
         ammo--;
         nextShot = Time.time + coolDown;
 
         owner.CameraFollow.RotationOffset = rndRecoil;
         //VFX
-        owner.SubmitShootServerRpc();
+        owner.ShootBullet();
     }
     private void Awake()
     {
@@ -51,7 +51,7 @@ abstract public class Weapon : Item
     }
 
 
-    protected void Reload()
+    public void Reload()
     {
         if (ammo < 0) return;
         var ammoUsed = Mathf.Min(magazineCapacity, remainingAmmo);
@@ -59,9 +59,9 @@ abstract public class Weapon : Item
         ammo = ammoUsed;
     }
 
-    protected RaycastHit[] ShootRaycast(Vector3 direction, LayerMask mask)
+    protected RaycastHit[] ShootRaycast(Camera camera, LayerMask mask)
     {
-        return Physics.RaycastAll(canonEnd.position, direction, Mathf.Infinity, mask);
+        return Physics.RaycastAll(camera.ScreenPointToRay(new Vector3(Screen.width / 2f, Screen.height / 2f, 0), Camera.MonoOrStereoscopicEye.Mono), Mathf.Infinity, mask);
     }
     protected void FindRayVictims(ShooterController owner, RaycastHit[] hits)
     {

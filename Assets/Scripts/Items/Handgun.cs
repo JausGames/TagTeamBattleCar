@@ -8,7 +8,7 @@ public class Handgun : Weapon
     public override void Use(ShooterController owner)
     {
         base.Use(owner);
-        var hits = ShootRaycast(owner.CameraContainer.forward, owner.Hitablemask);
+        var hits = ShootRaycast(owner.CameraFollow.Camera, owner.Hitablemask);
         FindRayVictims(owner, hits);
     }
 

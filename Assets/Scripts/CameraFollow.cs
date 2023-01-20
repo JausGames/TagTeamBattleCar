@@ -4,20 +4,23 @@ using UnityEngine;
 
 public class CameraFollow : MonoBehaviour
 {
-    [SerializeField] Transform target;
+    [SerializeField] Transform targetRig;
     public  float speed = 20f;
-    private Camera camera;
+    private new Camera camera;
     [SerializeField] Vector3 offset;
+    //[SerializeField] Quaternion quaternionOffset = Quaternion.identity;
 
 
-    [SerializeField] Vector3 rotationOffset;
+    Vector3 rotationOffset;
     [SerializeField] float rotationFadeoutDuration;
     [SerializeField] float rotationFadeoutTime;
     [SerializeField] AnimationCurve rotationOffsetCurve;
     private Quaternion desiredRotation;
+    [SerializeField]private Transform target;
 
     private void Start()
     {
+        camera = GetComponentInChildren<Camera>();
         desiredRotation = Quaternion.identity;
     }
     public Vector3 RotationOffset { get => rotationOffset;
@@ -55,12 +58,14 @@ public class CameraFollow : MonoBehaviour
         var seatForward = (seatTransform.forward.x * Vector2.right + seatTransform.forward.z * Vector2.up).normalized;
 
         angle = Vector2.SignedAngle(seatForward, forward);
-        target = transform.position + transform.forward * 10f;
+        //target = transform.position + camera.transform.forward * 10f;
+        target = this.target.position;
     }
 
     private void LateUpdate()
     {
-        transform.position = Vector3.MoveTowards(transform.position, target.position + offset, speed);
+        //transform.position = Vector3.MoveTowards(transform.position, target.position + offset.x * targetRig.right + offset.z * targetRig.forward + offset.y * targetRig.up, speed);
+        transform.position = Vector3.MoveTowards(transform.position, targetRig.position + offset.y * Vector3.up, speed);
         transform.rotation = desiredRotation * Quaternion.Euler(CurrentOffset);
 
         Debug.Log("CameraFollow, LateUpdate : CurrentOffset = " + CurrentOffset);

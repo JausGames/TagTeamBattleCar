@@ -21,6 +21,7 @@ public class Player : NetworkBehaviour
     [SerializeField] HealthBar healthbar;
     [SerializeField] CreditsUi creditsUi;
     [SerializeField] Team team;
+    [SerializeField] PlayerController controller;
 
     public float MaxHealth { get => maxHealth; set => maxHealth = value; }
     public NetworkVariable<float> Health { get => health; set => health = value; }
@@ -38,13 +39,6 @@ public class Player : NetworkBehaviour
             healthbar.SetHealth(health.Value);
             health.OnValueChanged += UpdateHealthBar;
         }
-        if (IsLocalPlayer)
-        {
-            var virtualCamera = FindObjectOfType<CinemachineVirtualCamera>();
-            virtualCamera.enabled = true;
-            virtualCamera.LookAt = lookAt;
-            virtualCamera.Follow = transform;
-        }
     }
 
     internal void UpdateCreditsUi(float previousValue, float newValue)
@@ -52,13 +46,6 @@ public class Player : NetworkBehaviour
         if (creditsUi)
             creditsUi.Amount = Mathf.FloorToInt(newValue);
     }
-
-    public void Update()
-    {
-        if (!IsLocalPlayer || !lookAt || !body) return;
-        lookAt.transform.position = transform.position + body.velocity.normalized;
-    }
-
     #region Network var : Health
     public void SetHealth(float health)
     {
@@ -76,35 +63,29 @@ public class Player : NetworkBehaviour
     }
     #endregion
 
+    public void GetHit(float damage)
+    {
+        Debug.Log("Player, GetHit : damage = " + damage);
+        SetHealth(Mathf.Max(0f, health.Value - damage));
+        if (health.Value == 0) KillPlayerClientRpc(NetworkObjectId);
+    }
     private void UpdateHealthBar(float previous, float current)
     {
         healthbar.SetHealth(current);
     }
 
-    public void GetHit(float damage)
-    {
-        Debug.Log("ShooterController, GetHit : damage = " + damage);
-        SetHealth(Mathf.Max(0f, health.Value - damage));
-        if (health.Value == 0) SubmitDieServerRpc(NetworkObjectId);
-    }
-
     [ServerRpc]
     private void SubmitDieServerRpc(ulong playerid)
     {
-        Debug.Log("ShooterController, SubmitDieServerRpc : playerid = " + playerid);
-        KillPlayerClientRpc(playerid);
+        Debug.Log("Player, SubmitDieServerRpc : playerid = " + playerid);
+        
     }
 
     [ClientRpc]
     private void KillPlayerClientRpc(ulong playerid)
     {
-        Debug.Log("ShooterController, KillPlayerClientRpc : playerid = " + playerid);
-        GetNetworkObject(playerid).gameObject.GetComponentInChildren<Player>().Die();
-    }
-    private void Die()
-    {
-        Debug.Log("ShooterController, Die : Die = " + NetworkObjectId);
-        Destroy(gameObject);
+        Debug.Log("Player, KillPlayerClientRpc : playerid = " + playerid);
+        GetNetworkObject(playerid).gameObject.GetComponentInChildren<Player>().controller.Die();
     }
 
 }

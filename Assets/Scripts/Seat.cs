@@ -6,12 +6,10 @@ using UnityEngine;
 public class Seat : MonoBehaviour
 {
     [SerializeField]public Transform seatTransform;
-    [SerializeField]public NetworkAnimator animator;
-    [SerializeField]public Transform target;
+    //[SerializeField]public NetworkAnimator animator;
     [SerializeField] private Transform bulletStart;
-    [SerializeField] public Transform rightHand;
-    [SerializeField]public Rigidbody body;
-    [SerializeField]public ShooterAnimatorController controller;
+    //[SerializeField] public Transform rightHand;
+    //[SerializeField]public ShooterAnimatorController controller;
 
     private GameObject item;
 
@@ -19,12 +17,12 @@ public class Seat : MonoBehaviour
         get => item;
         set
         {
-            if (item != null) Destroy(item);
-            item = Instantiate(value, rightHand);
+            /*if (item != null) Destroy(item);
+            item = Instantiate(value, rightHand);*/
             if (item.GetComponent<Weapon>()) bulletStart = item.GetComponent<Weapon>().canonEnd;
             else bulletStart = null;
-            item.GetComponent<Item>().Id = value.GetComponent<Item>().Id;
-            item.GetComponent<Item>().Prefab = value.GetComponent<Item>().Prefab;
+            /*item.GetComponent<Item>().Id = value.GetComponent<Item>().Id;
+            item.GetComponent<Item>().Prefab = value.GetComponent<Item>().Prefab;*/
         }
     }
 

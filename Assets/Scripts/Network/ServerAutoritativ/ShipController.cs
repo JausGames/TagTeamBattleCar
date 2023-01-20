@@ -6,7 +6,7 @@ using Unity.Netcode;
 namespace ServerAutoritative
 {
 
-public class ShipController : NetworkBehaviour
+public class ShipController : PlayerController
 {
     [Header("Inputs")]
     [SerializeField] Vector2 previousRotation;
@@ -381,6 +381,11 @@ public class ShipController : NetworkBehaviour
         Gizmos.color = Color.blue;
         Gizmos.DrawLine(transform.position, transform.position + (vectorForward + vectorRight + vectorUp).normalized * 10f);
     }
-}
+
+        public override void Die()
+        {
+
+        }
+    }
 
 }

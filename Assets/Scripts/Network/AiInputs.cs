@@ -26,10 +26,18 @@ namespace Inputs
                 var destinationV3 = FindNearestPointOnLine(path.Checkpoints[segmentId].position, path.Checkpoints[segmentId].position, transform.position + (path.Checkpoints[nextCheckpoint].position - transform.position) * .01f);
                 //var destinationV3 = path.Checkpoints[segmentId].position;
    
-                var move = (Vector3.Dot(destinationV3 - transform.position, transform.forward) * Vector2.up + Vector3.Dot(destinationV3 - transform.position, transform.right) * Vector2.right).normalized * .2f;
+                var move = (Vector3.Dot(destinationV3 - transform.position, transform.forward) * Vector2.up + Vector3.Dot(destinationV3 - transform.position, transform.right) * Vector2.right).normalized;
 
-                OnRotate(move.x);
-                OnTorque(move.y);
+                Debug.Log("AiInputs, Update : move = " + move);
+
+                move.x = Mathf.Sign(move.x) * Mathf.Min(1f, Mathf.Pow(Mathf.Abs(move.y / move.x), .25f));
+
+                move.y = Mathf.Sign(move.y) * Mathf.Min(1f, Mathf.Pow(Mathf.Abs(move.y / move.x), 4f));
+
+                move.Normalize();
+
+                OnRotate(move.x * .1f);
+                OnTorque(move.y * .1f);
 
                 Debug.Log("AiInputs, Update : length to end = " + (path.Segments[segmentId][1] - transform.position).magnitude);
 

@@ -189,7 +189,7 @@
                 {
                     "name": "",
                     "id": "16c1c729-7064-43d4-a7a8-2688e72e728c",
-                    "path": "<Keyboard>/shift",
+                    "path": "<Keyboard>/ctrl",
                     "interactions": "",
                     "processors": "",
                     "groups": "Keyboard",
@@ -211,7 +211,7 @@
                 {
                     "name": "",
                     "id": "ce846cc2-7338-410b-a702-ca9a4eb58f99",
-                    "path": "<Keyboard>/ctrl",
+                    "path": "<Keyboard>/shift",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -274,6 +274,15 @@
                     "name": "SwitchItem",
                     "type": "Button",
                     "id": "79a8bc1f-1bc2-4f0c-bc68-bcbfdae5850b",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Reload",
+                    "type": "Button",
+                    "id": "453f8cf4-32e4-4f3a-836b-8eadf385f9dd",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
@@ -399,6 +408,28 @@
                     "processors": "",
                     "groups": "Gamepad",
                     "action": "SwitchItem",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "f27087ea-6ad6-4f11-8e9a-a552ed5cf663",
+                    "path": "<Keyboard>/r",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "Keyboard",
+                    "action": "Reload",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "002fbbf3-0544-4153-89db-f49b1d71b2e4",
+                    "path": "<Gamepad>/buttonWest",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Reload",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

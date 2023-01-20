@@ -344,7 +344,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 01614664b831546d2ae94a42149d80ac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_SendPointerHoverToParent: 1
   m_MoveRepeatDelay: 0.5
   m_MoveRepeatRate: 0.1
   m_XRTrackingOrigin: {fileID: 0}
@@ -485,7 +484,13 @@ MonoBehaviour:
       SourceHashToOverride: 0
       OverridingTargetPrefab: {fileID: 0}
     - Override: 0
-      Prefab: {fileID: 3346695240900732517, guid: 890afb532898f3d48b414c2738f31b0c,
+      Prefab: {fileID: 4249782411962541405, guid: f24058203e4b558488b8240bda56ae7e,
+        type: 3}
+      SourcePrefabToOverride: {fileID: 0}
+      SourceHashToOverride: 0
+      OverridingTargetPrefab: {fileID: 0}
+    - Override: 0
+      Prefab: {fileID: 8241328780733922180, guid: 000c10cb7779fb147a8bfae00ac0d4d0,
         type: 3}
       SourcePrefabToOverride: {fileID: 0}
       SourceHashToOverride: 0
@@ -956,12 +961,12 @@ PrefabInstance:
     - target: {fileID: 5108372697740669478, guid: 33a793bee5c677748b4e0bb44310c58c,
         type: 3}
       propertyPath: m_SizeDelta.y
-      value: 70
+      value: 60
       objectReference: {fileID: 0}
     - target: {fileID: 5108372697740669478, guid: 33a793bee5c677748b4e0bb44310c58c,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: -0.000030517578
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5108372697740669478, guid: 33a793bee5c677748b4e0bb44310c58c,
         type: 3}

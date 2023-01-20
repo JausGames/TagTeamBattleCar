@@ -1,7 +1,7 @@
 fileFormatVersion: 2
 guid: 3626e5d14eada7446a13ad0252f8e65f
 ModelImporter:
-  serializedVersion: 21300
+  serializedVersion: 21202
   internalIDToNameTable:
   - first:
       74: 7755506058460354959
@@ -48,6 +48,27 @@ ModelImporter:
   - first:
       74: -960387160744038562
     second: Cowboy rig|Aim
+  - first:
+      74: 1243232831866209167
+    second: Cowboy rig|Aim (1)
+  - first:
+      74: 8224792976799794440
+    second: Cowboy rig|Look Back
+  - first:
+      74: 8741988651210712952
+    second: Cowboy rig|Look Front
+  - first:
+      74: -8610298971653376011
+    second: Cowboy rig|Look Left
+  - first:
+      74: -3366556325176282028
+    second: Cowboy rig|Look Right
+  - first:
+      74: 117419905161531591
+    second: Cowboy rig|Reload
+  - first:
+      74: -7854945979417875251
+    second: Cowboy rig|Die
   externalObjects:
   - first:
       type: UnityEngine:Material
@@ -98,8 +119,8 @@ ModelImporter:
     extraUserProperties: []
     clipAnimations:
     - serializedVersion: 16
-      name: Cowboy rig|Sit idle
-      takeName: Cowboy rig|Sit idle
+      name: Cowboy rig|Aim (1)
+      takeName: Cowboy rig|Aim
       internalID: 0
       firstFrame: 0
       lastFrame: 59
@@ -127,18 +148,18 @@ ModelImporter:
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
-      name: Cowboy rig|Sit look back - handgun
-      takeName: Cowboy rig|Sit look back - handgun
+      name: Cowboy rig|Look Back
+      takeName: Cowboy rig|Look Back
       internalID: 0
       firstFrame: 0
-      lastFrame: 59
+      lastFrame: 1
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
       cycleOffset: 0
       loop: 0
       hasAdditiveReferencePose: 0
-      loopTime: 1
+      loopTime: 0
       loopBlend: 0
       loopBlendOrientation: 0
       loopBlendPositionY: 0
@@ -156,18 +177,18 @@ ModelImporter:
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
-      name: Cowboy rig|Sit look front - handgun
-      takeName: Cowboy rig|Sit look front - handgun
+      name: Cowboy rig|Look Front
+      takeName: Cowboy rig|Look Front
       internalID: 0
       firstFrame: 0
-      lastFrame: 59
+      lastFrame: 1
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
       cycleOffset: 0
       loop: 0
       hasAdditiveReferencePose: 0
-      loopTime: 1
+      loopTime: 0
       loopBlend: 0
       loopBlendOrientation: 0
       loopBlendPositionY: 0
@@ -185,18 +206,18 @@ ModelImporter:
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
-      name: Cowboy rig|Sit look left - handgun
-      takeName: Cowboy rig|Sit look left - handgun
+      name: Cowboy rig|Look Left
+      takeName: Cowboy rig|Look Left
       internalID: 0
       firstFrame: 0
-      lastFrame: 59
+      lastFrame: 1
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
       cycleOffset: 0
       loop: 0
       hasAdditiveReferencePose: 0
-      loopTime: 1
+      loopTime: 0
       loopBlend: 0
       loopBlendOrientation: 0
       loopBlendPositionY: 0
@@ -214,18 +235,18 @@ ModelImporter:
       maskSource: {instanceID: 0}
       additiveReferencePoseFrame: 0
     - serializedVersion: 16
-      name: Cowboy rig|Sit look right - handgun
-      takeName: Cowboy rig|Sit look right - handgun
+      name: Cowboy rig|Look Right
+      takeName: Cowboy rig|Look Right
       internalID: 0
       firstFrame: 0
-      lastFrame: 59
+      lastFrame: 1
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
       cycleOffset: 0
       loop: 0
       hasAdditiveReferencePose: 0
-      loopTime: 1
+      loopTime: 0
       loopBlend: 0
       loopBlendOrientation: 0
       loopBlendPositionY: 0
@@ -284,6 +305,72 @@ ModelImporter:
       loop: 0
       hasAdditiveReferencePose: 0
       loopTime: 1
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask: []
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: Cowboy rig|Reload
+      takeName: Cowboy rig|Reload
+      internalID: 0
+      firstFrame: 0
+      lastFrame: 39
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events:
+      - time: 0.9746032
+        functionName: OnReload
+        data: 
+        objectReferenceParameter: {fileID: 11500000, guid: 918b86f7b20c5594196a0b18c9f3f9b2,
+          type: 3}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      transformMask: []
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    - serializedVersion: 16
+      name: Cowboy rig|Die
+      takeName: Cowboy rig|Die
+      internalID: 0
+      firstFrame: 0
+      lastFrame: 271
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
       loopBlend: 0
       loopBlendOrientation: 0
       loopBlendPositionY: 0
@@ -367,7 +454,6 @@ ModelImporter:
   humanoidOversampling: 1
   avatarSetup: 1
   addHumanoidExtraRootOnlyWhenUsingAvatar: 1
-  remapMaterialsIfMaterialImportModeIsNone: 0
   additionalBone: 0
   userData: 
   assetBundleName: 
