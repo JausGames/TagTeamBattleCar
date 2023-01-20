@@ -166,7 +166,8 @@ public class ShooterController : PlayerController
     private void SetItemUp(Item value)
     {
 
-        if (heldItem != null) Destroy(heldItem);
+        if (heldItem != null)
+            Destroy(heldItem.gameObject); ;
         heldItem = Instantiate(value, rightHand);
         //if (item.GetComponent<Weapon>()) bulletStart = item.GetComponent<Weapon>().canonEnd;
         //else bulletStart = null;
@@ -297,7 +298,7 @@ public class ShooterController : PlayerController
     }
     internal void StartReloading()
     {
-        if (reloading) return;
+        if (reloading || ((Weapon)heldItem).RemainingAmmo == 0) return;
         reloading = true;
         SubmitReloadServerRpc();
     }

@@ -12,8 +12,8 @@ abstract public class Weapon : Item
     [SerializeField] private Vector3 recoil = Vector3.right * -2f;
 
     protected float nextShot;
-    protected int ammo;
-    private int remainingAmmo;
+    [SerializeField] protected int ammo;
+    [SerializeField] private int remainingAmmo;
 
     [Header("Components")]
     [SerializeField] public Transform canonEnd;
@@ -26,6 +26,8 @@ abstract public class Weapon : Item
             return recoil * t + (recoil - 2f * recoil.y * Vector3.up) * (1f - t);
         }
     }
+
+    public int RemainingAmmo { get => remainingAmmo; set => remainingAmmo = value; }
 
     public override bool Use(ShooterController owner)
     {
@@ -56,10 +58,11 @@ abstract public class Weapon : Item
 
     public void Reload()
     {
-        if (ammo < 0) return;
-        var ammoUsed = Mathf.Min(magazineCapacity, remainingAmmo);
-        remainingAmmo -= magazineCapacity;
-        ammo = ammoUsed;
+        if (remainingAmmo == 0) return;
+        var ammoUsed = Mathf.Min(magazineCapacity - ammo, remainingAmmo);
+        Debug.Log("Weapon, Reload : ammoUsed = " + ammoUsed);
+        remainingAmmo -= ammoUsed;
+        ammo += ammoUsed;
     }
 
     protected RaycastHit[] ShootRaycast(Camera camera, LayerMask mask)
@@ -68,6 +71,10 @@ abstract public class Weapon : Item
     }
     protected void FindRayVictims(ShooterController owner, RaycastHit[] hits)
     {
+        List<Player> players = new List<Player>();
+        List<RaycastHit> rays = new List<RaycastHit>();
+        Player victim = null;
+
         foreach (var hit in hits)
         {
             switch (hit.collider.gameObject.layer)
@@ -76,13 +83,36 @@ abstract public class Weapon : Item
                 case 3:
                 case 6:
                     var ennemy = hit.collider.GetComponent<Player>() ? hit.collider.GetComponent<Player>() : hit.collider.GetComponentInParent<Player>();
-                    Debug.Log("ShooterController, Shoot : #" + owner.NetworkObjectId + " shot #" + ennemy.NetworkObjectId);
-                    owner.SummitGetHitServerRpc(ennemy.NetworkObjectId, damage, owner.NetworkObjectId);
-                    owner.GetHitCreditsEarnEvent.Invoke(Mathf.Min(ennemy.Health.Value, damage));
-                    return;
+                    if (players.Contains(ennemy)) break;
+
+
+                    rays.Add(hit);
+                    players.Add(ennemy);
+
+                    break;
                 default:
                     break;
             }
+        }
+
+        var dist = Mathf.Infinity;
+        var closest = -1;
+        for(var i = 0; i < rays.Count; i++)
+        {
+            var rayDist = (canonEnd.position - rays[i].point).sqrMagnitude;
+            if (rayDist < dist)
+            {
+                closest = i;
+                dist = rayDist;
+            }
+        }
+
+        if(closest != -1)
+        {
+            Debug.Log("ShooterController, Shoot : #" + owner.NetworkObjectId + " shot #" + players[closest].NetworkObjectId);
+            owner.GetHitCreditsEarnEvent.Invoke(Mathf.Min(players[closest].Health.Value, damage));
+            owner.SummitGetHitServerRpc(players[closest].NetworkObjectId, damage, owner.NetworkObjectId);
+            Debug.DrawLine(canonEnd.position, hits[closest].point, Color.red);
         }
     }
 
