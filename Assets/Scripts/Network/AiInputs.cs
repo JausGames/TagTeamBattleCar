@@ -24,28 +24,21 @@ namespace Inputs
             {
                 var nextCheckpoint = segmentId == path.Checkpoints.Count - 1 ? 0 : segmentId + 1;
                 var destinationV3 = FindNearestPointOnLine(path.Checkpoints[segmentId].position, path.Checkpoints[segmentId].position, transform.position + (path.Checkpoints[nextCheckpoint].position - transform.position) * .01f);
-                //var destinationV3 = path.Checkpoints[segmentId].position;
-   
+
                 var move = (Vector3.Dot(destinationV3 - transform.position, transform.forward) * Vector2.up + Vector3.Dot(destinationV3 - transform.position, transform.right) * Vector2.right).normalized;
-
-                Debug.Log("AiInputs, Update : move = " + move);
-
                 move.x = Mathf.Sign(move.x) * Mathf.Min(1f, Mathf.Pow(Mathf.Abs(move.y / move.x), .25f));
-
                 move.y = Mathf.Sign(move.y) * Mathf.Min(1f, Mathf.Pow(Mathf.Abs(move.y / move.x), 4f));
-
                 move.Normalize();
 
-                OnRotate(move.x * .1f);
-                OnTorque(move.y * .1f);
-
-                Debug.Log("AiInputs, Update : length to end = " + (path.Segments[segmentId][1] - transform.position).magnitude);
+                OnRotate(move.x);
+                OnTorque(move.y);
 
                 if ((destinationV3 - transform.position).magnitude < 30f) 
                     segmentId = nextCheckpoint;
 
             }
         }
+
         public Vector3 FindNearestPointOnLine(Vector3 origin, Vector3 end, Vector3 point)
         {
             //Get heading
