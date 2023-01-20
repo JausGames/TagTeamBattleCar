@@ -5,11 +5,13 @@ using UnityEngine;
 public class Handgun : Weapon
 {
 
-    public override void Use(ShooterController owner)
+    public override bool Use(ShooterController owner)
     {
-        base.Use(owner);
+        var canShoot = base.Use(owner);
+        if (!canShoot) return false;
         var hits = ShootRaycast(owner.CameraFollow.Camera, owner.Hitablemask);
         FindRayVictims(owner, hits);
+        return true;
     }
 
 }

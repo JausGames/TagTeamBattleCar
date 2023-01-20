@@ -27,18 +27,21 @@ abstract public class Weapon : Item
         }
     }
 
-    public override void Use(ShooterController owner)
+    public override bool Use(ShooterController owner)
     {
-        
-        if (Time.time < nextShot || (ammo == 0 && remainingAmmo == 0)) return; // check cooldown & ammunition
-        if (ammo == 0 && remainingAmmo > 0) { owner.StartReloading(); return; }  // Auto reload
+        Debug.Log("Weapon, Use : Time = " + Time.time);
+        Debug.Log("Weapon, Use : nextShot = " + nextShot);
+        if (Time.time < nextShot || (ammo == 0 && remainingAmmo == 0)) return false; // check cooldown & ammunition
+        if (ammo == 0 && remainingAmmo > 0) { owner.StartReloading(); return false; }  // Auto reload
 
+        Debug.Log("Weapon, Use : shoting");
         ammo--;
         nextShot = Time.time + coolDown;
 
         owner.CameraFollow.RotationOffset = rndRecoil;
         //VFX
         owner.ShootBullet();
+        return true;
     }
     private void Awake()
     {
@@ -74,8 +77,9 @@ abstract public class Weapon : Item
                 case 6:
                     var ennemy = hit.collider.GetComponent<Player>() ? hit.collider.GetComponent<Player>() : hit.collider.GetComponentInParent<Player>();
                     Debug.Log("ShooterController, Shoot : #" + owner.NetworkObjectId + " shot #" + ennemy.NetworkObjectId);
-                    owner.SummitGetHitServerRpc(ennemy.NetworkObjectId, damage);
-                    break;
+                    owner.SummitGetHitServerRpc(ennemy.NetworkObjectId, damage, owner.NetworkObjectId);
+                    owner.GetHitCreditsEarnEvent.Invoke(Mathf.Min(ennemy.Health.Value, damage));
+                    return;
                 default:
                     break;
             }

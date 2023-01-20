@@ -4,8 +4,9 @@ using UnityEngine;
 
 abstract public class Tool : Item
 {
-    public override void Use(ShooterController owner)
+    public override bool Use(ShooterController owner)
     {
         owner.SwitchItem(true);
+        return true;
     }
 }

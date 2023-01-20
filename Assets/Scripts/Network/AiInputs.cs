@@ -29,7 +29,7 @@ namespace Inputs
                 move.x = Mathf.Sign(move.x) * Mathf.Min(1f, Mathf.Pow(Mathf.Abs(move.y / move.x), .25f));
                 move.y = Mathf.Sign(move.y) * Mathf.Min(1f, Mathf.Pow(Mathf.Abs(move.y / move.x), 4f));
                 move.Normalize();
-
+                move = move * .0f;
                 OnRotate(move.x);
                 OnTorque(move.y);
 

@@ -5,6 +5,7 @@ using UnityEngine;
 
 using Unity.Netcode;
 using RootMotion.FinalIK;
+using UnityEngine.Events;
 
 public class ShooterController : PlayerController
 {
@@ -30,6 +31,7 @@ public class ShooterController : PlayerController
     [SerializeField] private CameraFollow cameraFollow;
     [SerializeField] private ClientAutoritative.ShipController ship;
 
+    [HideInInspector] UnityEvent<float> getHitCreditsEarnEvent = new UnityEvent<float>();
 
     [SerializeField] Transform rightHand;
     [SerializeField] Transform target;
@@ -97,6 +99,7 @@ public class ShooterController : PlayerController
     }
 
     public ClientAutoritative.ShipController Ship { get => ship; set => ship = value; }
+    public UnityEvent<float> GetHitCreditsEarnEvent { get => getHitCreditsEarnEvent; set => getHitCreditsEarnEvent = value; }
 
     // Update is called once per frame
     private void Start()
@@ -351,10 +354,10 @@ public class ShooterController : PlayerController
 
 
     [ServerRpc]
-    public void SummitGetHitServerRpc(ulong playerid, float damage)
+    public void SummitGetHitServerRpc(ulong playerid, float damage, ulong originId)
     {
         Debug.Log("ShooterController, SummitGetHitServerRpc : touched player = #" + playerid);
-        GetNetworkObject(playerid).GetComponentInChildren<Player>().GetHit(damage);
+        GetNetworkObject(playerid).GetComponentInChildren<Player>().GetHit(damage, originId);
     }
 
     [ClientRpc]

@@ -4903,7 +4903,7 @@ MonoBehaviour:
   coolDown: 0.8
   maximumAmmo: 20
   magazineCapacity: 5
-  recoil: {x: -12, y: 4, z: -0}
+  recoil: {x: -10, y: 4, z: -0}
   canonEnd: {fileID: 5947979214890729210}
   shootParticles:
   - {fileID: 7141249747043298120}

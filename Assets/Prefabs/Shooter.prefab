@@ -525,7 +525,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &8388673499335599602
 RectTransform:
   m_ObjectHideFlags: 0
@@ -767,12 +767,12 @@ PrefabInstance:
     - target: {fileID: 1932498533189330358, guid: 8a473b6c15854844eaa0c41ae2ed265b,
         type: 3}
       propertyPath: m_AnchorMax.x
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1932498533189330358, guid: 8a473b6c15854844eaa0c41ae2ed265b,
         type: 3}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8a473b6c15854844eaa0c41ae2ed265b, type: 3}
@@ -1640,6 +1640,11 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 3
       objectReference: {fileID: 0}
+    - target: {fileID: 6197949761825185264, guid: 40d052a04d1e4884980549cdff23372c,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6434645920846604304, guid: 40d052a04d1e4884980549cdff23372c,
         type: 3}
       propertyPath: m_Pivot.x
@@ -1744,6 +1749,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6733338086572904661, guid: 40d052a04d1e4884980549cdff23372c,
+        type: 3}
+      propertyPath: m_Name
+      value: lbl_credits
       objectReference: {fileID: 0}
     - target: {fileID: 6733338086572904661, guid: 40d052a04d1e4884980549cdff23372c,
         type: 3}

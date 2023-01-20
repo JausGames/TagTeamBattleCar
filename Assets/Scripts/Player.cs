@@ -4,6 +4,7 @@ using UnityEngine;
 using Cinemachine;
 using Unity.Netcode;
 using System;
+using UnityEngine.Events;
 
 public class Player : NetworkBehaviour
 {
@@ -26,6 +27,10 @@ public class Player : NetworkBehaviour
     public float MaxHealth { get => maxHealth; set => maxHealth = value; }
     public NetworkVariable<float> Health { get => health; set => health = value; }
     public Team Team { get => team; set => team = value; }
+
+    [HideInInspector] UnityEvent<ulong> dieCreditsEarnEvent = new UnityEvent<ulong>();
+    public UnityEvent<ulong> DieCreditsEarnEvent { get => dieCreditsEarnEvent; set => dieCreditsEarnEvent = value; }
+    public PlayerController Controller { get => controller; set => controller = value; }
 
     public void Start()
     {
@@ -63,11 +68,15 @@ public class Player : NetworkBehaviour
     }
     #endregion
 
-    public void GetHit(float damage)
+    public void GetHit(float damage, ulong killerId)
     {
         Debug.Log("Player, GetHit : damage = " + damage);
         SetHealth(Mathf.Max(0f, health.Value - damage));
-        if (health.Value == 0) KillPlayerClientRpc(NetworkObjectId);
+        if (health.Value == 0)
+        {
+            GetNetworkObject(killerId).GetComponentInChildren<Player>().DieCreditsEarnEvent.Invoke(NetworkObjectId);
+            KillPlayerClientRpc(NetworkObjectId);
+        }
     }
     private void UpdateHealthBar(float previous, float current)
     {
