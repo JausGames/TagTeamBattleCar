@@ -38,6 +38,7 @@ public class ShooterController : PlayerController
     [SerializeField] Quaternion rotationOffset;
     private bool reloading;
     [SerializeField] private AimIK ik;
+    private bool alive = true;
 
     public Transform CameraContainer { get => cameraContainer; set => cameraContainer = value; }
 
@@ -386,9 +387,29 @@ public class ShooterController : PlayerController
     {
         look.Value = vector2;
     }
-
+    //Called on client rpc
     public override void Die()
     {
-        Destroy(transform.parent.gameObject);
+        if (!alive) return;
+        alive = false;
+        animatorController.Die();
+    }
+    public override void Respawn()
+    {
+        if(IsOwner)
+            SubmitRespawnServerRpc();
+    }
+
+    [ServerRpc]
+    private void SubmitRespawnServerRpc()
+    {
+        player.Health.Value = player.MaxHealth;
+        alive = true;
+        SetAliveClientRpc();
+    }
+    [ClientRpc]
+    private void SetAliveClientRpc()
+    {
+        alive = true;
     }
 }

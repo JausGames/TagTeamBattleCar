@@ -386,6 +386,11 @@ public class ShipController : PlayerController
         {
 
         }
+
+        public override void Respawn()
+        {
+            throw new System.NotImplementedException();
+        }
     }
 
 }

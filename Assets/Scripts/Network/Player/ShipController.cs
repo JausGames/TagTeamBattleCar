@@ -313,6 +313,11 @@ namespace ClientAutoritative
         {
             Destroy(transform.parent.parent.gameObject);
         }
+
+        public override void Respawn()
+        {
+            throw new System.NotImplementedException();
+        }
     }
 
 }

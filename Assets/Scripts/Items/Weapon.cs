@@ -125,11 +125,14 @@ abstract public class Weapon : Item
             owner.SummitGetHitServerRpc(players[closest].NetworkObjectId, damage, owner.NetworkObjectId);
             Debug.DrawLine(canonEnd.position, hits[closest].point, Color.red);
         }
+        else if(closest != -1)
+        {
+            var layer = layers[closest];
+            var origin = hits[closest].point;
+            var direction = hits[closest].normal;
+            owner.SubmitShotContactParticleServerRpc(layer, origin, direction);
+        }
 
-        var layer = layers[closest];
-        var origin = hits[closest].point;
-        var direction = hits[closest].normal;
-        owner.SubmitShotContactParticleServerRpc(layer, origin, direction);
     }
 
     

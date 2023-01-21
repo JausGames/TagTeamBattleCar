@@ -10,4 +10,8 @@ public class ShooterAnimatorEvent : MonoBehaviour
     {
         shooter.Reload();
     }
+    public void OnRespawn()
+    {
+        shooter.Respawn();
+    }
 }

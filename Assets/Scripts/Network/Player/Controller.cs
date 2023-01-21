@@ -6,4 +6,5 @@ using UnityEngine;
 abstract public class PlayerController : NetworkBehaviour
 {
     abstract public void Die();
+    abstract public void Respawn();
 }

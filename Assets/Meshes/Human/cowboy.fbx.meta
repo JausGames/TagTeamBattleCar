@@ -105,7 +105,8 @@ ModelImporter:
     rigImportErrors: 
     rigImportWarnings: 
     animationImportErrors: 
-    animationImportWarnings: 
+    animationImportWarnings: Event OnReload has a time (1.583730) outside the clip's
+      valid range (0.000000..0.791667). It will never be fired
     animationRetargetingWarnings: 
     animationDoRetargetingWarnings: 0
     importAnimatedCustomProperties: 0
@@ -362,8 +363,8 @@ ModelImporter:
       name: Cowboy rig|Die
       takeName: Cowboy rig|Die
       internalID: 0
-      firstFrame: 0
-      lastFrame: 271
+      firstFrame: 101
+      lastFrame: 250
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
@@ -382,7 +383,15 @@ ModelImporter:
       mirror: 0
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
-      events: []
+      events:
+      - time: 0.92833877
+        functionName: OnRespawn
+        data: 
+        objectReferenceParameter: {fileID: 11500000, guid: 918b86f7b20c5594196a0b18c9f3f9b2,
+          type: 3}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
       transformMask: []
       maskType: 3
       maskSource: {instanceID: 0}

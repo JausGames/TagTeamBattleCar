@@ -20,5 +20,9 @@ public class ShooterAnimatorController : MonoBehaviour
     { 
         animator.Animator.SetTrigger("reload");
     }
+    public void Die()
+    { 
+        animator.Animator.SetTrigger("die");
+    }
 
 }

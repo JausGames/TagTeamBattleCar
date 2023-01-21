@@ -86,7 +86,7 @@ public class Team : NetworkBehaviour
     {
         var player = GetNetworkObject(victimId).GetComponentInChildren<Player>();
         float value = 100f;
-        if (player.Controller is ShipController) value = 500f;
+        if (player.Controller is ShipController) value = 400f;
         else if (player.Controller is ShooterController) value = 100f;
         ChangeCreditAmount(value);
     }
