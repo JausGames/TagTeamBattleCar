@@ -104,7 +104,7 @@ public class ShooterController : PlayerController
     // Update is called once per frame
     private void Start()
     {
-        hitablemask = (1 << 3) | (1 << 6) | (1 << 0);
+        hitablemask = (1 << 3) | (1 << 6) | (1 << 0) | (1 << 8);
         if (IsOwner && IsLocalPlayer)
         {
             Cursor.lockState = CursorLockMode.Locked;
@@ -162,6 +162,17 @@ public class ShooterController : PlayerController
     }
 
 
+    [ServerRpc]
+    internal void SubmitShotContactParticleServerRpc(int layer, Vector3 origin, Vector3 direction)
+    {
+        InstantiateShotContactParticlesClientRpc(layer, origin, direction);
+    }
+
+    [ClientRpc]
+    private void InstantiateShotContactParticlesClientRpc(int layer, Vector3 origin, Vector3 direction)
+    {
+        ((Weapon)heldItem).InstantiateContactParticles(layer, origin, direction);
+    }
 
     private void SetItemUp(Item value)
     {

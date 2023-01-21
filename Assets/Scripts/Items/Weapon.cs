@@ -18,6 +18,9 @@ abstract public class Weapon : Item
     [Header("Components")]
     [SerializeField] public Transform canonEnd;
     [SerializeField] public List<ParticleSystem> shootParticles;
+    [SerializeField] public ParticleSystem bloodParticles;
+    [SerializeField] public ParticleSystem woodParticles;
+    [SerializeField] public ParticleSystem sandParticles;
     protected Vector3 rndRecoil 
     {
         get
@@ -47,6 +50,10 @@ abstract public class Weapon : Item
     }
     private void Awake()
     {
+        for(int i = 0; i < 9; i++)
+        {
+            Debug.Log("Awake, Weapon : layermask = " + LayerMask.LayerToName(i));
+        }
         ResetAmmo();
     }
     internal void ResetAmmo()
@@ -73,7 +80,7 @@ abstract public class Weapon : Item
     {
         List<Player> players = new List<Player>();
         List<RaycastHit> rays = new List<RaycastHit>();
-        Player victim = null;
+        List<int> layers = new List<int>();
 
         foreach (var hit in hits)
         {
@@ -81,23 +88,27 @@ abstract public class Weapon : Item
             {
                 // Hit player body
                 case 3:
+                // Hit kart body
                 case 6:
+                // Hit horse body
+                case 8:
                     var ennemy = hit.collider.GetComponent<Player>() ? hit.collider.GetComponent<Player>() : hit.collider.GetComponentInParent<Player>();
-                    if (players.Contains(ennemy)) break;
-
-
+                    //if (players.Contains(ennemy)) break;
                     rays.Add(hit);
                     players.Add(ennemy);
-
+                    layers.Add(hit.collider.gameObject.layer);
                     break;
                 default:
+                    rays.Add(hit);
+                    players.Add(null);
+                    layers.Add(hit.collider.gameObject.layer);
                     break;
             }
         }
 
         var dist = Mathf.Infinity;
         var closest = -1;
-        for(var i = 0; i < rays.Count; i++)
+        for (var i = 0; i < rays.Count; i++)
         {
             var rayDist = (canonEnd.position - rays[i].point).sqrMagnitude;
             if (rayDist < dist)
@@ -107,15 +118,26 @@ abstract public class Weapon : Item
             }
         }
 
-        if(closest != -1)
+        if (closest != -1 && players[closest])
         {
             Debug.Log("ShooterController, Shoot : #" + owner.NetworkObjectId + " shot #" + players[closest].NetworkObjectId);
             owner.GetHitCreditsEarnEvent.Invoke(Mathf.Min(players[closest].Health.Value, damage));
             owner.SummitGetHitServerRpc(players[closest].NetworkObjectId, damage, owner.NetworkObjectId);
             Debug.DrawLine(canonEnd.position, hits[closest].point, Color.red);
         }
+
+        var layer = layers[closest];
+        var origin = hits[closest].point;
+        var direction = hits[closest].normal;
+        owner.SubmitShotContactParticleServerRpc(layer, origin, direction);
     }
 
-
-
+    
+    public void InstantiateContactParticles(int layer, Vector3 origin, Vector3 direction)
+    {
+        var prtcl = layer == 6 ? woodParticles : layer == 0 ? sandParticles : bloodParticles;
+        var prtclInstance = Instantiate(prtcl, origin, Quaternion.identity);
+        prtclInstance.transform.LookAt(direction + prtclInstance.transform.position);
+        Destroy(prtclInstance, 5f);
+    }
 }
