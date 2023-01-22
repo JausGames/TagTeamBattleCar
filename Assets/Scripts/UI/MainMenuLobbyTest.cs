@@ -8,9 +8,8 @@ using Unity.Netcode.Transports.UNET;
 using Unity.Services.Lobbies;
 using Unity.Services.Lobbies.Models;
 using TMPro;
-using ParrelSync;
 
-public class MainMenu : MonoBehaviour
+public class MainMenuLobbyTest : MonoBehaviour
 {
     [Header("UI Components")]
     [SerializeField] GameObject ConectionMenu;
@@ -18,22 +17,18 @@ public class MainMenu : MonoBehaviour
     [SerializeField] TMPro.TMP_InputField text_ipAdress;
     [SerializeField] TMPro.TMP_InputField text_currentIp;
     [SerializeField] TMPro.TMP_Text lbl_ping;
-
     [SerializeField] Button btn_starServer;
     [SerializeField] Button btn_starGame;
     [SerializeField] Button btn_joinGame;
 
+    [SerializeField] TMPro.TMP_InputField input_teamname;
+
+    [SerializeField] Transform lobbyRect;
     [SerializeField] GameObject playerPrefab;
     [SerializeField] TMPro.TMP_InputField inputName;
 
 
-    [SerializeField] List<GameObject> clientMenus;
-    [SerializeField] List<GameObject> serverMenus;
-
-
-    [Header("Client Components")]
-    [SerializeField] TeamUi teamUi;
-
+    [SerializeField] List<OnlineLobbyController> lobbyControllerList = new List<OnlineLobbyController>();
 
     Ping ping;
     List<int> pingsArray = new List<int>();
@@ -42,6 +37,8 @@ public class MainMenu : MonoBehaviour
 
     //string ipAdress = "172.30.114.48";
     string ipAdress = "127.0.0.1";
+
+    public string TeamName { get => input_teamname.text; }
 
     private void Update()
     {
@@ -79,20 +76,6 @@ public class MainMenu : MonoBehaviour
         btn_joinGame.onClick.AddListener(Client);
 
         ping = new Ping("127.0.0.1");
-
-
-#if UNITY_EDITOR
-        //Is this unity editor instance opening a clone project?
-        if (ClonesManager.IsClone())
-        {
-            string customArgument = ClonesManager.GetArgument();
-            inputName.text = customArgument;
-        }
-        else
-        {
-            inputName.text = "Jeune Bogoss";
-        }
-#endif
     }
     private void OnDestroy()
     {
@@ -109,6 +92,8 @@ public class MainMenu : MonoBehaviour
         NetworkManager.Singleton.ConnectionApprovalCallback += ApprovalCheck;
         NetworkManager.Singleton.NetworkConfig.ConnectionData = Encoding.ASCII.GetBytes(inputName.text);
         NetworkManager.Singleton.StartServer();
+        //MLAPI
+        //NetworkManager.Singleton.StartHost(PlayerManager.GetInstance().GetSpawnPosition()[0], PlayerManager.GetInstance().GetSpawnRotation()[0]);
     }
     public void Host()
     {
@@ -116,6 +101,8 @@ public class MainMenu : MonoBehaviour
         NetworkManager.Singleton.ConnectionApprovalCallback += ApprovalCheck;
         NetworkManager.Singleton.NetworkConfig.ConnectionData = Encoding.ASCII.GetBytes(inputName.text);
         NetworkManager.Singleton.StartHost();
+        //MLAPI
+        //NetworkManager.Singleton.StartHost(PlayerManager.GetInstance().GetSpawnPosition()[0], PlayerManager.GetInstance().GetSpawnRotation()[0]);
     }
 
     public void Client()
@@ -144,11 +131,6 @@ public class MainMenu : MonoBehaviour
 
     private void HandleServerStarted()
     {
-        foreach(var menu in serverMenus)
-        {
-            menu.SetActive(true);
-        }
-
         // Temporary workaround to treat host as client
         if (NetworkManager.Singleton.IsHost)
         {
@@ -157,35 +139,45 @@ public class MainMenu : MonoBehaviour
     }
     private void HandleClientConnected(ulong clientId)
     {
-        Debug.Log("MainMenu, HandleClientConnected : clientid = " + clientId);
         // Are we the client that is connecting?
-        if (NetworkManager.Singleton.IsServer)
-        {
-            var haveObject = MatchmakingServer.Instance.IdToObjectId.TryGetValue(clientId, out var objectId);
-            MatchmakingServer.Instance.IdToName.TryGetValue(clientId, out var name);
-
-            if (haveObject)
-            {
-                MatchmakingServer.Instance.SetClientUpClientRpc(name, clientId, objectId);
-            }
-        }
-
         if (clientId == NetworkManager.Singleton.LocalClientId)
         {
-            foreach (var menu in clientMenus)
+            //@BJN can only access ConnectedClientList on SERVER
+            /*var list = NetworkManager.Singleton.ConnectedClientsList;
+            var listId = new List<ulong>();
+            foreach (Unity.Netcode.NetworkClient client in list)
             {
-                menu.SetActive(true);
-            }
+                listId.Add(client.ClientId);
+            }*/
+            //NetworkManager.Singleton.ConnectedClients.TryGetValue(clientId, out NetworkClient networkClient);
+            //networkClient.PlayerObject.TryGetComponent<Player>(out Player newPlayer);
+            //Debug.Log("HandleClientConnected : team nb = " + ((NetworkManager.Singleton.ConnectedClients.Count + 1) % 2), this);
+
+
+            //PlayerManager.GetInstance().FindPlayers(listId);
+            //SubmitAddPlayerServerRpc(clientId);
+
+                    //ConectionMenu.SetActive(false);
+
+            // passwordEntryUI.SetActive(false);
+            //leaveButton.SetActive(true);
         }
     }
 
     [ServerRpc]
-    void SubmitAddPlayerServerRpc(string name, ulong clientId, ulong networkObject)
+    void SubmitAddPlayerServerRpc(ulong clientId, ServerRpcParams rpcParams = default)
     {
         //only accessible by client
         //if (!NetworkManager.Singleton.ConnectedClients.TryGetValue(clientId, out NetworkClient networkClient)) return;
         // (!networkClient.PlayerObject.TryGetComponent<Player>(out Player newPlayer)) return;
         //AddPlayerClientRpc(clientId);
+    }
+    [ClientRpc]
+    void AddPlayerClientRpc(Player player, ulong clientId)
+    {
+        if (clientId == NetworkManager.Singleton.LocalClientId) return;
+        AddPlayerToList(player);
+        
     }
 
     private void AddPlayerToList(Player player)
@@ -231,12 +223,13 @@ public class MainMenu : MonoBehaviour
         Debug.Log("connection approval : name = " + playerName +", id = " + clientId);
 
         GameObject go = Instantiate(playerPrefab, Vector3.zero, Quaternion.identity);
-        var networkObject = go.GetComponent<NetworkObject>();
-        networkObject.SpawnWithOwnership(clientId, false);
-        var client = go.GetComponent<MatchmakingClient>();
-        
-
-        MatchmakingServer.Instance.AddPlayer(playerName, clientId, networkObject.NetworkObjectId);
+        go.GetComponent<NetworkObject>().SpawnWithOwnership(clientId, false);
+        var olc = go.GetComponent<OnlineLobbyController>();
+        if(clientId != 0)
+        {
+            olc.Role = false;
+        }
+        olc.PlayerName = playerName;
     }
 
 }

@@ -69,7 +69,7 @@ public class OnlineLobbyController : NetworkBehaviour
 
     private IEnumerator StartGame()
     {
-        var teamName = FindObjectOfType<MainMenu>().TeamName;
+        var teamName = FindObjectOfType<MainMenuLobbyTest>().TeamName;
 
         Debug.Log("OnlineLobbyController, StartGame");
         var status = NetworkManager.SceneManager.LoadScene("GameScene", UnityEngine.SceneManagement.LoadSceneMode.Single);
