@@ -8,11 +8,13 @@ public class MatchmakingClient : NetworkBehaviour
 {
     [SerializeField] PlayerData data;
     [SerializeField] TeamUi teamUi;
+    [SerializeField] MatchmakingUi matchmakingUi;
     public PlayerData Data { get => data; set => data = value; }
     public List<ulong> TeammateList { get => teammateList; set => teammateList = value; }
 
     List<ulong> teammateList = new List<ulong>();
 
+    #region Start & Set up
     private void Start()
     {
         teamUi = FindObjectOfType<TeamUi>();
@@ -21,20 +23,53 @@ public class MatchmakingClient : NetworkBehaviour
             teamUi.addMateEvent.AddListener(delegate { MatchmakingServer.Instance.SubmitTryFindMateServerRpc(data.ClientId, teamUi.MateName); });
             teamUi.leaveTeam.AddListener(LeaveTeam);
         }
+
+        matchmakingUi = FindObjectOfType<MatchmakingUi>();
+        if (IsOwner)
+        {
+            matchmakingUi.JoinQuitButton.onClick.AddListener(JoinQueue);
+        }
     }
     public void CreateData(string name, ulong clientId)
     {
         data = new PlayerData(name, clientId, this.NetworkObjectId);
     }
+    internal void SetUpClient(string name, ulong clientId, ulong playerObjectId)
+    {
+        if (!IsOwner) return;
+        AddMate(name + "#" + clientId);
+        CreateData(name, clientId);
+    }
+    #endregion
 
+    #region Team management
+    [ClientRpc]
+    internal void AddMateClientRpc(string mateName)
+    {
+        if (IsOwner)
+        {
+            AddMate(mateName);
+
+        }
+    }
+    internal void AddMate(string mateName)
+    {
+        if(teamUi)
+            teamUi.AddTeammateUi(mateName);
+        else
+            StartCoroutine(WaitForTeamUi(mateName));
+
+        var id = mateName.Substring(mateName.IndexOf("#") + 1);
+        teammateList.Add(Convert.ToUInt64(id));
+    }
     private void LeaveTeam()
     {
         Debug.Log("MatchmakingClient, LeaveTeam : quitter = " + Data.Name);
         for (int i = 0; i < teammateList.Count; i++)
         {
-            if(teammateList[i] != Data.ClientId)
+            if (teammateList[i] != Data.ClientId)
             {
-                RemoveMateServerRpc(teammateList[i], Data.Name+"#"+Data.ClientId);
+                RemoveMateServerRpc(teammateList[i], Data.Name + "#" + Data.ClientId);
                 Debug.Log("MatchmakingClient, LeaveTeam : teammate #" + teammateList[i]);
             }
         }
@@ -71,25 +106,6 @@ public class MatchmakingClient : NetworkBehaviour
         teammateList.Remove(Convert.ToUInt64(id));
     }
 
-    [ClientRpc]
-    internal void AddMateClientRpc(string mateName)
-    {
-        if (IsOwner)
-        {
-            AddMate(mateName);
-
-        }
-    }
-    internal void AddMate(string mateName)
-    {
-        if(teamUi)
-            teamUi.AddTeammateUi(mateName);
-        else
-            StartCoroutine(WaitForTeamUi(mateName));
-
-        var id = mateName.Substring(mateName.IndexOf("#") + 1);
-        teammateList.Add(Convert.ToUInt64(id));
-    }
     IEnumerator WaitForTeamUi(string mateName)
     {
         while(teamUi == null)
@@ -99,11 +115,45 @@ public class MatchmakingClient : NetworkBehaviour
         }
         teamUi.AddTeammateUi(mateName);
     }
+    #endregion
 
-    internal void SetUpClient(string name, ulong clientId, ulong playerObjectId)
+    #region Queueing
+    void JoinQueue()
+    {
+        if(teammateList.Count == 2)
+        {
+            MatchmakingServer.Instance.RegisterTeamServerRpc(teammateList[0], teammateList[1]);
+        }
+        else if (teammateList.Count == 3)
+        {
+            MatchmakingServer.Instance.RegisterTeamServerRpc(teammateList[0], teammateList[1], teammateList[2]);
+        }
+
+        foreach(var mate in teammateList)
+        {
+            MatchmakingServer.Instance.AddPlayerToQueueServerRpc(mate);
+
+            matchmakingUi.JoinQuitButton.onClick.RemoveListener(JoinQueue);
+            matchmakingUi.JoinQuitButton.onClick.AddListener(LeaveQueue);
+        }
+    }
+
+    [ClientRpc]
+    internal void SetInQueueClientRpc(bool inQueue)
     {
         if (!IsOwner) return;
-        AddMate(name + "#" + clientId);
-        CreateData(name, clientId);
+        matchmakingUi.QueueStatus = inQueue ? "In queue ..." : "Ready to join queue";
+        matchmakingUi.ButtonLabel = inQueue ? "Quit" : "Join";
     }
+    void LeaveQueue()
+    {
+        foreach (var mate in teammateList)
+        {
+            MatchmakingServer.Instance.RemovePlayerToQueueServerRpc(mate);
+            matchmakingUi.JoinQuitButton.onClick.RemoveListener(LeaveQueue);
+            matchmakingUi.JoinQuitButton.onClick.AddListener(JoinQueue);
+        }
+    }
+
+    #endregion
 }

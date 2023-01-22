@@ -536,30 +536,6 @@ MonoBehaviour:
     LoadSceneTimeOut: 120
     SpawnTimeout: 1
     EnableNetworkLogs: 1
---- !u!114 &1155459264 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 4654081567066653653, guid: fdbc7cda103c8ee4f9e66b69752a8e5f,
-    type: 3}
-  m_PrefabInstance: {fileID: 4785745116047349807}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &1216423478 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 3133388962117203834, guid: fdbc7cda103c8ee4f9e66b69752a8e5f,
-    type: 3}
-  m_PrefabInstance: {fileID: 4785745116047349807}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2da0c512f12947e489f739169773d7ca, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!224 &1250998746 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 1549086945456542407, guid: 99b4ca01385c2b043a640c2e915288a5,
@@ -674,6 +650,18 @@ MonoBehaviour:
   playerUiItem: {fileID: 4112558075612084946, guid: b7efc041f59211d4a9a43e2e708fd181,
     type: 3}
   listContainer: {fileID: 1250998746}
+  gameQueue: 
+  unfinishedTeam: 
+  teamPrefab: {fileID: 735899700741052560, guid: 322ca9a6a83d46c4a94c79ad5ebefbd9,
+    type: 3}
+  shipPrefab: {fileID: 3346695240900732517, guid: 6a1f107f43d27cb459b17ead5816cd9f,
+    type: 3}
+  shootPrefab: {fileID: 3346695240900732517, guid: 59db258f9a07a6a4fa069ce800ad13fd,
+    type: 3}
+  aiShipPrefab: {fileID: 4249782411962541405, guid: f24058203e4b558488b8240bda56ae7e,
+    type: 3}
+  aiShootPrefab: {fileID: 8241328780733922180, guid: 000c10cb7779fb147a8bfae00ac0d4d0,
+    type: 3}
 --- !u!1 &1551272448
 GameObject:
   m_ObjectHideFlags: 0
@@ -1186,12 +1174,12 @@ PrefabInstance:
     - target: {fileID: 3180379338791794757, guid: 4f18bfe5c1c0c314aa70f6b2d2739644,
         type: 3}
       propertyPath: m_SizeDelta.x
-      value: 400
+      value: 300
       objectReference: {fileID: 0}
     - target: {fileID: 3180379338791794757, guid: 4f18bfe5c1c0c314aa70f6b2d2739644,
         type: 3}
       propertyPath: m_SizeDelta.y
-      value: 200
+      value: 110
       objectReference: {fileID: 0}
     - target: {fileID: 3180379338791794757, guid: 4f18bfe5c1c0c314aa70f6b2d2739644,
         type: 3}
@@ -1319,16 +1307,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 7245320942778422165}
     m_Modifications:
-    - target: {fileID: 4424864425464276541, guid: fdbc7cda103c8ee4f9e66b69752a8e5f,
-        type: 3}
-      propertyPath: btn_add_mate
-      value: 
-      objectReference: {fileID: 1155459264}
-    - target: {fileID: 4424864425464276541, guid: fdbc7cda103c8ee4f9e66b69752a8e5f,
-        type: 3}
-      propertyPath: input_mate_name
-      value: 
-      objectReference: {fileID: 1216423478}
     - target: {fileID: 4808168828021995999, guid: fdbc7cda103c8ee4f9e66b69752a8e5f,
         type: 3}
       propertyPath: m_Pivot.x

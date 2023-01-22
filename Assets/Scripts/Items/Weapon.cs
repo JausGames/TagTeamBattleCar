@@ -141,6 +141,6 @@ abstract public class Weapon : Item
         var prtcl = layer == 6 ? woodParticles : layer == 0 ? sandParticles : bloodParticles;
         var prtclInstance = Instantiate(prtcl, origin, Quaternion.identity);
         prtclInstance.transform.LookAt(direction + prtclInstance.transform.position);
-        Destroy(prtclInstance, 5f);
+        Destroy(prtclInstance.gameObject, 5f);
     }
 }
