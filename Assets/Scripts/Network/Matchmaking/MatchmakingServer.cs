@@ -43,10 +43,16 @@ public class MatchmakingServer : NetworkBehaviour
 
     }
 
-    [ClientRpc] 
+    public void SetClientUp(string name, ulong clientId, ulong playerObjectId, bool isHost = false)
+    {
+        if (isHost)
+            GetNetworkObject(playerObjectId).GetComponent<MatchmakingClient>().SetUpClient(name, clientId, playerObjectId);
+        else
+            SetClientUpClientRpc(name, clientId, playerObjectId);
+    }
+    [ClientRpc]
     public void SetClientUpClientRpc(string name, ulong clientId, ulong playerObjectId)
     {
-        Debug.Log("SetClientUpClientRpc, name = " + name);
         GetNetworkObject(playerObjectId).GetComponent<MatchmakingClient>().SetUpClient(name, clientId, playerObjectId);
 
     }
@@ -54,20 +60,36 @@ public class MatchmakingServer : NetworkBehaviour
     [ServerRpc(RequireOwnership = false)]
     internal void SubmitTryFindMateServerRpc(ulong requesterId, string nameToFind)
     {
-        Debug.Log("SubmitTryFindMateServerRpc, requesterId = " + requesterId);
-        Debug.Log("SubmitTryFindMateServerRpc, nameToFind = " + nameToFind);
         var playerExist = idToName.TryGetValue(requesterId, out var requesterName);
         idToObjectId.TryGetValue(requesterId, out var requesterObjectId);
         if (playerExist)
         {
             for (int i = 0; i < playerList.Count; i++)
             {
-                Debug.Log("SubmitTryFindMateServerRpc, name in list = " + (playerList[i].Name + "#" + playerList[i].ClientId));
                 if (playerList[i].Name +"#"+ playerList[i].ClientId == nameToFind)
                 {
-                    Debug.Log("SubmitTryFindMateServerRpc, founded ");
-                    GetNetworkObject(requesterObjectId).GetComponent<MatchmakingClient>().AddMateClientRpc(nameToFind);
-                    GetNetworkObject(playerList[i].PlayerObjectId).GetComponent<MatchmakingClient>().AddMateClientRpc(requesterName+"#"+requesterId);
+                    var requester = GetNetworkObject(requesterObjectId).GetComponent<MatchmakingClient>();
+                    var newMember = GetNetworkObject(playerList[i].PlayerObjectId).GetComponent<MatchmakingClient>();
+
+                    var currentTeam = new List<ulong>(requester.TeammateList);
+                    foreach (var mateId in currentTeam)
+                    {
+
+                        var mateExist = idToName.TryGetValue(mateId, out var mateName);
+                        mateExist = idToObjectId.TryGetValue(mateId, out var objectId);
+
+                        if (mateExist)
+                        {
+                            var member = GetNetworkObject(objectId).GetComponent<MatchmakingClient>();
+                            //member.TeammateList.Add(newMember.Data.ClientId);
+                            member.AddMateClientRpc(nameToFind);
+
+                            newMember.AddMateClientRpc(mateName + "#" + mateId);
+                            //newMember.TeammateList.Add(mateId);
+                        }
+
+                    }
+
                 }
             }
         }

@@ -90,7 +90,7 @@ public class MainMenu : MonoBehaviour
         }
         else
         {
-            inputName.text = "Jeune Bogoss";
+            inputName.text = "bogoss";
         }
 #endif
     }
@@ -152,24 +152,24 @@ public class MainMenu : MonoBehaviour
         // Temporary workaround to treat host as client
         if (NetworkManager.Singleton.IsHost)
         {
-            HandleClientConnected(NetworkManager.ServerClientId);
+            //HandleClientConnected(NetworkManager.ServerClientId);
         }
     }
     private void HandleClientConnected(ulong clientId)
     {
         Debug.Log("MainMenu, HandleClientConnected : clientid = " + clientId);
-        // Are we the client that is connecting?
-        if (NetworkManager.Singleton.IsServer)
+        if (NetworkManager.Singleton.IsServer || NetworkManager.Singleton.IsHost)
         {
             var haveObject = MatchmakingServer.Instance.IdToObjectId.TryGetValue(clientId, out var objectId);
             MatchmakingServer.Instance.IdToName.TryGetValue(clientId, out var name);
 
             if (haveObject)
             {
-                MatchmakingServer.Instance.SetClientUpClientRpc(name, clientId, objectId);
+                MatchmakingServer.Instance.SetClientUp(name, clientId, objectId, NetworkManager.Singleton.IsHost && clientId == NetworkManager.Singleton.LocalClientId);
             }
         }
 
+        // Are we the client that is connecting?
         if (clientId == NetworkManager.Singleton.LocalClientId)
         {
             foreach (var menu in clientMenus)
@@ -177,20 +177,6 @@ public class MainMenu : MonoBehaviour
                 menu.SetActive(true);
             }
         }
-    }
-
-    [ServerRpc]
-    void SubmitAddPlayerServerRpc(string name, ulong clientId, ulong networkObject)
-    {
-        //only accessible by client
-        //if (!NetworkManager.Singleton.ConnectedClients.TryGetValue(clientId, out NetworkClient networkClient)) return;
-        // (!networkClient.PlayerObject.TryGetComponent<Player>(out Player newPlayer)) return;
-        //AddPlayerClientRpc(clientId);
-    }
-
-    private void AddPlayerToList(Player player)
-    {
-        throw new System.NotImplementedException();
     }
 
     private void HandleClientDisconnect(ulong clientId)
