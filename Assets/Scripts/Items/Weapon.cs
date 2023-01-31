@@ -118,19 +118,20 @@ abstract public class Weapon : Item
             }
         }
 
-        if (closest != -1 && players[closest])
+        if (closest != -1)
         {
-            Debug.Log("ShooterController, Shoot : #" + owner.NetworkObjectId + " shot #" + players[closest].NetworkObjectId);
-            owner.GetHitCreditsEarnEvent.Invoke(Mathf.Min(players[closest].Health.Value, damage));
-            owner.SummitGetHitServerRpc(players[closest].NetworkObjectId, damage, owner.NetworkObjectId);
-            Debug.DrawLine(canonEnd.position, hits[closest].point, Color.red);
-        }
-        else if(closest != -1)
-        {
+            if(players[closest])
+            {
+                Debug.Log("ShooterController, Shoot : #" + owner.NetworkObjectId + " shot #" + players[closest].NetworkObjectId);
+                owner.GetHitCreditsEarnEvent.Invoke(Mathf.Min(players[closest].Health.Value, damage));
+                owner.SummitGetHitServerRpc(players[closest].NetworkObjectId, damage, owner.NetworkObjectId);
+                Debug.DrawLine(canonEnd.position, hits[closest].point, Color.red);
+            }
             var layer = layers[closest];
             var origin = hits[closest].point;
             var direction = hits[closest].normal;
             owner.SubmitShotContactParticleServerRpc(layer, origin, direction);
+            Debug.Log("Weapon, FindRayVictim : layer = " + layer);
         }
 
     }
