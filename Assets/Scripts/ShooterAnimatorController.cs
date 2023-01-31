@@ -13,6 +13,7 @@ public class ShooterAnimatorController : MonoBehaviour
         set
         {
             angle = value >= 0 ? value / 360f : ((value + 360f) / 360f);
+            //animator.Animator.SetFloat("angle", Mathf.MoveTowards(animator.Animator.GetFloat("angle"), angle, 0.01f));
             animator.Animator.SetFloat("angle", angle);
         }
     }
