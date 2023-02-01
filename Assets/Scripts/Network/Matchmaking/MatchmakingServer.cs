@@ -68,9 +68,10 @@ public class MatchmakingServer : NetworkBehaviour
         if (isHost)
             client.SetUpClient(name, clientId, playerObjectId);
         else
+        {
             SetClientUpClientRpc(name, clientId, playerObjectId);
-
-        client.TeammateList.Add(Convert.ToUInt64(clientId));
+            client.TeammateList.Add(Convert.ToUInt64(clientId));
+        }
     }
     [ClientRpc]
     public void SetClientUpClientRpc(string name, ulong clientId, ulong playerObjectId)
@@ -86,37 +87,37 @@ public class MatchmakingServer : NetworkBehaviour
     {
         var playerExist = idToName.TryGetValue(requesterId, out var requesterName);
         idToObjectId.TryGetValue(requesterId, out var requesterObjectId);
-        Debug.Log("MatchmakingServer, SubmitTryFindMateServerRpc : requesterId = " + requesterId + ", nameToFind = "+ nameToFind);
+        //Debug.Log("MatchmakingServer, SubmitTryFindMateServerRpc : requesterId = " + requesterId + ", nameToFind = "+ nameToFind);
         if (playerExist)
         {
-            Debug.Log("MatchmakingServer, SubmitTryFindMateServerRpc : player exist ");
+            //Debug.Log("MatchmakingServer, SubmitTryFindMateServerRpc : player exist ");
             for (int i = 0; i < playerList.Count; i++)
             {
                 if (playerList[i].Name +"#"+ playerList[i].ClientId == nameToFind)
                 {
-                    Debug.Log("MatchmakingServer, SubmitTryFindMateServerRpc : is concern player");
+                    //Debug.Log("MatchmakingServer, SubmitTryFindMateServerRpc : is concern player");
                     var requester = GetNetworkObject(requesterObjectId).GetComponent<MatchmakingClient>();
                     var newMember = GetNetworkObject(playerList[i].PlayerObjectId).GetComponent<MatchmakingClient>();
 
                     var currentTeam = new List<ulong>(requester.TeammateList);
-                    Debug.Log("MatchmakingServer, SubmitTryFindMateServerRpc : currentTeam.Count = " + currentTeam.Count);
+                    //Debug.Log("MatchmakingServer, SubmitTryFindMateServerRpc : currentTeam.Count = " + currentTeam.Count);
                     foreach (var mateId in currentTeam)
                     {
-                        Debug.Log("MatchmakingServer, SubmitTryFindMateServerRpc : add existing teamate = " + mateId);
+                        //Debug.Log("MatchmakingServer, SubmitTryFindMateServerRpc : add existing teamate = " + mateId);
                         var mateExist = idToName.TryGetValue(mateId, out var mateName);
                         mateExist = idToObjectId.TryGetValue(mateId, out var objectId);
 
                         if (mateExist)
                         {
-                            Debug.Log("MatchmakingServer, SubmitTryFindMateServerRpc : add existing teamate, mateExist " + mateExist);
+                            //Debug.Log("MatchmakingServer, SubmitTryFindMateServerRpc : add existing teamate, mateExist " + mateExist);
                             var member = GetNetworkObject(objectId).GetComponent<MatchmakingClient>();
-                            //member.TeammateList.Add(newMember.Data.ClientId);
                             member.AddMateClientRpc(nameToFind);
-                            member.TeammateList.Add(Convert.ToUInt64(playerList[i].ClientId));
+                            // if host it will add it twice
+                            if(!member.IsOwnedByServer) member.TeammateList.Add(Convert.ToUInt64(playerList[i].ClientId));
 
                             newMember.AddMateClientRpc(mateName + "#" + mateId);
-                            newMember.TeammateList.Add(Convert.ToUInt64(mateId));
-                            //newMember.TeammateList.Add(mateId);
+                            // if host it will add it twice
+                            if (!newMember.IsOwnedByServer) newMember.TeammateList.Add(Convert.ToUInt64(mateId));
                         }
 
                     }
@@ -133,13 +134,15 @@ public class MatchmakingServer : NetworkBehaviour
     public void AddPlayerToQueueServerRpc(ulong clientId)
     {
         gameQueue.Add(clientId);
+        Debug.Log("MatchmakingServer, AddPlayerToQueueServerRpc : clientId = " + clientId + ", queue count = " + gameQueue.Count);
 
         idToUiObject.TryGetValue(clientId, out var uiObject);
         idToObjectId.TryGetValue(clientId, out var objectId);
         uiObject.GetComponent<ConnectedPlayerUiSetter>().PlayerState = "In queue";
         GetNetworkObject(objectId).GetComponent<MatchmakingClient>().SetInQueueClientRpc(true);
 
-        if (gameQueue.Count >= minPlayer) StartCoroutine(StartGame());
+        if (gameQueue.Count >= minPlayer) 
+            StartCoroutine(StartGame());
     }
 
 

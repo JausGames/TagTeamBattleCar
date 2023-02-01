@@ -115,7 +115,7 @@ AudioListener:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2426869947475028694}
-  m_Enabled: 1
+  m_Enabled: 0
 --- !u!1 &3346695240900732517
 GameObject:
   m_ObjectHideFlags: 0
@@ -379,7 +379,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   health:
-    m_InternalValue: 0
+    m_InternalValue: 100
   maxHealth: 100
   lookAt: {fileID: 0}
   body: {fileID: 0}
@@ -402,7 +402,7 @@ MonoBehaviour:
   look:
     m_InternalValue: {x: 0, y: 0, z: 0}
   seat: {fileID: 0}
-  aimeUi: {fileID: 8494546482941859864}
+  ui: {fileID: 8494546482941859864}
   currentWeapon: {fileID: 0}
   currentTool: {fileID: 0}
   heldItem: {fileID: 0}
@@ -415,6 +415,7 @@ MonoBehaviour:
   cameraFollow: {fileID: 5666359829624113700}
   ship: {fileID: 0}
   rightHand: {fileID: 8522976971823683119}
+  audioListener: {fileID: 7035209919317685513}
   target: {fileID: 8385886751071570821}
   rotationOffset: {x: 0, y: 1, z: 0, w: -0.00000004371139}
   ik: {fileID: 1408077053411568610}
@@ -609,7 +610,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &8388673499335599602
 RectTransform:
   m_ObjectHideFlags: 0
@@ -823,11 +824,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 1932498532606489309, guid: 8a473b6c15854844eaa0c41ae2ed265b,
-        type: 3}
-      propertyPath: gradient.m_Mode
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 1932498533041388337, guid: 8a473b6c15854844eaa0c41ae2ed265b,
         type: 3}
       propertyPath: m_Layer
@@ -851,12 +847,12 @@ PrefabInstance:
     - target: {fileID: 1932498533189330358, guid: 8a473b6c15854844eaa0c41ae2ed265b,
         type: 3}
       propertyPath: m_AnchorMax.x
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1932498533189330358, guid: 8a473b6c15854844eaa0c41ae2ed265b,
         type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8a473b6c15854844eaa0c41ae2ed265b, type: 3}

@@ -68,8 +68,6 @@ public class CameraFollow : MonoBehaviour
         transform.position = Vector3.MoveTowards(transform.position, targetRig.position + offset.y * Vector3.up, speed);
         transform.rotation = desiredRotation * Quaternion.Euler(CurrentOffset);
 
-        Debug.Log("CameraFollow, LateUpdate : CurrentOffset = " + CurrentOffset);
-
 
         /*if(CurrentOffset != Vector3.zero)
         {

@@ -653,7 +653,7 @@ MonoBehaviour:
   listContainer: {fileID: 1250998746}
   gameQueue: 
   unfinishedTeam: 
-  minPlayer: 6
+  minPlayer: 3
   teamPrefab: {fileID: 735899700741052560, guid: 322ca9a6a83d46c4a94c79ad5ebefbd9,
     type: 3}
   shipPrefab: {fileID: 3346695240900732517, guid: 6a1f107f43d27cb459b17ead5816cd9f,

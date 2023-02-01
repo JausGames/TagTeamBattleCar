@@ -93,7 +93,7 @@ namespace Inputs
         }*/
         public void OnTorque(float context)
         {
-            Debug.Log(gameObject.ToString() + ", Network Informations : IsLocalPlayer " + IsLocalPlayer);
+            //Debug.Log(gameObject.ToString() + ", Network Informations : IsLocalPlayer " + IsLocalPlayer);
             //Debug.Log("Network Informations : IsLocalPlayer " + IsLocalPlayer);
             if (motor == null || !IsOwner) return;
             motor.SetMotorTorque(context);

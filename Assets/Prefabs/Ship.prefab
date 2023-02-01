@@ -9773,7 +9773,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   health:
-    m_InternalValue: 0
+    m_InternalValue: 1000
   maxHealth: 1000
   lookAt: {fileID: 5493142883312927755}
   body: {fileID: 5493142882487950269}

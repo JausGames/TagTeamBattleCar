@@ -13,6 +13,7 @@ public class MatchmakingClient : NetworkBehaviour
     public List<ulong> TeammateList { get => teammateList; set => teammateList = value; }
 
     List<ulong> teammateList = new List<ulong>();
+    public bool IsClientHost { get => IsHost; }
 
     #region Start & Set up
     private void Start()
@@ -20,16 +21,13 @@ public class MatchmakingClient : NetworkBehaviour
         teamUi = FindObjectOfType<TeamUi>();
         if(IsOwner)
         {
-            Debug.Log("MatchmakingClient, Start : register button");
+            //Debug.Log("MatchmakingClient, Start : register button");
             teamUi.addMateEvent.AddListener(delegate { MatchmakingServer.Instance.SubmitTryFindMateServerRpc(data.ClientId, teamUi.MateName); });
             teamUi.leaveTeam.AddListener(LeaveTeam);
-        }
-
-        matchmakingUi = FindObjectOfType<MatchmakingUi>();
-        if (IsOwner)
-        {
+            matchmakingUi = FindObjectOfType<MatchmakingUi>();
             matchmakingUi.JoinQuitButton.onClick.AddListener(JoinQueue);
         }
+
     }
     public void CreateData(string name, ulong clientId)
     {
@@ -49,9 +47,8 @@ public class MatchmakingClient : NetworkBehaviour
     {
         if (IsOwner)
         {
-            Debug.Log("MatchmakingClient, AddMateClientRpc : mate id = " + mateName);
+            //Debug.Log("MatchmakingClient, AddMateClientRpc : mate id = " + mateName);
             AddMate(mateName);
-
         }
     }
     internal void AddMate(string mateName)
@@ -66,13 +63,13 @@ public class MatchmakingClient : NetworkBehaviour
     }
     private void LeaveTeam()
     {
-        Debug.Log("MatchmakingClient, LeaveTeam : quitter = " + Data.Name);
+        //Debug.Log("MatchmakingClient, LeaveTeam : quitter = " + Data.Name);
         for (int i = 0; i < teammateList.Count; i++)
         {
             if (teammateList[i] != Data.ClientId)
             {
                 RemoveMateServerRpc(teammateList[i], Data.Name + "#" + Data.ClientId);
-                Debug.Log("MatchmakingClient, LeaveTeam : teammate #" + teammateList[i]);
+                //Debug.Log("MatchmakingClient, LeaveTeam : teammate #" + teammateList[i]);
             }
         }
         teammateList.Clear();
@@ -83,7 +80,7 @@ public class MatchmakingClient : NetworkBehaviour
     [ServerRpc]
     internal void RemoveMateServerRpc(ulong mate, string quitterName)
     {
-        Debug.Log("MatchmakingClient, RemoveMateServerRpc");
+        //Debug.Log("MatchmakingClient, RemoveMateServerRpc");
         MatchmakingServer.Instance.IdToObjectId.TryGetValue(mate, out var mateObjectId);
         GetNetworkObject(mateObjectId).GetComponent<MatchmakingClient>().RemoveMateClientRpc(quitterName);
     }
@@ -91,16 +88,16 @@ public class MatchmakingClient : NetworkBehaviour
     [ClientRpc]
     internal void RemoveMateClientRpc(string quitterName)
     {
-        Debug.Log("MatchmakingClient, RemoveMateClientRpc : NetworkObjectId = " + NetworkObjectId + ", is owner = " + IsOwner);
+        //Debug.Log("MatchmakingClient, RemoveMateClientRpc : NetworkObjectId = " + NetworkObjectId + ", is owner = " + IsOwner);
         if (IsOwner)
         {
-            Debug.Log("MatchmakingClient, RemoveMateClientRpc : is client object #" + NetworkObjectId);
+            //Debug.Log("MatchmakingClient, RemoveMateClientRpc : is client object #" + NetworkObjectId);
             RemoveMate(quitterName);
         }
     }
     internal void RemoveMate(string mateName)
     {
-        Debug.Log("MatchmakingClient, RemoveMate : mateName = " + mateName);
+        //Debug.Log("MatchmakingClient, RemoveMate : mateName = " + mateName);
         if (teamUi)
             teamUi.RemoveTeammateUi(mateName);
 
@@ -122,7 +119,8 @@ public class MatchmakingClient : NetworkBehaviour
     #region Queueing
     void JoinQueue()
     {
-        if(teammateList.Count == 2)
+        Debug.Log("MatchmakingClient, JoinQueue : OwnerClient id = " + OwnerClientId + ", teammate count = " + teammateList.Count);
+        if (teammateList.Count == 2)
         {
             MatchmakingServer.Instance.RegisterTeamServerRpc(teammateList[0], teammateList[1]);
         }

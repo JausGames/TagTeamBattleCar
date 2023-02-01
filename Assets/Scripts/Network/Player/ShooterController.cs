@@ -11,7 +11,7 @@ public class ShooterController : PlayerController
 {
     [Header("Inputs")][SerializeField] NetworkVariable<Vector3> look = new NetworkVariable<Vector3>(Vector3.zero, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
     [SerializeField] Seat seat;
-    [SerializeField] GameObject aimeUi;
+    [SerializeField] GameObject ui;
 
     [Space]
     [Header("Item")]
@@ -34,6 +34,7 @@ public class ShooterController : PlayerController
     [HideInInspector] UnityEvent<float> getHitCreditsEarnEvent = new UnityEvent<float>();
 
     [SerializeField] Transform rightHand;
+    [SerializeField] AudioListener audioListener;
     [SerializeField] Transform target;
     [SerializeField] Quaternion rotationOffset;
     private bool reloading;
@@ -111,7 +112,8 @@ public class ShooterController : PlayerController
             Cursor.lockState = CursorLockMode.Locked;
             //body.isKinematic = false;
             cameraContainer.GetComponent<CameraFollow>().GetComponentInChildren<Camera>().enabled = true;
-            aimeUi.SetActive(true);
+            ui.SetActive(true);
+            audioListener.enabled = true;
         }
 
         if (!weaponWheel) return;

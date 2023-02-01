@@ -35,6 +35,7 @@ namespace ClientAutoritative
         [SerializeField] CarSoundManager soundManager;
         [SerializeField] List<Wheel> wheels;
         [SerializeField] GameObject ui;
+        [SerializeField] AudioListener audioListener;
         [SerializeField] private Transform lookAt;
 
         [Space]
@@ -61,6 +62,8 @@ namespace ClientAutoritative
                 virtualCamera.enabled = true;
                 virtualCamera.LookAt = lookAt;
                 virtualCamera.Follow = transform;
+                audioListener.enabled = true;
+
             }
         }
         #region Network var : Rotation
@@ -155,7 +158,7 @@ namespace ClientAutoritative
 
             //Effects here
             PlayShipSvfxServerRpc(Mathf.Abs(localVelocity.z), torqueApply.Value);
-            Debug.Log("ShipController, VFXisplayed client ? " + (torqueApply.Value > 0));
+            //Debug.Log("ShipController, VFXisplayed client ? " + (torqueApply.Value > 0));
 
         }
 
