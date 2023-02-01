@@ -36,6 +36,8 @@ public class MatchmakingServer : NetworkBehaviour
     List<ulong> playerInTeam = new List<ulong>();
     List<List<ulong>> teams = new List<List<ulong>>();
     [SerializeField] List<int> unfinishedTeam = new List<int>();
+    [Header("Matchmaker settings")]
+    [SerializeField] private int minPlayer = 6;
 
     [Header("Instantiated prefabs")]
     [SerializeField] private GameObject teamPrefab;
@@ -127,7 +129,7 @@ public class MatchmakingServer : NetworkBehaviour
         uiObject.GetComponent<ConnectedPlayerUiSetter>().PlayerState = "In queue";
         GetNetworkObject(objectId).GetComponent<MatchmakingClient>().SetInQueueClientRpc(true);
 
-        if (gameQueue.Count >= 3) StartCoroutine(StartGame());
+        if (gameQueue.Count >= minPlayer) StartCoroutine(StartGame());
     }
 
 
