@@ -20,6 +20,7 @@ public class MatchmakingClient : NetworkBehaviour
         teamUi = FindObjectOfType<TeamUi>();
         if(IsOwner)
         {
+            Debug.Log("MatchmakingClient, Start : register button");
             teamUi.addMateEvent.AddListener(delegate { MatchmakingServer.Instance.SubmitTryFindMateServerRpc(data.ClientId, teamUi.MateName); });
             teamUi.leaveTeam.AddListener(LeaveTeam);
         }
@@ -48,6 +49,7 @@ public class MatchmakingClient : NetworkBehaviour
     {
         if (IsOwner)
         {
+            Debug.Log("MatchmakingClient, AddMateClientRpc : mate id = " + mateName);
             AddMate(mateName);
 
         }

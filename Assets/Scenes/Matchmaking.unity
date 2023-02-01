@@ -376,6 +376,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 01614664b831546d2ae94a42149d80ac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_SendPointerHoverToParent: 1
   m_MoveRepeatDelay: 0.5
   m_MoveRepeatRate: 0.1
   m_XRTrackingOrigin: {fileID: 0}
@@ -652,6 +653,7 @@ MonoBehaviour:
   listContainer: {fileID: 1250998746}
   gameQueue: 
   unfinishedTeam: 
+  minPlayer: 6
   teamPrefab: {fileID: 735899700741052560, guid: 322ca9a6a83d46c4a94c79ad5ebefbd9,
     type: 3}
   shipPrefab: {fileID: 3346695240900732517, guid: 6a1f107f43d27cb459b17ead5816cd9f,
