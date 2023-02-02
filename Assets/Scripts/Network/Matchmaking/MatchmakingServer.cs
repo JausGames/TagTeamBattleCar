@@ -190,7 +190,7 @@ public class MatchmakingServer : NetworkBehaviour
             Debug.Log("OnlineLobbyController, StartGame : IsListening = " + NetworkManager.Singleton.IsListening);
             yield return new WaitForEndOfFrame();
         }
-        for (int i = 0; i < gameQueue.Count; i++)
+        /*for (int i = 0; i < gameQueue.Count; i++)
         {
             GameObject teamGo = Instantiate(teamPrefab, Vector3.zero, Quaternion.identity);
             teamGo.GetComponent<NetworkObject>().SpawnWithOwnership(gameQueue[i], false);
@@ -204,9 +204,9 @@ public class MatchmakingServer : NetworkBehaviour
             var ship = driverGo.GetComponentInChildren<ClientAutoritative.ShipController>();
             team.AddPlayer(ship.GetComponentInParent<Player>());
             playerList.Add(driverGo.GetComponent<NetworkObject>().NetworkObjectId);
-        }
+        }*/
 
-        /*for (int i = 0; i < teams.Count; i++)
+        for (int i = 0; i < teams.Count; i++)
         {
             GameObject teamGo = Instantiate(teamPrefab, Vector3.zero, Quaternion.identity);
             teamGo.GetComponent<NetworkObject>().SpawnWithOwnership(teams[i][0], false);
@@ -238,7 +238,7 @@ public class MatchmakingServer : NetworkBehaviour
             SubmitCreateTeamServerRpc(teamGo.GetComponent<NetworkObject>().NetworkObjectId, playerList.ToArray());
         }
 
-        SpawnAi();*/
+        SpawnAi();
 
     }
 

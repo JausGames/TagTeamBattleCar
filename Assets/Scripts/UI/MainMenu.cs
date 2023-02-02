@@ -8,7 +8,7 @@ using Unity.Netcode.Transports.UNET;
 using Unity.Services.Lobbies;
 using Unity.Services.Lobbies.Models;
 using TMPro;
-using ParrelSync;
+//using ParrelSync;
 
 public class MainMenu : MonoBehaviour
 {
@@ -81,7 +81,7 @@ public class MainMenu : MonoBehaviour
         ping = new Ping("127.0.0.1");
 
 
-#if UNITY_EDITOR
+/*#if UNITY_EDITOR
         //Is this unity editor instance opening a clone project?
         if (ClonesManager.IsClone())
         {
@@ -92,7 +92,7 @@ public class MainMenu : MonoBehaviour
         {
             inputName.text = "bogoss";
         }
-#endif
+#endif*/
     }
     private void OnDestroy()
     {
