@@ -62,6 +62,7 @@ namespace ClientAutoritative
                 virtualCamera.enabled = true;
                 virtualCamera.LookAt = lookAt;
                 virtualCamera.Follow = transform;
+                audioListener = Camera.main.GetComponent<AudioListener>();
                 audioListener.enabled = true;
 
             }
@@ -113,7 +114,6 @@ namespace ClientAutoritative
                 {
                     wheel.RotateWheel(speed);
                 }
-
             }
         }
 
@@ -144,11 +144,11 @@ namespace ClientAutoritative
                 torque += ApplySteeringRotation(rotation.Value, localAngularVelocity, out resetSteer);
                 force += ApplyMotorAcceleration(torqueApply.Value, localVelocity, localMatrix);
             }
-            else
-            {
+            //else
+            //{
                 //torque += CheckAerialRotations(isRotationAxeY.Value, rotation.Value);
                 force += ApplyGravity();
-            }
+            //}
 
             body.AddForce(force * Time.deltaTime, ForceMode.Acceleration);
             //body.velocity += force * Time.deltaTime;

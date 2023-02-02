@@ -105,6 +105,7 @@ public class MainMenu : MonoBehaviour
     }
     public void Server()
     {
+        if (inputName.text == "") return;
         // Hook up password approval check
         NetworkManager.Singleton.ConnectionApprovalCallback += ApprovalCheck;
         NetworkManager.Singleton.NetworkConfig.ConnectionData = Encoding.ASCII.GetBytes(inputName.text);
@@ -112,6 +113,7 @@ public class MainMenu : MonoBehaviour
     }
     public void Host()
     {
+        if (inputName.text == "") return;
         // Hook up password approval check
         NetworkManager.Singleton.ConnectionApprovalCallback += ApprovalCheck;
         NetworkManager.Singleton.NetworkConfig.ConnectionData = Encoding.ASCII.GetBytes(inputName.text);
@@ -120,6 +122,7 @@ public class MainMenu : MonoBehaviour
 
     public void Client()
     {
+        if (inputName.text == "") return;
         // Set password ready to send to the server to validate
         NetworkManager.Singleton.NetworkConfig.ConnectionData = Encoding.ASCII.GetBytes(inputName.text);
         NetworkManager.Singleton.StartClient();
