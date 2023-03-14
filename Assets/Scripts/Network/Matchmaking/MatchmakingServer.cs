@@ -46,6 +46,7 @@ public class MatchmakingServer : NetworkBehaviour
     [SerializeField] private GameObject aiShipPrefab;
     [SerializeField] private GameObject aiShootPrefab;
 
+
     #region Client set up
     public void AddPlayer(string name, ulong clientId, ulong playerObjectId)
     {

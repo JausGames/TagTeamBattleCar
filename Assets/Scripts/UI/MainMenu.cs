@@ -8,6 +8,7 @@ using Unity.Netcode.Transports.UNET;
 using Unity.Services.Lobbies;
 using Unity.Services.Lobbies.Models;
 using TMPro;
+using System.Threading.Tasks;
 //using ParrelSync;
 
 public class MainMenu : MonoBehaviour
@@ -65,6 +66,7 @@ public class MainMenu : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+
         unetTransform = GetComponent<UNetTransport>();
 
         NetworkManager.Singleton.OnServerStarted += HandleServerStarted;
@@ -81,18 +83,31 @@ public class MainMenu : MonoBehaviour
         ping = new Ping("127.0.0.1");
 
 
-/*#if UNITY_EDITOR
-        //Is this unity editor instance opening a clone project?
-        if (ClonesManager.IsClone())
-        {
-            string customArgument = ClonesManager.GetArgument();
-            inputName.text = customArgument;
-        }
-        else
-        {
-            inputName.text = "bogoss";
-        }
-#endif*/
+        /*#if UNITY_EDITOR
+            //Is this unity editor instance opening a clone project?
+            if (ClonesManager.IsClone())
+            {
+                string customArgument = ClonesManager.GetArgument();
+                inputName.text = customArgument;
+            }
+            else
+            {
+                inputName.text = "bogoss";
+            }
+        #endif*/
+    }
+
+    async void TryConnectToAgonesAsync()
+    {
+        var agones = GetComponent<Agones.AgonesSdk>();
+        bool ok = await agones.Connect();
+    }
+
+    async void IsAgonesServerReadyAsync()
+    {
+
+        var agones = GetComponent<Agones.AgonesSdk>(); 
+        bool ok = await agones.Ready();
     }
     private void OnDestroy()
     {
