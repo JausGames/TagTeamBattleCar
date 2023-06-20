@@ -1,0 +1,119 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!319 &31900000
+AvatarMask:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: AllBody
+  m_Mask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+  m_Elements:
+  - m_Path: 
+    m_Weight: 1
+  - m_Path: Horse
+    m_Weight: 0
+  - m_Path: Horse Rig
+    m_Weight: 1
+  - m_Path: Horse Rig/Root
+    m_Weight: 1
+  - m_Path: "Horse Rig/Root/DEF-\u017Cebra"
+    m_Weight: 1
+  - m_Path: "Horse Rig/Root/DEF-\u017Cebra/DEF-siodlo"
+    m_Weight: 1
+  - m_Path: "Horse Rig/Root/DEF-\u017Cebra/DEF-siodlo/DEF-zad"
+    m_Weight: 1
+  - m_Path: "Horse Rig/Root/DEF-\u017Cebra/DEF-siodlo/DEF-zad/DEF-ogon.001"
+    m_Weight: 1
+  - m_Path: "Horse Rig/Root/DEF-\u017Cebra/DEF-siodlo/DEF-zad/DEF-ogon.001/DEF-ogon.002"
+    m_Weight: 1
+  - m_Path: "Horse Rig/Root/DEF-\u017Cebra/DEF-siodlo/DEF-zad/DEF-ogon.001/DEF-ogon.002/DEF-ogon.002_end"
+    m_Weight: 1
+  - m_Path: "Horse Rig/Root/DEF-\u017Cebra/DEF-siodlo/DEF-zad/DEF-ogon.001/DEF-ogon.002/DEF-ogon.002_end/DEF-ogon.002_end_end"
+    m_Weight: 1
+  - m_Path: "Horse Rig/Root/DEF-\u017Cebra/DEF-siodlo/DEF-zad/DEF-udowa.L"
+    m_Weight: 1
+  - m_Path: "Horse Rig/Root/DEF-\u017Cebra/DEF-siodlo/DEF-zad/DEF-udowa.L/DEF-piszczelowa.L"
+    m_Weight: 1
+  - m_Path: "Horse Rig/Root/DEF-\u017Cebra/DEF-siodlo/DEF-zad/DEF-udowa.L/DEF-piszczelowa.L/Bones"
+    m_Weight: 1
+  - m_Path: "Horse Rig/Root/DEF-\u017Cebra/DEF-siodlo/DEF-zad/DEF-udowa.L/DEF-piszczelowa.L/Bones/DEF-t-palec.001.L"
+    m_Weight: 1
+  - m_Path: "Horse Rig/Root/DEF-\u017Cebra/DEF-siodlo/DEF-zad/DEF-udowa.L/DEF-piszczelowa.L/Bones/DEF-t-palec.001.L/DEF-t-palec.002.L"
+    m_Weight: 1
+  - m_Path: "Horse Rig/Root/DEF-\u017Cebra/DEF-siodlo/DEF-zad/DEF-udowa.L/DEF-piszczelowa.L/Bones/DEF-t-palec.001.L/DEF-t-palec.002.L/DEF-t-palec.002.L_end"
+    m_Weight: 1
+  - m_Path: "Horse Rig/Root/DEF-\u017Cebra/DEF-siodlo/DEF-zad/DEF-udowa.L/DEF-piszczelowa.L/Bones/DEF-t-palec.001.L/DEF-t-palec.002.L/DEF-t-palec.002.L_end/DEF-t-palec.002.L_end_end"
+    m_Weight: 1
+  - m_Path: "Horse Rig/Root/DEF-\u017Cebra/DEF-siodlo/DEF-zad/DEF-udowa.R"
+    m_Weight: 1
+  - m_Path: "Horse Rig/Root/DEF-\u017Cebra/DEF-siodlo/DEF-zad/DEF-udowa.R/DEF-piszczelowa.R"
+    m_Weight: 1
+  - m_Path: "Horse Rig/Root/DEF-\u017Cebra/DEF-siodlo/DEF-zad/DEF-udowa.R/DEF-piszczelowa.R/DEF-t-\u015Br\xF3dstopia.R"
+    m_Weight: 1
+  - m_Path: "Horse Rig/Root/DEF-\u017Cebra/DEF-siodlo/DEF-zad/DEF-udowa.R/DEF-piszczelowa.R/DEF-t-\u015Br\xF3dstopia.R/DEF-t-palec.001.R"
+    m_Weight: 1
+  - m_Path: "Horse Rig/Root/DEF-\u017Cebra/DEF-siodlo/DEF-zad/DEF-udowa.R/DEF-piszczelowa.R/DEF-t-\u015Br\xF3dstopia.R/DEF-t-palec.001.R/DEF-t-palec.002.R"
+    m_Weight: 1
+  - m_Path: "Horse Rig/Root/DEF-\u017Cebra/DEF-siodlo/DEF-zad/DEF-udowa.R/DEF-piszczelowa.R/DEF-t-\u015Br\xF3dstopia.R/DEF-t-palec.001.R/DEF-t-palec.002.R/DEF-t-palec.002.R_end"
+    m_Weight: 1
+  - m_Path: "Horse Rig/Root/DEF-\u017Cebra/DEF-siodlo/DEF-zad/DEF-udowa.R/DEF-piszczelowa.R/DEF-t-\u015Br\xF3dstopia.R/DEF-t-palec.001.R/DEF-t-palec.002.R/DEF-t-palec.002.R_end/DEF-t-palec.002.R_end_end"
+    m_Weight: 1
+  - m_Path: "Horse Rig/Root/DEF-\u017Cebra/DEF-szyja.001"
+    m_Weight: 1
+  - m_Path: "Horse Rig/Root/DEF-\u017Cebra/DEF-szyja.001/DEF-szyja.002"
+    m_Weight: 1
+  - m_Path: "Horse Rig/Root/DEF-\u017Cebra/DEF-szyja.001/DEF-szyja.002/DEF-szyja.004"
+    m_Weight: 1
+  - m_Path: "Horse Rig/Root/DEF-\u017Cebra/DEF-szyja.001/DEF-szyja.002/DEF-szyja.004/DEF-szyja.003"
+    m_Weight: 1
+  - m_Path: "Horse Rig/Root/DEF-\u017Cebra/DEF-szyja.001/DEF-szyja.002/DEF-szyja.004/DEF-szyja.003/DEF-\u0142eb"
+    m_Weight: 1
+  - m_Path: "Horse Rig/Root/DEF-\u017Cebra/DEF-szyja.001/DEF-szyja.002/DEF-szyja.004/DEF-szyja.003/DEF-\u0142eb/DEF-\u0142eb_end"
+    m_Weight: 1
+  - m_Path: "Horse Rig/Root/DEF-\u017Cebra/DEF-szyja.001/DEF-szyja.002/DEF-szyja.004/DEF-szyja.003/DEF-\u0142eb/DEF-\u0142eb_end/DEF-\u0142eb_end_end"
+    m_Weight: 1
+  - m_Path: "Horse Rig/Root/DEF-\u017Cebra/def-\u0142opatka.L"
+    m_Weight: 1
+  - m_Path: "Horse Rig/Root/DEF-\u017Cebra/def-\u0142opatka.L/def-biceps.L"
+    m_Weight: 1
+  - m_Path: "Horse Rig/Root/DEF-\u017Cebra/def-\u0142opatka.L/def-biceps.L/def-biceps.L_end"
+    m_Weight: 1
+  - m_Path: "Horse Rig/Root/DEF-\u017Cebra/def-\u0142opatka.L/def-biceps.L/def-biceps.L_end/def-biceps.L_end_end"
+    m_Weight: 1
+  - m_Path: "Horse Rig/Root/DEF-\u017Cebra/def-\u0142opatka.L/DEF-ramienna.L"
+    m_Weight: 1
+  - m_Path: "Horse Rig/Root/DEF-\u017Cebra/def-\u0142opatka.L/DEF-ramienna.L/DEF-promieniowa.L"
+    m_Weight: 1
+  - m_Path: "Horse Rig/Root/DEF-\u017Cebra/def-\u0142opatka.L/DEF-ramienna.L/DEF-promieniowa.L/DEF-nadp\u0119cinowa.L"
+    m_Weight: 1
+  - m_Path: "Horse Rig/Root/DEF-\u017Cebra/def-\u0142opatka.L/DEF-ramienna.L/DEF-promieniowa.L/DEF-nadp\u0119cinowa.L/DEF-p\u0119cinowa.L"
+    m_Weight: 1
+  - m_Path: "Horse Rig/Root/DEF-\u017Cebra/def-\u0142opatka.L/DEF-ramienna.L/DEF-promieniowa.L/DEF-nadp\u0119cinowa.L/DEF-p\u0119cinowa.L/DEF-kopytoprzod.L"
+    m_Weight: 1
+  - m_Path: "Horse Rig/Root/DEF-\u017Cebra/def-\u0142opatka.L/DEF-ramienna.L/DEF-promieniowa.L/DEF-nadp\u0119cinowa.L/DEF-p\u0119cinowa.L/DEF-kopytoprzod.L/DEF-kopytoprzod.L_end"
+    m_Weight: 1
+  - m_Path: "Horse Rig/Root/DEF-\u017Cebra/def-\u0142opatka.L/DEF-ramienna.L/DEF-promieniowa.L/DEF-nadp\u0119cinowa.L/DEF-p\u0119cinowa.L/DEF-kopytoprzod.L/DEF-kopytoprzod.L_end/DEF-kopytoprzod.L_end_end"
+    m_Weight: 1
+  - m_Path: "Horse Rig/Root/DEF-\u017Cebra/def-\u0142opatka.R"
+    m_Weight: 1
+  - m_Path: "Horse Rig/Root/DEF-\u017Cebra/def-\u0142opatka.R/def-biceps.R"
+    m_Weight: 1
+  - m_Path: "Horse Rig/Root/DEF-\u017Cebra/def-\u0142opatka.R/def-biceps.R/def-biceps.R_end"
+    m_Weight: 1
+  - m_Path: "Horse Rig/Root/DEF-\u017Cebra/def-\u0142opatka.R/def-biceps.R/def-biceps.R_end/def-biceps.R_end_end"
+    m_Weight: 1
+  - m_Path: "Horse Rig/Root/DEF-\u017Cebra/def-\u0142opatka.R/DEF-ramienna.R"
+    m_Weight: 1
+  - m_Path: "Horse Rig/Root/DEF-\u017Cebra/def-\u0142opatka.R/DEF-ramienna.R/DEF-promieniowa.R"
+    m_Weight: 1
+  - m_Path: "Horse Rig/Root/DEF-\u017Cebra/def-\u0142opatka.R/DEF-ramienna.R/DEF-promieniowa.R/DEF-nadp\u0119cinowa.R"
+    m_Weight: 1
+  - m_Path: "Horse Rig/Root/DEF-\u017Cebra/def-\u0142opatka.R/DEF-ramienna.R/DEF-promieniowa.R/DEF-nadp\u0119cinowa.R/DEF-p\u0119cinowa.R"
+    m_Weight: 1
+  - m_Path: "Horse Rig/Root/DEF-\u017Cebra/def-\u0142opatka.R/DEF-ramienna.R/DEF-promieniowa.R/DEF-nadp\u0119cinowa.R/DEF-p\u0119cinowa.R/DEF-kopytoprzod.R"
+    m_Weight: 1
+  - m_Path: "Horse Rig/Root/DEF-\u017Cebra/def-\u0142opatka.R/DEF-ramienna.R/DEF-promieniowa.R/DEF-nadp\u0119cinowa.R/DEF-p\u0119cinowa.R/DEF-kopytoprzod.R/DEF-kopytoprzod.R_end"
+    m_Weight: 1
+  - m_Path: "Horse Rig/Root/DEF-\u017Cebra/def-\u0142opatka.R/DEF-ramienna.R/DEF-promieniowa.R/DEF-nadp\u0119cinowa.R/DEF-p\u0119cinowa.R/DEF-kopytoprzod.R/DEF-kopytoprzod.R_end/DEF-kopytoprzod.R_end_end"
+    m_Weight: 1

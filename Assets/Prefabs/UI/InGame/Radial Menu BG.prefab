@@ -471,7 +471,6 @@ MonoBehaviour:
   - {fileID: 11400000, guid: d4290715d875ccd4ca5690eb681d54b5, type: 2}
   - {fileID: 11400000, guid: d69c31f74205ce442bf7e6bb8d968a5f, type: 2}
   - {fileID: 11400000, guid: ee75f70a31ab1834dbf650a75ec63e7d, type: 2}
-  - {fileID: 11400000, guid: 7e23a029fde58af41902cc60aa0ae62d, type: 2}
   pickedItem:
     name: 
   divider: {fileID: 5162915948191520696, guid: 9bac94427c6dc2c49825601338e3a0d8, type: 3}

@@ -112,6 +112,16 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6518450502505343189, guid: 59db258f9a07a6a4fa069ce800ad13fd,
+        type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 6518450502505343189, guid: 59db258f9a07a6a4fa069ce800ad13fd,
+        type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 20
+      objectReference: {fileID: 0}
     - target: {fileID: 7703325547458210297, guid: 59db258f9a07a6a4fa069ce800ad13fd,
         type: 3}
       propertyPath: m_Enabled
@@ -120,6 +130,11 @@ PrefabInstance:
     - target: {fileID: 8080546214950268921, guid: 59db258f9a07a6a4fa069ce800ad13fd,
         type: 3}
       propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8494546482941859864, guid: 59db258f9a07a6a4fa069ce800ad13fd,
+        type: 3}
+      propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents:

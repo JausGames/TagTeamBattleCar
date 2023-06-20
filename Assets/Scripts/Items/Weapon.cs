@@ -16,7 +16,11 @@ abstract public class Weapon : Item
     [SerializeField] private int remainingAmmo;
 
     [Header("Components")]
+    [SerializeField] public string layerName;
     [SerializeField] public Transform canonEnd;
+    [SerializeField] public AudioClip clipFire;
+    [SerializeField] public AudioClip clipReload;
+    [SerializeField] public AudioSource source;
     [SerializeField] public List<ParticleSystem> shootParticles;
     [SerializeField] public ParticleSystem bloodParticles;
     [SerializeField] public ParticleSystem woodParticles;
@@ -32,7 +36,7 @@ abstract public class Weapon : Item
 
     public int RemainingAmmo { get => remainingAmmo; set => remainingAmmo = value; }
 
-    public override bool Use(ShooterController owner)
+    public override bool Use(ShooterController owner, bool use)
     {
         Debug.Log("Weapon, Use : Time = " + Time.time);
         Debug.Log("Weapon, Use : nextShot = " + nextShot);
@@ -44,16 +48,22 @@ abstract public class Weapon : Item
         nextShot = Time.time + coolDown;
 
         owner.CameraFollow.RotationOffset = rndRecoil;
-        //VFX
-        owner.ShootBullet();
         return true;
     }
+
     private void Awake()
     {
         for(int i = 0; i < 9; i++)
         {
             Debug.Log("Awake, Weapon : layermask = " + LayerMask.LayerToName(i));
         }
+        if(source == null)
+            source = gameObject.AddComponent<AudioSource>();
+
+        source.minDistance = 5f;
+        source.maxDistance = 200f;
+        source.spatialBlend = 1f;
+        source.volume = .5f;
         ResetAmmo();
     }
     internal void ResetAmmo()
@@ -67,6 +77,7 @@ abstract public class Weapon : Item
     {
         if (remainingAmmo == 0) return;
         var ammoUsed = Mathf.Min(magazineCapacity - ammo, remainingAmmo);
+        source.PlayOneShot(clipReload);
         Debug.Log("Weapon, Reload : ammoUsed = " + ammoUsed);
         remainingAmmo -= ammoUsed;
         ammo += ammoUsed;
@@ -75,6 +86,10 @@ abstract public class Weapon : Item
     protected RaycastHit[] ShootRaycast(Camera camera, LayerMask mask)
     {
         return Physics.RaycastAll(camera.ScreenPointToRay(new Vector3(Screen.width / 2f, Screen.height / 2f, 0), Camera.MonoOrStereoscopicEye.Mono), Mathf.Infinity, mask);
+    }
+    protected RaycastHit[] ShootRaycastFromGun(LayerMask mask, Vector3 origin, Vector3 direction)
+    {
+        return Physics.RaycastAll(new Ray(origin, direction), Mathf.Infinity, mask);
     }
     protected void FindRayVictims(ShooterController owner, RaycastHit[] hits)
     {

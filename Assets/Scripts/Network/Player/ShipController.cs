@@ -34,6 +34,7 @@ namespace ClientAutoritative
         [SerializeField] Seat[] seats;
         [SerializeField] CarSoundManager soundManager;
         [SerializeField] List<Wheel> wheels;
+        [SerializeField] List<ConfigurableJoint> joints;
         [SerializeField] GameObject ui;
         [SerializeField] AudioListener audioListener;
         [SerializeField] private Transform lookAt;
@@ -156,25 +157,41 @@ namespace ClientAutoritative
             ForceForwardDirection(parkingBreaking.Value, localVelocity);
             if (resetSteer) ResetSteeringWheel(localAngularVelocity);
 
+            foreach(var joint in joints)
+            {
+                var drive = new JointDrive();
+                drive.positionDamper = joint.angularYZDrive.positionDamper;
+                drive.maximumForce = joint.angularYZDrive.maximumForce;
+                drive.mode = joint.angularYZDrive.mode;
+                drive.positionDamper = joint.angularYZDrive.positionDamper;
+
+                if((localVelocity.y / carSettings.maxSpeed) != carSettings.maxSpeed)
+                    drive.positionSpring = 20f + (1f - carSettings.accelerationCurve.Evaluate(localVelocity.z / carSettings.maxSpeed))  * 280f;
+
+                joint.angularYZDrive = drive;
+            }
+
+
+
             //Effects here
-            PlayShipSvfxServerRpc(Mathf.Abs(localVelocity.z), torqueApply.Value);
+            PlayShipSvfxServerRpc(Mathf.Abs(localVelocity.z), Mathf.Abs(localVelocity.x), torqueApply.Value, rotation.Value);
             //Debug.Log("ShipController, VFXisplayed client ? " + (torqueApply.Value > 0));
 
         }
 
         [ServerRpc]
-        void PlayShipSvfxServerRpc(float speed, float torque)
+        void PlayShipSvfxServerRpc(float speed, float speedX, float torque, float inputX)
         {
-            PlayShipSvfxClientRpc(speed, torque);
+            PlayShipSvfxClientRpc(speed, speedX, torque, inputX);
         }
 
         [ClientRpc]
-        void PlayShipSvfxClientRpc(float speed, float torque)
+        void PlayShipSvfxClientRpc(float speed, float speedX, float torque, float inputX)
         {
             PlaySpeedVfx(speed);
             SetMotorPitch(speed > .5f ? speed : 0f, torque);
             //if (speed > 0.5f)
-            carAnimator.SetSpeed(speed > .5f ? speed : 0f);
+            carAnimator.SetSpeed(speed > .5f ? speed : 0f, speedX, inputX);
         }
 
         #endregion

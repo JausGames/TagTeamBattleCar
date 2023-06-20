@@ -42,8 +42,9 @@ public class CameraFollow : MonoBehaviour
     }
 
     public Camera Camera { get => camera; set => camera = value; }
+    public Quaternion DesiredRotation { get => desiredRotation; set => desiredRotation = value; }
 
-    public void RotateCamera(Vector3 look, float cameraSpeed, Transform seatTransform, out float angle, out Vector3 target)
+    public void RotateCamera(Vector3 look, float cameraSpeed, Transform seatTransform, out float rot, out Vector3 target, out float angle)
     {
 
         var eulerRot = desiredRotation.eulerAngles + new Vector3(look.normalized.y * Time.deltaTime * cameraSpeed * look.magnitude, look.normalized.x * Time.deltaTime * cameraSpeed * look.magnitude, 0f);
@@ -58,6 +59,7 @@ public class CameraFollow : MonoBehaviour
         var seatForward = (seatTransform.forward.x * Vector2.right + seatTransform.forward.z * Vector2.up).normalized;
 
         angle = Vector2.SignedAngle(seatForward, forward);
+        rot = Camera.transform.eulerAngles.y;
         //target = transform.position + camera.transform.forward * 10f;
         target = this.target.position;
     }

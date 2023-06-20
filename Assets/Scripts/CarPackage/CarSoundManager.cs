@@ -4,33 +4,51 @@ using UnityEngine;
 
 public class CarSoundManager : MonoBehaviour
 {
-    [SerializeField] AudioSource motorAudioSource;
-    [SerializeField] AnimationCurve speedToPitchCurve;
-    [SerializeField] float pitchClamp = 20f;
-    float lastSpeed;
-    [SerializeField] float shutMotorClamp = 2f;
+
+    [SerializeField] List<Sound> sounds;
+    [SerializeField] List<AudioSource> sources;
+
     float maxSpeed = 60f;
-    float currentPitch = 1f;
-    float maxVolume;
 
     private void Awake()
     {
-        maxVolume = motorAudioSource.volume;
+        for(int i = 0; i < sounds.Count; i++)
+        {
+            sources.Add(gameObject.AddComponent<AudioSource>());
+            sources[i].Stop();
+            sources[i].loop = true;
+            sources[i].clip = sounds[i].Clip;
+            sources[i].minDistance = 8f;
+            sources[i].maxDistance = 100f;
+            sources[i].spatialBlend = 1f;
+            sources[i].Play();
+        }
     }
     public void SetCarEnginePitch(float speed, float torque)
     {
-
-        currentPitch = Mathf.MoveTowards(currentPitch, speedToPitchCurve.Evaluate(speed / maxSpeed), pitchClamp * Time.deltaTime);
-
-        if (torque == 0f) motorAudioSource.volume = Mathf.MoveTowards(motorAudioSource.volume, 0f, shutMotorClamp * Time.deltaTime);
-        else if (speed > 0f) motorAudioSource.volume = Mathf.MoveTowards(motorAudioSource.volume, maxVolume, shutMotorClamp * Time.deltaTime);
-
-
-        motorAudioSource.pitch = currentPitch;
-        lastSpeed = speed;
+        for (int i = 0; i < sounds.Count; i++)
+        {
+            sources[i].pitch = Mathf.MoveTowards(sources[i].pitch, sounds[i].SpeedToPitchCurve.Evaluate(speed / maxSpeed), sounds[i].ClampSpeed * Time.deltaTime);
+            sources[i].volume = Mathf.MoveTowards(sources[i].volume, sounds[i].SpeedToVolumeCurve.Evaluate(speed / maxSpeed), sounds[i].ClampSpeed * Time.deltaTime);
+        }
     }
     public void SetMaxSpeed(float maxSpeed)
     {
         this.maxSpeed = maxSpeed;
+    }
+    [System.Serializable]
+    class Sound
+    {
+        [SerializeField] AudioClip clip;
+        [SerializeField] AnimationCurve speedToPitchCurve;
+        [SerializeField] AnimationCurve speedToVolumeCurve;
+        [SerializeField] float maxVolume;
+        [SerializeField] float clampSpeed;
+
+        public AudioClip Clip { get => clip; set => clip = value; }
+        public float MaxVolume { get => maxVolume; set => maxVolume = value; }
+        public AnimationCurve SpeedToPitchCurve { get => speedToPitchCurve; set => speedToPitchCurve = value; }
+        public AnimationCurve SpeedToVolumeCurve { get => speedToVolumeCurve; set => speedToVolumeCurve = value; }
+        public float ClampSpeed { get => clampSpeed; set => clampSpeed = value; }
     }
 }

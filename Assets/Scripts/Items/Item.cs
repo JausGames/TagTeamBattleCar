@@ -9,5 +9,5 @@ abstract public class Item : MonoBehaviour
     public GameObject Prefab { get => prefab; set => prefab = value; }
     public int Id { get => id; set => id = value; }
 
-    public abstract bool Use(ShooterController owner);
+    public abstract bool Use(ShooterController owner, bool use);
 }

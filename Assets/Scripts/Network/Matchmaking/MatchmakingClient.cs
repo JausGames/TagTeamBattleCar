@@ -12,7 +12,7 @@ public class MatchmakingClient : NetworkBehaviour
     public PlayerData Data { get => data; set => data = value; }
     public List<ulong> TeammateList { get => teammateList; set => teammateList = value; }
 
-    List<ulong> teammateList = new List<ulong>();
+    [SerializeField] List<ulong> teammateList = new List<ulong>();
     public bool IsClientHost { get => IsHost; }
 
     #region Start & Set up

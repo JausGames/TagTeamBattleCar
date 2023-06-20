@@ -191,21 +191,7 @@ public class MatchmakingServer : NetworkBehaviour
             Debug.Log("OnlineLobbyController, StartGame : IsListening = " + NetworkManager.Singleton.IsListening);
             yield return new WaitForEndOfFrame();
         }
-        /*for (int i = 0; i < gameQueue.Count; i++)
-        {
-            GameObject teamGo = Instantiate(teamPrefab, Vector3.zero, Quaternion.identity);
-            teamGo.GetComponent<NetworkObject>().SpawnWithOwnership(gameQueue[i], false);
-            var team = teamGo.GetComponent<Team>();
-            //team.name = teamName;
-            var playerList = new List<ulong>();
 
-            GameObject driverGo = Instantiate(shipPrefab, Vector3.zero, Quaternion.identity);
-            driverGo.GetComponent<NetworkObject>().SpawnAsPlayerObject(gameQueue[i], false);
-            driverGo.transform.parent = teamGo.transform;
-            var ship = driverGo.GetComponentInChildren<ClientAutoritative.ShipController>();
-            team.AddPlayer(ship.GetComponentInParent<Player>());
-            playerList.Add(driverGo.GetComponent<NetworkObject>().NetworkObjectId);
-        }*/
 
         for (int i = 0; i < teams.Count; i++)
         {
@@ -257,9 +243,9 @@ public class MatchmakingServer : NetworkBehaviour
         driverAiGo.GetComponent<NetworkObject>().SpawnWithOwnership(OwnerClientId, true);
         driverAiGo.transform.parent = teamGo.transform;
         var shipAi = driverAiGo.GetComponentInChildren<ClientAutoritative.ShipController>();
-        //team.AddPlayer(shipAi.GetComponent<Player>());
+        team.AddPlayer(shipAi.GetComponentInParent<Player>());
         //SubmitAddPlayerToTeam();
-        //playerList.Add(driverAiGo.GetComponent<NetworkObject>().NetworkObjectId);
+        playerAiList.Add(driverAiGo.GetComponent<NetworkObject>().NetworkObjectId);
 
         for (int i = 0; i < 2; i++)
         {
@@ -271,16 +257,17 @@ public class MatchmakingServer : NetworkBehaviour
             shooter.Seat = shipAi.Seats[i];
             shooter.Ship = shipAi;
             shooter.FindSeatClientRpc(driverAiGo.GetComponent<NetworkObject>().NetworkObjectId, i);
-            //team.AddPlayer(shooter.GetComponent<Player>());
-            //playerList.Add(shooterGo.GetComponent<NetworkObject>().NetworkObjectId);
+            team.AddPlayer(shooter.GetComponent<Player>());
+            playerAiList.Add(shooterGo.GetComponent<NetworkObject>().NetworkObjectId);
 
         }
+        SubmitCreateTeamServerRpc(teamGo.GetComponent<NetworkObject>().NetworkObjectId, playerAiList.ToArray());
     }
 
     [ServerRpc]
     private void SubmitCreateTeamServerRpc(ulong networkObjectId, ulong[] playersObjectId)
     {
-        if (!IsHost) AddPlayersToTeam(networkObjectId, playersObjectId);
+        //if (!IsHost) AddPlayersToTeam(networkObjectId, playersObjectId);
         SetUpTeamClientRpc(networkObjectId, playersObjectId);
         var team = GetNetworkObject(networkObjectId).GetComponent<Team>();
         team.Credits.Value = GameSettings.startingCredits;
@@ -289,7 +276,8 @@ public class MatchmakingServer : NetworkBehaviour
     [ClientRpc]
     private void SetUpTeamClientRpc(ulong networkObjectId, ulong[] playersObjectId)
     {
-        AddPlayersToTeam(networkObjectId, playersObjectId);
+        if(!IsHost)
+            AddPlayersToTeam(networkObjectId, playersObjectId);
     }
 
     private Team AddPlayersToTeam(ulong networkObjectId, ulong[] playersObjectId)

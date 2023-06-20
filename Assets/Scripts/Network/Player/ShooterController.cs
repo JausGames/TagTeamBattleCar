@@ -22,12 +22,14 @@ public class ShooterController : PlayerController
     [Space]
     [Header("Components")]
     private LayerMask hitablemask;
+    [SerializeField] AudioSource audioSource;
     [SerializeField] Player player;
     [SerializeField] Transform cameraContainer;
     [SerializeField] ShooterAnimatorController animatorController;
     [SerializeField] float cameraSpeed;
     [SerializeField] RadialMenuController weaponWheel;
     [SerializeField] RadialMenuController toolWheel;
+    [SerializeField] private Collider collider;
     [SerializeField] private CameraFollow cameraFollow;
     [SerializeField] private ClientAutoritative.ShipController ship;
 
@@ -40,6 +42,7 @@ public class ShooterController : PlayerController
     private bool reloading;
     [SerializeField] private AimIK ik;
     private bool alive = true;
+    private float angle;
 
     public Transform CameraContainer { get => cameraContainer; set => cameraContainer = value; }
 
@@ -150,17 +153,24 @@ public class ShooterController : PlayerController
         if (Seat)
         {
             transform.position = Seat.transform.position;
-            transform.rotation = Seat.transform.parent.rotation * rotationOffset;
+            //transform.rotation = Seat.transform.parent.rotation * rotationOffset;
         }
         if (IsOwner && IsLocalPlayer)
         {
+            float rot;
+            Vector3 target;
+            Vector3 input = IsOnMenu ? Vector3.zero : look.Value;
 
-            if (IsOnMenu) return;
-            cameraFollow.RotateCamera(look.Value, cameraSpeed, Seat.transform, out float angle, out Vector3 target);
+            cameraFollow.RotateCamera(input, cameraSpeed, Seat.transform, out rot, out target, out float angle);
 
-            animatorController.Angle = angle;
+            float localAngleDelta = (angle - this.angle) * Time.deltaTime * 40f;
+            Debug.Log("ShooterController, LateUpdate : localAngleDelta = " + localAngleDelta);
 
-            PlayAnimationServerRpc(angle, target);
+            transform.eulerAngles = new Vector3(transform.eulerAngles.x, rot, transform.eulerAngles.z);
+            animatorController.DirX = input.x;
+            PlayAnimationServerRpc(transform.rotation, target, input.x + localAngleDelta);
+            this.angle = angle;
+
         }
     }
 
@@ -200,6 +210,12 @@ public class ShooterController : PlayerController
         if (heldItem is Weapon)
         {
             ((Weapon)heldItem).shootParticles[0].transform.parent.parent = seat.transform;
+
+            animatorController.SetLayer(animatorController.Animator.Animator.GetLayerIndex(((Weapon)heldItem).layerName));
+        }
+        else
+        {
+            animatorController.SetLayer(0);
         }
     }
 
@@ -295,18 +311,21 @@ public class ShooterController : PlayerController
     }
 
     [ServerRpc]
-    void PlayAnimationServerRpc(float angle, Vector3 target)
+    void PlayAnimationServerRpc(Quaternion rotation, Vector3 target, float dirX)
     {
-        PlayAnimationClientRpc(angle, target);
+        PlayAnimationClientRpc(rotation, target, dirX);
     }
 
     [ClientRpc]
-    void PlayAnimationClientRpc(float angle, Vector3 target)
+    void PlayAnimationClientRpc(Quaternion rotation, Vector3 target, float dirX)
     {
         if(!IsOwner)
         {
-            animatorController.Angle = angle;
+            animatorController.DirX = dirX;
+            transform.rotation = rotation;
             this.target.position = target;
+            //this.target.position = target;
+            //transform.rotation = Quaternion.Euler(transform.eulerAngles.x, angle, transform.eulerAngles.z);
         }
         //animatorController.Direction = (x * Vector2.right + y * Vector2.up).normalized;
     }
@@ -336,18 +355,40 @@ public class ShooterController : PlayerController
     }
     internal void Shoot(bool context)
     {
-        if (!IsOwner || !context || IsOnMenu || heldItem == null) return;
+        if (!IsOwner || IsOnMenu || heldItem == null) return;
 
-        heldItem.Use(this);
+        heldItem.Use(this, context);
     }
 
     internal void ShootBullet()
     {
+        animatorController.PlayFiring();
         foreach (var prtcl in ((Weapon)heldItem).shootParticles)
         {
-            prtcl.Play();
+            ((Weapon)heldItem).source.PlayOneShot(((Weapon)heldItem).clipFire);
+            var particles = Instantiate(prtcl, prtcl.transform.position, prtcl.transform.rotation, prtcl.transform.parent);
+            particles.Play();
+            Destroy(particles.gameObject, 5f);
         }
         SubmitShootServerRpc(((Weapon)heldItem).canonEnd.position, ((Weapon)heldItem).canonEnd.rotation);
+    }
+    internal void ShootBullet(Vector3 passThroughPoint)
+    {
+        animatorController.PlayFiring();
+        foreach (var prtcl in ((Weapon)heldItem).shootParticles)
+        {
+            ((Weapon)heldItem).source.PlayOneShot(((Weapon)heldItem).clipFire);
+            var particles = Instantiate(prtcl, prtcl.transform.position, prtcl.transform.rotation, prtcl.transform.parent);
+            particles.transform.LookAt(passThroughPoint);
+            particles.Play();
+            Destroy(particles.gameObject, 5f);
+        }
+        SubmitShootServerRpc(((Weapon)heldItem).canonEnd.position, ((Weapon)heldItem).canonEnd.rotation, passThroughPoint);
+    }
+    [ServerRpc]
+    public void SubmitShootServerRpc(Vector3 position, Quaternion rotation, Vector3 passThroughPoint)
+    {
+        PlayShootParticleClientRpc(position, rotation, passThroughPoint);
     }
     [ServerRpc]
     public void SubmitShootServerRpc(Vector3 position, Quaternion rotation)
@@ -356,14 +397,27 @@ public class ShooterController : PlayerController
     }
 
     [ClientRpc]
+    void PlayShootParticleClientRpc(Vector3 position, Quaternion rotation, Vector3 passThroughPoint)
+    {
+        if (IsOwner) return;
+        animatorController.PlayFiring();
+        foreach (var prtcl in ((Weapon)heldItem).shootParticles)
+        {
+            var particles = Instantiate(prtcl, position, rotation, prtcl.transform.parent);
+            particles.transform.LookAt(passThroughPoint);
+            particles.Play();
+        }
+    }
+    [ClientRpc]
     void PlayShootParticleClientRpc(Vector3 position, Quaternion rotation)
     {
         if (IsOwner) return;
+        animatorController.PlayFiring();
         foreach (var prtcl in ((Weapon)heldItem).shootParticles)
         {
-            prtcl.transform.position = position;
-            prtcl.transform.rotation = rotation;
-            prtcl.Play();
+            ((Weapon)heldItem).source.PlayOneShot(((Weapon)heldItem).clipFire);
+            var particles = Instantiate(prtcl, position, rotation, prtcl.transform.parent);
+            particles.Play();
         }
     }
 
@@ -394,7 +448,10 @@ public class ShooterController : PlayerController
     {
         if (!alive) return;
         alive = false;
+        ik.enabled = false;
         animatorController.Die();
+        collider.enabled = false;
+        
     }
     public override void Respawn()
     {
@@ -407,11 +464,15 @@ public class ShooterController : PlayerController
     {
         player.Health.Value = player.MaxHealth;
         alive = true;
+        ik.enabled = true;
+        collider.enabled = true;
         SetAliveClientRpc();
     }
     [ClientRpc]
     private void SetAliveClientRpc()
     {
+        collider.enabled = true;
         alive = true;
+        ik.enabled = true;
     }
 }

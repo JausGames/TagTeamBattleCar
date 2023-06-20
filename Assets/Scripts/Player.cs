@@ -20,6 +20,7 @@ public class Player : NetworkBehaviour
     [Space]
     [Header("Component")]
     [SerializeField] HealthBar healthbar;
+    [SerializeField] List<HealthBar> matehealthbars;
     [SerializeField] CreditsUi creditsUi;
     [SerializeField] Team team;
     [SerializeField] PlayerController controller;
@@ -32,6 +33,8 @@ public class Player : NetworkBehaviour
     public UnityEvent<ulong> DieCreditsEarnEvent { get => dieCreditsEarnEvent; set => dieCreditsEarnEvent = value; }
     public PlayerController Controller { get => controller; set => controller = value; }
 
+
+
     public void Start()
     {
         if (IsServer)
@@ -42,8 +45,24 @@ public class Player : NetworkBehaviour
         {
             healthbar.SetMaxHealth(maxHealth);
             healthbar.SetHealth(health.Value);
+
+
             health.OnValueChanged += UpdateHealthBar;
+
+
+            var threated = 0;
+            for (int i = 0; i < 3; i++)
+            {
+                if (Team.Players[i] && Team.Players[i] != this)
+                {
+                    threated++;
+                    Team.Players[i].Health.OnValueChanged += threated == 1 ? UpdateMateHealthBar1 : UpdateMateHealthBar2;
+                    matehealthbars[threated - 1].SetMaxHealth(Team.Players[i].MaxHealth);
+                    matehealthbars[threated - 1].SetHealth(Team.Players[i].MaxHealth);
+                }
+            }
         }
+
     }
 
     internal void UpdateCreditsUi(float previousValue, float newValue)
@@ -81,6 +100,14 @@ public class Player : NetworkBehaviour
     private void UpdateHealthBar(float previous, float current)
     {
         healthbar.SetHealth(current);
+    }
+    private void UpdateMateHealthBar1(float previous, float current)
+    {
+        matehealthbars[0].SetHealth(current);
+    }
+    private void UpdateMateHealthBar2(float previous, float current)
+    {
+        matehealthbars[1].SetHealth(current);
     }
 
     [ServerRpc]
