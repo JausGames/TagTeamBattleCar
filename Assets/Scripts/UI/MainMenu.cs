@@ -5,15 +5,7 @@ using Unity.Netcode;
 using UnityEngine.UI;
 using System.Text;
 using Unity.Netcode.Transports.UNET;
-<<<<<<< HEAD
 using ParrelSync;
-=======
-using Unity.Services.Lobbies;
-using Unity.Services.Lobbies.Models;
-using TMPro;
-using System.Threading.Tasks;
-//using ParrelSync;
->>>>>>> b4adfef1942d30819039acaca7d986f9e9dbe7c2
 
 public class MainMenu : MonoBehaviour
 {
@@ -86,9 +78,6 @@ public class MainMenu : MonoBehaviour
 
         ping = new Ping("127.0.0.1");
 
-
-<<<<<<< HEAD
-
 #if UNITY_EDITOR
         //Is this unity editor instance opening a clone project?
         if (ClonesManager.IsClone())
@@ -108,33 +97,6 @@ public class MainMenu : MonoBehaviour
 
 
 
-=======
-        /*#if UNITY_EDITOR
-            //Is this unity editor instance opening a clone project?
-            if (ClonesManager.IsClone())
-            {
-                string customArgument = ClonesManager.GetArgument();
-                inputName.text = customArgument;
-            }
-            else
-            {
-                inputName.text = "bogoss";
-            }
-        #endif*/
-    }
-
-    async void TryConnectToAgonesAsync()
-    {
-        var agones = GetComponent<Agones.AgonesSdk>();
-        bool ok = await agones.Connect();
-    }
-
-    async void IsAgonesServerReadyAsync()
-    {
-
-        var agones = GetComponent<Agones.AgonesSdk>(); 
-        bool ok = await agones.Ready();
->>>>>>> b4adfef1942d30819039acaca7d986f9e9dbe7c2
     }
     private void OnDestroy()
     {
