@@ -2,30 +2,25 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-abstract public class Weapon : Item
+public class RangeWeapon : Weapon
 {
     [Header("Stats")]
-    [SerializeField] protected float damage = 10f;
-    [SerializeField] protected float coolDown = .4f;
     [SerializeField] protected int maximumAmmo;
     [SerializeField] protected int magazineCapacity;
     [SerializeField] private Vector3 recoil = Vector3.right * -2f;
 
-    protected float nextShot;
     [SerializeField] protected int ammo;
     [SerializeField] private int remainingAmmo;
 
     [Header("Components")]
-    [SerializeField] public string layerName;
     [SerializeField] public Transform canonEnd;
     [SerializeField] public AudioClip clipFire;
     [SerializeField] public AudioClip clipReload;
     [SerializeField] public AudioSource source;
-    [SerializeField] public List<ParticleSystem> shootParticles;
     [SerializeField] public ParticleSystem bloodParticles;
     [SerializeField] public ParticleSystem woodParticles;
     [SerializeField] public ParticleSystem sandParticles;
-    protected Vector3 rndRecoil 
+    protected Vector3 rndRecoil
     {
         get
         {
@@ -38,9 +33,7 @@ abstract public class Weapon : Item
 
     public override bool Use(ShooterController owner, bool use)
     {
-        Debug.Log("Weapon, Use : Time = " + Time.time);
-        Debug.Log("Weapon, Use : nextShot = " + nextShot);
-        if (Time.time < nextShot || (ammo == 0 && remainingAmmo == 0)) return false; // check cooldown & ammunition
+        if (Time.time < nextShot || (ammo == 0 && remainingAmmo == 0)) return false;// check cooldown & ammunition
         if (ammo == 0 && remainingAmmo > 0) { owner.StartReloading(); return false; }  // Auto reload
 
         Debug.Log("Weapon, Use : shoting");
@@ -53,11 +46,11 @@ abstract public class Weapon : Item
 
     private void Awake()
     {
-        for(int i = 0; i < 9; i++)
+        for (int i = 0; i < 9; i++)
         {
             Debug.Log("Awake, Weapon : layermask = " + LayerMask.LayerToName(i));
         }
-        if(source == null)
+        if (source == null)
             source = gameObject.AddComponent<AudioSource>();
 
         source.minDistance = 5f;
@@ -108,12 +101,14 @@ abstract public class Weapon : Item
                 // Hit horse body
                 case 8:
                     var ennemy = hit.collider.GetComponent<Player>() ? hit.collider.GetComponent<Player>() : hit.collider.GetComponentInParent<Player>();
-                    //if (players.Contains(ennemy)) break;
-                    rays.Add(hit);
-                    players.Add(ennemy);
-                    layers.Add(hit.collider.gameObject.layer);
+                    if (!owner.Player.Team.Players.Contains(ennemy)) {
+
+                        rays.Add(hit);
+                        players.Add(ennemy);
+                        layers.Add(hit.collider.gameObject.layer);
+                    }
                     break;
-                default:
+                    default:
                     rays.Add(hit);
                     players.Add(null);
                     layers.Add(hit.collider.gameObject.layer);
@@ -135,11 +130,11 @@ abstract public class Weapon : Item
 
         if (closest != -1)
         {
-            if(players[closest])
+            if (players[closest])
             {
                 Debug.Log("ShooterController, Shoot : #" + owner.NetworkObjectId + " shot #" + players[closest].NetworkObjectId);
                 owner.GetHitCreditsEarnEvent.Invoke(Mathf.Min(players[closest].Health.Value, damage));
-                owner.SummitGetHitServerRpc(players[closest].NetworkObjectId, damage, owner.NetworkObjectId);
+                owner.SubmitGetHitServerRpc(players[closest].NetworkObjectId, damage, owner.NetworkObjectId);
                 Debug.DrawLine(canonEnd.position, hits[closest].point, Color.red);
             }
             var layer = layers[closest];
@@ -151,7 +146,7 @@ abstract public class Weapon : Item
 
     }
 
-    
+
     public void InstantiateContactParticles(int layer, Vector3 origin, Vector3 direction)
     {
         var prtcl = layer == 6 ? woodParticles : layer == 0 ? sandParticles : bloodParticles;

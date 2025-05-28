@@ -124,4 +124,26 @@ public class Player : NetworkBehaviour
         GetNetworkObject(playerid).gameObject.GetComponentInChildren<Player>().controller.Die();
     }
 
+    void SetLayerAllChildren(Transform root, int layer)
+    {
+        root.gameObject.layer = layer;
+        var children = root.GetComponentsInChildren<Transform>(includeInactive: true);
+        foreach (var child in children)
+        {
+            //            Debug.Log(child.name);
+            child.gameObject.layer = layer;
+        }
+    }
+
+    internal float GetStolen(float stolenAmount, ulong originId)
+    {
+        if (Team.ChangeCreditAmount(-stolenAmount))
+            return stolenAmount;
+        else
+        {
+            var allCredits = Team.Credits.Value;
+            Team.ChangeCreditAmount(Team.Credits.Value);
+            return allCredits;
+        }
+    }
 }

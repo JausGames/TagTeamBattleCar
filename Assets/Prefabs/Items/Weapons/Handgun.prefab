@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5947979214890729210}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: canonEnd
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -43,7 +43,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5010862076391226227}
   - component: {fileID: 4683018868977219439}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Handgun
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -78,23 +78,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1f202b2a15e5b9e42b80810fbe39698b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  layerName: Handgun
   damage: 10
   coolDown: 0.4
-  maximumAmmo: 30
-  magazineCapacity: 6
-  recoil: {x: -5, y: 1.5, z: -0}
-  ammo: 0
-  remainingAmmo: 0
-  layerName: Handgun
-  canonEnd: {fileID: 5947979214890729210}
-  clipFire: {fileID: 8300000, guid: 836521b27226c784b98b91e0614b4d5c, type: 3}
-  clipReload: {fileID: 8300000, guid: d4c8b0966d8963b41940fcfea37c25e6, type: 3}
-  source: {fileID: 0}
   shootParticles:
   - {fileID: 4741716438188889057}
   - {fileID: 19023730635839072}
   - {fileID: 9184834135657063197}
   - {fileID: 8294069818815494247}
+  maximumAmmo: 30
+  magazineCapacity: 6
+  recoil: {x: -5, y: 1.5, z: -0}
+  ammo: 0
+  remainingAmmo: 0
+  canonEnd: {fileID: 5947979214890729210}
+  clipFire: {fileID: 8300000, guid: 836521b27226c784b98b91e0614b4d5c, type: 3}
+  clipReload: {fileID: 8300000, guid: d4c8b0966d8963b41940fcfea37c25e6, type: 3}
+  source: {fileID: 0}
   bloodParticles: {fileID: 628332049230124513, guid: 21c074c5c0e09e54f81e0354593b1c46,
     type: 3}
   woodParticles: {fileID: 7322068444043981968, guid: 9ec9e23e40d4c2c4a8920a49cd3eddd4,
@@ -110,7 +110,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 9215527183071864997}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: visual
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -142,7 +142,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3890601578720592431}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: hangunParticleSystem
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -179,6 +179,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: particle_flash
+      objectReference: {fileID: 0}
+    - target: {fileID: 2388071963733879488, guid: 917f69eeb00aa594fb8e6cb2327dbde5,
+        type: 3}
+      propertyPath: m_Layer
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 3337434729908326166, guid: 917f69eeb00aa594fb8e6cb2327dbde5,
         type: 3}
@@ -331,10 +336,80 @@ PrefabInstance:
       propertyPath: m_ConstrainProportionsScale
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: -8642686762091197726, guid: 2c64e09c5296a164593d6088d5355976,
+        type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: -8078514392236604104, guid: 2c64e09c5296a164593d6088d5355976,
+        type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: -6834340721776777833, guid: 2c64e09c5296a164593d6088d5355976,
+        type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: -6780552138435474263, guid: 2c64e09c5296a164593d6088d5355976,
+        type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: -6212337932066759517, guid: 2c64e09c5296a164593d6088d5355976,
+        type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: -5568371526223589888, guid: 2c64e09c5296a164593d6088d5355976,
+        type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: -4799049200003972372, guid: 2c64e09c5296a164593d6088d5355976,
+        type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: -3111565609762313623, guid: 2c64e09c5296a164593d6088d5355976,
+        type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
     - target: {fileID: 919132149155446097, guid: 2c64e09c5296a164593d6088d5355976,
         type: 3}
       propertyPath: m_Name
       value: Handgun
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 2c64e09c5296a164593d6088d5355976,
+        type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 1214824004972775095, guid: 2c64e09c5296a164593d6088d5355976,
+        type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 1839753970148383582, guid: 2c64e09c5296a164593d6088d5355976,
+        type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 5530701255766440318, guid: 2c64e09c5296a164593d6088d5355976,
+        type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 6619225641134156614, guid: 2c64e09c5296a164593d6088d5355976,
+        type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 8351053838077304830, guid: 2c64e09c5296a164593d6088d5355976,
+        type: 3}
+      propertyPath: m_Layer
+      value: 10
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2c64e09c5296a164593d6088d5355976, type: 3}
@@ -411,6 +486,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: particle_trail
       objectReference: {fileID: 0}
+    - target: {fileID: 4382066365803561557, guid: 3fe9a5fc81305d34c9ed5f5b531514cd,
+        type: 3}
+      propertyPath: m_Layer
+      value: 10
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3fe9a5fc81305d34c9ed5f5b531514cd, type: 3}
 --- !u!4 &4902073476280612995 stripped
@@ -436,6 +516,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: particle_flameburst
+      objectReference: {fileID: 0}
+    - target: {fileID: 4759946606336411506, guid: 24fed9459d45a43488cc1b1eacf01198,
+        type: 3}
+      propertyPath: m_Layer
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 8989983182146617249, guid: 24fed9459d45a43488cc1b1eacf01198,
         type: 3}
@@ -517,6 +602,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: particle_smoke
+      objectReference: {fileID: 0}
+    - target: {fileID: 458747247492427243, guid: 4316a403caad07844b17fbb01e3d2cba,
+        type: 3}
+      propertyPath: m_Layer
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 6141949075085767740, guid: 4316a403caad07844b17fbb01e3d2cba,
         type: 3}

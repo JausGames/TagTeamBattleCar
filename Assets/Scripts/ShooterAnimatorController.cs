@@ -44,7 +44,7 @@ public class ShooterAnimatorController : MonoBehaviour
     internal void SetLayer(int layerId)
     {
         Debug.Log("SetLayer : " + layerId);
-        for (int i = 1; i < 5; i++)
+        for (int i = 1; i < 6; i++)
         {
             if(i == layerId)
                 animator.Animator.SetLayerWeight(i, 1f);

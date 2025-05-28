@@ -28,6 +28,7 @@ namespace ClientAutoritative
         [SerializeField] protected Rigidbody body;
         [SerializeField] CarAnimator carAnimator;
         [SerializeField] Transform centerOfMass;
+        [SerializeField] Transform cart;
         [SerializeField] Rigidbody cartBody;
         [SerializeField] Transform cartCenterOfMass;
         [SerializeField] ParticleSystem[] boostParticles;
@@ -47,6 +48,7 @@ namespace ClientAutoritative
         [SerializeField] float minHealthImpactOnSpeed = .5f;
 
         public Seat[] Seats { get => seats; set => seats = value; }
+        public Transform Cart { get => cart; set => cart = value; }
 
         private void Start()
         {

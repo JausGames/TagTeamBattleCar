@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Shotgun : Weapon
+public class Shotgun : RangeWeapon
 {
     [SerializeField] float numberOfBullet = 8;
     [SerializeField] float dispersion = 1f;

@@ -10,6 +10,7 @@ using UnityEngine.Events;
 public class ShooterController : PlayerController
 {
     [Header("Inputs")][SerializeField] NetworkVariable<Vector3> look = new NetworkVariable<Vector3>(Vector3.zero, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Owner);
+
     [SerializeField] Seat seat;
     [SerializeField] GameObject ui;
 
@@ -17,6 +18,8 @@ public class ShooterController : PlayerController
     [Header("Item")]
     [SerializeField] Weapon currentWeapon;
     [SerializeField] Tool currentTool;
+
+
     [SerializeField] Item heldItem;
 
     [Space]
@@ -26,6 +29,8 @@ public class ShooterController : PlayerController
     [SerializeField] Player player;
     [SerializeField] Transform cameraContainer;
     [SerializeField] ShooterAnimatorController animatorController;
+
+
     [SerializeField] float cameraSpeed;
     [SerializeField] RadialMenuController weaponWheel;
     [SerializeField] RadialMenuController toolWheel;
@@ -85,7 +90,8 @@ public class ShooterController : PlayerController
             else if(value.Id == currentWeapon.Id)
             {
                 if (heldItem is Tool) SwitchItem();
-                ((Weapon)HeldItem).ResetAmmo();
+                if (heldItem as RangeWeapon)
+                    ((RangeWeapon)HeldItem).ResetAmmo();
             }
 
 
@@ -105,6 +111,7 @@ public class ShooterController : PlayerController
 
     public ClientAutoritative.ShipController Ship { get => ship; set => ship = value; }
     public UnityEvent<float> GetHitCreditsEarnEvent { get => getHitCreditsEarnEvent; set => getHitCreditsEarnEvent = value; }
+    public Player Player { get => player; set => player = value; }
 
     // Update is called once per frame
     private void Start()
@@ -139,9 +146,10 @@ public class ShooterController : PlayerController
         //body.AddForce(Vector3.down, ForceMode.VelocityChange);
         if (Seat && heldItem is Weapon)
         {
-            foreach (var prtcl in ((Weapon)heldItem).shootParticles)
+            if (heldItem as RangeWeapon)
+                foreach (var prtcl in ((RangeWeapon)heldItem).shootParticles)
             {
-                prtcl.transform.position = ((Weapon)heldItem).canonEnd.position;
+                prtcl.transform.position = ((RangeWeapon)heldItem).canonEnd.position;
                 prtcl.transform.LookAt(target);
             }
         }
@@ -184,7 +192,8 @@ public class ShooterController : PlayerController
     [ClientRpc]
     private void InstantiateShotContactParticlesClientRpc(int layer, Vector3 origin, Vector3 direction)
     {
-        ((Weapon)heldItem).InstantiateContactParticles(layer, origin, direction);
+        if (heldItem as RangeWeapon)
+            ((RangeWeapon)heldItem).InstantiateContactParticles(layer, origin, direction);
     }
 
     private void SetItemUp(Item value)
@@ -206,10 +215,10 @@ public class ShooterController : PlayerController
 
         //seat.Item = value.Prefab;
         //heldItem = seat.Item.GetComponent<Item>();
-
+        Debug.Log("ShooterController : heldItem is Weapon ? " + (heldItem is Weapon));
         if (heldItem is Weapon)
         {
-            ((Weapon)heldItem).shootParticles[0].transform.parent.parent = seat.transform;
+            //((Weapon)heldItem).shootParticles[0].transform.parent.parent = seat.transform;
 
             animatorController.SetLayer(animatorController.Animator.Animator.GetLayerIndex(((Weapon)heldItem).layerName));
         }
@@ -268,17 +277,17 @@ public class ShooterController : PlayerController
 
     internal void BuyItem()
     {
-        if (toolWheel.gameObject.activeSelf && player.Team.ChangeCreditAmount(-toolWheel.PickedItem.Cost))
+        if (toolWheel.gameObject.activeSelf && Player.Team.ChangeCreditAmount(-toolWheel.PickedItem.Cost))
         {
             var tool = toolWheel.PickedItem.Prefab.GetComponent<Tool>();
             CurrentTool = tool;
-            toolWheel.gameObject.SetActive(false);
+            //toolWheel.gameObject.SetActive(false);
         }
-        else if (weaponWheel.gameObject.activeSelf && player.Team.ChangeCreditAmount(-weaponWheel.PickedItem.Cost))
+        else if (weaponWheel.gameObject.activeSelf && Player.Team.ChangeCreditAmount(-weaponWheel.PickedItem.Cost))
         {
             var weap = weaponWheel.PickedItem.Prefab.GetComponent<Weapon>();
             CurrentWeapon = weap;
-            weaponWheel.gameObject.SetActive(false);
+            //weaponWheel.gameObject.SetActive(false);
         }
     }
     internal void SwitchItem(bool destroyCurrent = false)
@@ -331,13 +340,15 @@ public class ShooterController : PlayerController
     }
     internal void StartReloading()
     {
-        if (reloading || ((Weapon)heldItem).RemainingAmmo == 0) return;
+        if (heldItem as RangeWeapon)
+            if (reloading || ((RangeWeapon)heldItem).RemainingAmmo == 0) return;
         reloading = true;
         SubmitReloadServerRpc();
     }
     internal void Reload()
     {
-        ((Weapon)heldItem).Reload();
+        if (heldItem as RangeWeapon)
+            ((RangeWeapon)heldItem).Reload();
         ik.enabled = true;
         reloading = false;
     }
@@ -353,6 +364,23 @@ public class ShooterController : PlayerController
         ik.enabled = false;
         animatorController.Reload();
     }
+    internal void ActivateIk(bool value)
+    {
+        ik.enabled = value;
+        SubmitActivateIkServerRpc(value);
+    }
+
+    [ServerRpc]
+    public void SubmitActivateIkServerRpc(bool value)
+    {
+        PlayActivateIkClientRpc(value);
+    }
+
+    [ClientRpc]
+    void PlayActivateIkClientRpc(bool value)
+    {
+        ik.enabled = value;
+    }
     internal void Shoot(bool context)
     {
         if (!IsOwner || IsOnMenu || heldItem == null) return;
@@ -365,25 +393,30 @@ public class ShooterController : PlayerController
         animatorController.PlayFiring();
         foreach (var prtcl in ((Weapon)heldItem).shootParticles)
         {
-            ((Weapon)heldItem).source.PlayOneShot(((Weapon)heldItem).clipFire);
+            if (heldItem as RangeWeapon)
+                ((RangeWeapon)heldItem).source.PlayOneShot(((RangeWeapon)heldItem).clipFire);
+
             var particles = Instantiate(prtcl, prtcl.transform.position, prtcl.transform.rotation, prtcl.transform.parent);
             particles.Play();
             Destroy(particles.gameObject, 5f);
         }
-        SubmitShootServerRpc(((Weapon)heldItem).canonEnd.position, ((Weapon)heldItem).canonEnd.rotation);
+        if (heldItem as RangeWeapon)
+            SubmitShootServerRpc(((RangeWeapon)heldItem).canonEnd.position, ((RangeWeapon)heldItem).canonEnd.rotation);
     }
     internal void ShootBullet(Vector3 passThroughPoint)
     {
         animatorController.PlayFiring();
         foreach (var prtcl in ((Weapon)heldItem).shootParticles)
         {
-            ((Weapon)heldItem).source.PlayOneShot(((Weapon)heldItem).clipFire);
+            if (heldItem as RangeWeapon)
+                ((RangeWeapon)heldItem).source.PlayOneShot(((RangeWeapon)heldItem).clipFire);
             var particles = Instantiate(prtcl, prtcl.transform.position, prtcl.transform.rotation, prtcl.transform.parent);
             particles.transform.LookAt(passThroughPoint);
             particles.Play();
             Destroy(particles.gameObject, 5f);
         }
-        SubmitShootServerRpc(((Weapon)heldItem).canonEnd.position, ((Weapon)heldItem).canonEnd.rotation, passThroughPoint);
+        if (heldItem as RangeWeapon)
+            SubmitShootServerRpc(((RangeWeapon)heldItem).canonEnd.position, ((RangeWeapon)heldItem).canonEnd.rotation, passThroughPoint);
     }
     [ServerRpc]
     public void SubmitShootServerRpc(Vector3 position, Quaternion rotation, Vector3 passThroughPoint)
@@ -415,18 +448,25 @@ public class ShooterController : PlayerController
         animatorController.PlayFiring();
         foreach (var prtcl in ((Weapon)heldItem).shootParticles)
         {
-            ((Weapon)heldItem).source.PlayOneShot(((Weapon)heldItem).clipFire);
+            if(heldItem as RangeWeapon)
+                ((RangeWeapon)heldItem).source.PlayOneShot(((RangeWeapon)heldItem).clipFire);
             var particles = Instantiate(prtcl, position, rotation, prtcl.transform.parent);
             particles.Play();
         }
     }
 
+    [ServerRpc]
+    internal void SubmitStealCreditsServerRpc(ulong victimId, float stolenAmount, ulong originId)
+    {
+        var realStolenAmount = GetNetworkObject(victimId).GetComponentInChildren<Player>().GetStolen(stolenAmount, originId);
+        GetNetworkObject(originId).GetComponentInChildren<Player>().Team.ChangeCreditAmount(realStolenAmount);
+    }
 
     [ServerRpc]
-    public void SummitGetHitServerRpc(ulong playerid, float damage, ulong originId)
+    public void SubmitGetHitServerRpc(ulong playerid, float stolenAmount, ulong originId)
     {
         Debug.Log("ShooterController, SummitGetHitServerRpc : touched player = #" + playerid);
-        GetNetworkObject(playerid).GetComponentInChildren<Player>().GetHit(damage, originId);
+        GetNetworkObject(playerid).GetComponentInChildren<Player>().GetHit(stolenAmount, originId);
     }
 
     [ClientRpc]
@@ -462,7 +502,7 @@ public class ShooterController : PlayerController
     [ServerRpc]
     private void SubmitRespawnServerRpc()
     {
-        player.Health.Value = player.MaxHealth;
+        Player.Health.Value = Player.MaxHealth;
         alive = true;
         ik.enabled = true;
         collider.enabled = true;
@@ -474,5 +514,10 @@ public class ShooterController : PlayerController
         collider.enabled = true;
         alive = true;
         ik.enabled = true;
+    }
+
+    internal void ActivateMeleeTrigger(bool v)
+    {
+        ((MeleeWeapon)heldItem).ActivateTrigger(v);
     }
 }

@@ -10,11 +10,13 @@ public class Team : NetworkBehaviour
 {
     [SerializeField] NetworkVariable<char> teamName = new NetworkVariable<char>(new char(), NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
     [SerializeField] List<Player> players = new List<Player>();
+    [SerializeField] Transform cart;
     [SerializeField] NetworkVariable<float> credits = new NetworkVariable<float>(150f, NetworkVariableReadPermission.Everyone, NetworkVariableWritePermission.Server);
 
     public NetworkVariable<char> TeamName { get => teamName; set => teamName = value; }
     public NetworkVariable<float> Credits { get => credits; set => credits = value; }
     public List<Player> Players { get => players; set => players = value; }
+    public Transform Cart { get => cart; set => cart = value; }
 
     int test;
 
@@ -39,6 +41,11 @@ public class Team : NetworkBehaviour
             var controller = player.GetComponent<ShooterController>();
             controller.GetHitCreditsEarnEvent.AddListener(OnEarnFromHit);
             player.DieCreditsEarnEvent.AddListener(OnEarnFromKill);
+        }
+        else
+        {
+            var controller = player.GetComponentInChildren<ShipController>();
+            cart = controller.Cart;
         }
     }
 

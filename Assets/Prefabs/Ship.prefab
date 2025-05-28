@@ -14934,6 +14934,7 @@ MonoBehaviour:
   body: {fileID: 5493142882487950269}
   carAnimator: {fileID: 3200130069788905672}
   centerOfMass: {fileID: 5493142883440065815}
+  cart: {fileID: 5886952165397781772}
   cartBody: {fileID: 1219949760257940413}
   cartCenterOfMass: {fileID: 3625006621544064702}
   boostParticles:
@@ -32924,7 +32925,7 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
 --- !u!95 &8512038062878549061
 Animator:
-  serializedVersion: 4
+  serializedVersion: 5
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -32941,7 +32942,7 @@ Animator:
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
+  m_KeepAnimatorStateOnDisable: 0
 --- !u!114 &2210308562522578640
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -35533,7 +35534,7 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
 --- !u!95 &5025269706039922560
 Animator:
-  serializedVersion: 4
+  serializedVersion: 5
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -35550,7 +35551,7 @@ Animator:
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
+  m_KeepAnimatorStateOnDisable: 0
 --- !u!114 &2591628032654567441
 MonoBehaviour:
   m_ObjectHideFlags: 0
